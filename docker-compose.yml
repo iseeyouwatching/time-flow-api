@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: time-flow-db
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: time-flow-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  backend:
+    build: '.'
+    container_name: backend
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING.PROFILES.ACTIVE=default
+    depends_on:
+      - postgres
+
+networks:
+  default:
+    name: test-network
+    driver: bridge
