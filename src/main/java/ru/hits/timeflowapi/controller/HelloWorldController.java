@@ -5,12 +5,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class HelloWorldController {
 
-    @GetMapping("/hello-world")
+    @GetMapping("/unsecured")
     public String sayHelloWorld() {
-        return "Hello, World!";
+        return "Незащищенный эндпоинт.";
+    }
+
+    @GetMapping("/secured")
+    public String sayHelloSecured() {
+        return "Защищенный эндпоинт.";
     }
 
 }
