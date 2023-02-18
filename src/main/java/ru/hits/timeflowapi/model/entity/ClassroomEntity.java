@@ -1,18 +1,20 @@
 package ru.hits.timeflowapi.model.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "student")
-
-public class StudentDetailsEntity {
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "classroom")
+public class ClassroomEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -22,14 +24,8 @@ public class StudentDetailsEntity {
     )
     private UUID id;
 
-    @OneToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+    private String name;
 
-    private String studentNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private StudentGroupEntity group;
-
+    @OneToMany(mappedBy = "classroom")
+    private List<LessonEntity> lesson;
 }
