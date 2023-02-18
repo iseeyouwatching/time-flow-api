@@ -23,7 +23,7 @@ public class EmployeePostEntity {
     )
     private UUID id;
 
-    private String value;//teacher or scheduleMaker or admin
+    private String value;
 
     @ManyToMany(mappedBy = "posts")
     private List<EmployeeDetailsEntity> employees;

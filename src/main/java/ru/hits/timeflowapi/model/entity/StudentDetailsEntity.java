@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = "student")
 
 public class StudentDetailsEntity {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -24,9 +25,10 @@ public class StudentDetailsEntity {
     @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
+
     private String studentNumber;
 
 
-    //private StudentGroupEntity group;
+    //TODO: private StudentGroupEntity group;
 
 }

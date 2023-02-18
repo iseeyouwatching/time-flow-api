@@ -15,6 +15,7 @@ import java.util.UUID;
 @Setter
 @Table(name = "employee")
 public class EmployeeDetailsEntity {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -30,9 +31,11 @@ public class EmployeeDetailsEntity {
             inverseJoinColumns = @JoinColumn(name = "posts_id")
     )
     private List<EmployeePostEntity> posts;
+
     @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
+
     private String contactNumber;
 
 }
