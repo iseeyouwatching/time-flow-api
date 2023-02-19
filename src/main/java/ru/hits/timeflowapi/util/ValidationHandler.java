@@ -6,8 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
+import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.model.dto.ApiError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,4 +37,15 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> notFoundException(NotFoundException exception, WebRequest request) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmailAlreadyUsedException.class)
+    public ResponseEntity<ApiError> emailAlreadyUsedException(EmailAlreadyUsedException exception, WebRequest request) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
+    }
+
 }
