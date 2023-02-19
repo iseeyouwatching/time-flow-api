@@ -33,8 +33,4 @@ public class StudentGroupEntity {
     @OneToMany(mappedBy = "group")
     private List<StudentDetailsEntity> students;
 
-    public StudentGroupEntity(int number) {
-        this.number = number;
-    }
-
 }
