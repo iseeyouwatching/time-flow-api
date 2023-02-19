@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "employee_post")
 public class EmployeePostEntity {
     @Id
@@ -27,4 +27,5 @@ public class EmployeePostEntity {
 
     @ManyToMany(mappedBy = "posts")
     private List<EmployeeDetailsEntity> employees;
+
 }

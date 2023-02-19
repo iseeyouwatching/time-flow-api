@@ -1,0 +1,40 @@
+package ru.hits.timeflowapi.model.dto.user.signup;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.enumeration.Sex;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.UUID;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class StudentSignUpDto {
+
+    @Email(message = "Некорректный формат почты.")
+    private String email;
+
+    @Pattern(regexp = "[А-Я][а-я]*", message = "Имя должно быть написано на кириллице и с заглавной буквы.")
+    private String name;
+
+    @Pattern(regexp = "[А-Я][а-я]*", message = "Фамилия должна быть написана на кириллице и с заглавной буквы.")
+    private String surname;
+
+    @Pattern(regexp = "[А-Я][а-я]*", message = "Отчество должно быть написано на кириллице и с заглавной буквы.")
+    private String patronymic;
+
+    private Sex sex;
+
+    @Size(min = 8, max = 32, message = "Длина пароля должна быть от 8 до 32 символов.")
+    private String password;
+
+    @Size(min = 6, max = 6, message = "Длина номера студенческого билета должна быть 6 символов.")
+    private String studentNumber;
+
+    private UUID groupId;
+
+}
