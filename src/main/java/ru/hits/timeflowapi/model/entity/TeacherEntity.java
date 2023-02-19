@@ -31,6 +31,6 @@ public class TeacherEntity {
     private String patronymic;
 
     @OneToMany(mappedBy = "teacher")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 
 }
