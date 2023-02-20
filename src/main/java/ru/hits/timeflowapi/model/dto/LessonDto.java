@@ -3,7 +3,7 @@ package ru.hits.timeflowapi.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.hits.timeflowapi.model.entity.*;
+import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 
 import java.util.UUID;
@@ -15,7 +15,7 @@ public class LessonDto {
 
     private UUID id;
 
-    private StudentGroupDto studentGroup;
+    private StudentGroupBasicDto studentGroup;
 
     private SubjectDto subject;
 

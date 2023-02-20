@@ -1,8 +1,9 @@
-package ru.hits.timeflowapi.model.dto;
+package ru.hits.timeflowapi.model.dto.studentgroup;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.dto.LessonDto;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentGroupTimetableDto {
 
-    private StudentGroupDto studentGroup;
+    private StudentGroupBasicDto studentGroupBasic;
 
     private List<LessonDto> lessons;
 
