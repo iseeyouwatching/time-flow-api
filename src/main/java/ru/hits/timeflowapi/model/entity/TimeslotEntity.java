@@ -36,6 +36,6 @@ public class TimeslotEntity {
     private Date endTime;
 
     @OneToMany(mappedBy = "timeslot")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 
 }

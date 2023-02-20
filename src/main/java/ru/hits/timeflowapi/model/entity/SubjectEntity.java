@@ -24,9 +24,9 @@ public class SubjectEntity {
     )
     private UUID id;
 
-    private int number;
+    private String name;
 
     @OneToMany(mappedBy = "subject")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 
 }
