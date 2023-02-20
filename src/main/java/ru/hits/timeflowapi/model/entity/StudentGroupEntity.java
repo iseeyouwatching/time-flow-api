@@ -28,7 +28,7 @@ public class StudentGroupEntity {
     private int number;
 
     @OneToMany(mappedBy = "studentGroup")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 
     @OneToMany(mappedBy = "group")
     private List<StudentDetailsEntity> students;

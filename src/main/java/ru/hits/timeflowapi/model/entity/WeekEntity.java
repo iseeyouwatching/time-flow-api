@@ -37,5 +37,5 @@ public class WeekEntity {
     private Date endDate;
 
     @OneToMany(mappedBy = "week")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 }

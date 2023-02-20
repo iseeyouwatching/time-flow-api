@@ -24,8 +24,8 @@ public class ClassroomEntity {
     )
     private UUID id;
 
-    private String name;
+    private int number;
 
     @OneToMany(mappedBy = "classroom")
-    private List<LessonEntity> lesson;
+    private List<LessonEntity> lessons;
 }
