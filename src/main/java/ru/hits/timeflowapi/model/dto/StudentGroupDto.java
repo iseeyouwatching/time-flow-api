@@ -13,5 +13,7 @@ import java.util.UUID;
 public class StudentGroupDto {
 
     private UUID id;
+
     private int number;
+
 }

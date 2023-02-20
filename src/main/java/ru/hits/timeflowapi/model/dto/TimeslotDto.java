@@ -13,7 +13,11 @@ import java.util.UUID;
 public class TimeslotDto {
 
     private UUID id;
+
     private int sequenceNumber;
+
     private Date beginTime;
+
     private Date endTime;
+
 }

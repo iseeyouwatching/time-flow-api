@@ -13,7 +13,11 @@ import java.util.UUID;
 public class WeekDto {
 
     private UUID id;
+
     private int sequenceNumber;
+
     private Date beginDate;
+
     private Date endDate;
+
 }

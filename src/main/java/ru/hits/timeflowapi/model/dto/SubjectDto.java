@@ -12,5 +12,7 @@ import java.util.UUID;
 public class SubjectDto {
 
     private UUID id;
+
     private String name;
+
 }

@@ -14,4 +14,5 @@ public class TeacherTimetableDto {
     private TeacherDto teacher;
 
     private List<LessonDto> lessons;
+
 }

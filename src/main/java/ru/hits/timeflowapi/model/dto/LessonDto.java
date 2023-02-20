@@ -28,4 +28,5 @@ public class LessonDto {
     private WeekDto week;
 
     private LessonType lessonType;
+
 }
