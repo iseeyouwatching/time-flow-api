@@ -4,16 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
-
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentGroupDto {
+@Data
+public class ApiError {
 
-    private UUID id;
-
-    private int number;
+    private String message;
 
 }

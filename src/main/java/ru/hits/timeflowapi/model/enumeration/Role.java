@@ -1,7 +1,7 @@
 package ru.hits.timeflowapi.model.enumeration;
 
 public enum Role {
-    USER,
-    EMPLOYEE,
-    STUDENT
+    ROLE_USER,
+    ROLE_EMPLOYEE,
+    ROLE_STUDENT
 }

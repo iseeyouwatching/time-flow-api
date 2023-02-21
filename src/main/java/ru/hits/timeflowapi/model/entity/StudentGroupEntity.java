@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "student_group")
 public class StudentGroupEntity {
 
@@ -24,7 +24,7 @@ public class StudentGroupEntity {
     )
     private UUID id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private int number;
 
     @OneToMany(mappedBy = "studentGroup")
