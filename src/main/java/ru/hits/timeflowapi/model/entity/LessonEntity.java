@@ -45,9 +45,10 @@ public class LessonEntity {
     private TimeslotEntity timeslot;
 
     @ManyToOne
-    @JoinColumn(name = "week_id", nullable = false)
-    private WeekEntity week;
+    @JoinColumn(name = "day_id", nullable = false)
+    private DayEntity day;
 
     @Column(name = "lesson_type")
     private LessonType lessonType;
+
 }
