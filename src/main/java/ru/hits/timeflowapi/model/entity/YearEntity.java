@@ -14,8 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "week")
-public class WeekEntity {
+@Table(name = "year")
+public class YearEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -25,22 +25,11 @@ public class WeekEntity {
     )
     private UUID id;
 
-    @Column(name = "sequence_number")
-    private int sequenceNumber;
-
-    @Column(name = "begin_date")
-    @Temporal(TemporalType.DATE)
     private Date beginDate;
 
-    @Column(name = "end_date")
-    @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    @OneToMany(mappedBy = "week")
-    private List<DayEntity> days;
-
-    @ManyToOne
-    @JoinColumn(name = "year_id", nullable = false)
-    private YearEntity year;
+    @OneToMany(mappedBy = "year")
+    private List<WeekEntity> weeks;
 
 }
