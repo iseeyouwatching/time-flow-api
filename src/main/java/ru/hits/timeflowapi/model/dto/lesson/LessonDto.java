@@ -7,6 +7,7 @@ import ru.hits.timeflowapi.model.dto.*;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.model.entity.LessonEntity;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 
 import java.util.UUID;
@@ -31,5 +32,16 @@ public class LessonDto {
     private WeekDto week;
 
     private LessonType lessonType;
+
+    public LessonDto(LessonEntity lesson) {
+        this.id = lesson.getId();
+        this.studentGroup = new StudentGroupBasicDto(lesson.getStudentGroup());
+        this.subject = new SubjectDto(lesson.getSubject());
+        this.teacher = new TeacherDto(lesson.getTeacher());
+        this.classroom = new ClassroomDto(lesson.getClassroom());
+        this.timeslot = new TimeslotDto(lesson.getTimeslot());
+        this.week = new WeekDto(lesson.getWeek());
+        this.lessonType = lesson.getLessonType();
+    }
 
 }

@@ -8,6 +8,7 @@ import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.model.dto.lesson.LessonsDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
@@ -21,6 +22,7 @@ import ru.hits.timeflowapi.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -45,11 +47,11 @@ public class LessonService {
 
         StudentGroupBasicDto studentGroupBasicDto = new StudentGroupBasicDto(studentGroup);
 
-        List<LessonEntity> lessonEntities = lessonRepository.findByStudentGroup(studentGroup);
+        List<LessonEntity> lessons = lessonRepository.findByStudentGroup(studentGroup);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
-        for (LessonEntity lesson: lessonEntities) {
+        for (LessonEntity lesson: lessons) {
             lessonDtos.add(new LessonDto(
                     lesson.getId(),
                     new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -75,11 +77,11 @@ public class LessonService {
 
         TeacherDto teacherDto = new TeacherDto(teacher);
 
-        List<LessonEntity> lessonEntities = lessonRepository.findByTeacher(teacher);
+        List<LessonEntity> lessons = lessonRepository.findByTeacher(teacher);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
-        for (LessonEntity lesson: lessonEntities) {
+        for (LessonEntity lesson: lessons) {
             lessonDtos.add(new LessonDto(
                     lesson.getId(),
                     new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -105,11 +107,11 @@ public class LessonService {
 
         ClassroomDto classroomDto = new ClassroomDto(classroom);
 
-        List<LessonEntity> lessonEntities = lessonRepository.findByClassroom(classroom);
+        List<LessonEntity> lessons = lessonRepository.findByClassroom(classroom);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
-        for (LessonEntity lesson: lessonEntities) {
+        for (LessonEntity lesson: lessons) {
             lessonDtos.add(new LessonDto(
                     lesson.getId(),
                     new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -125,7 +127,13 @@ public class LessonService {
 
     }
 
-    public void addLesson(CreateLessonDto createLessonDto) {
+    public LessonDto getLessonById(UUID id) {
+
+        return new LessonDto(Objects.requireNonNull(lessonRepository.findById(id).orElse(null)));
+
+    }
+
+    public LessonDto addLesson(CreateLessonDto createLessonDto) {
 
         LessonEntity lesson = new LessonEntity();
 
@@ -138,6 +146,30 @@ public class LessonService {
         lesson.setLessonType(LessonType.values()[createLessonDto.getLessonType()]);
 
         lessonRepository.save(lesson);
+
+        return new LessonDto(lesson);
+
+    }
+
+    public LessonsDto getAllLessons() {
+
+        List<LessonDto> lessonDtos = new ArrayList<>();
+
+        List<LessonEntity> lessons = lessonRepository.findAll();
+
+        for (LessonEntity lesson: lessons) {
+            lessonDtos.add(new LessonDto(
+                    lesson.getId(),
+                    new StudentGroupBasicDto(lesson.getStudentGroup()),
+                    new SubjectDto(lesson.getSubject()),
+                    new TeacherDto(lesson.getTeacher()),
+                    new ClassroomDto(lesson.getClassroom()),
+                    new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
+                    lesson.getLessonType()));
+        }
+
+        return new LessonsDto(lessonDtos);
 
     }
 }
