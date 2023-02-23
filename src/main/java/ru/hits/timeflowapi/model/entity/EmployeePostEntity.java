@@ -23,7 +23,11 @@ public class EmployeePostEntity {
     )
     private UUID id;
 
-    private String value;
+    @Column(unique = true)
+    private String postRole;    // пример: "ROLE_ADMIN"
+
+    @Column(unique = true)
+    private String postName;    // пример: "Администратор"
 
     @ManyToMany(mappedBy = "posts")
     private List<EmployeeDetailsEntity> employees;
