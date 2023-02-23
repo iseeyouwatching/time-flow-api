@@ -1,8 +1,9 @@
-package ru.hits.timeflowapi.model.dto;
+package ru.hits.timeflowapi.model.dto.lesson;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.dto.*;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 

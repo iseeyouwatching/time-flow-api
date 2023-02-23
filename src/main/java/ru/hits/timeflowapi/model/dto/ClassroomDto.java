@@ -3,6 +3,7 @@ package ru.hits.timeflowapi.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.entity.ClassroomEntity;
 
 import java.util.UUID;
 
@@ -13,6 +14,11 @@ public class ClassroomDto {
 
     private UUID id;
 
-    private int number;
+    private String number;
+
+    public ClassroomDto(ClassroomEntity entity) {
+        this.id = entity.getId();
+        this.number = entity.getNumber();
+    }
 
 }

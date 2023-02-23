@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -50,4 +49,5 @@ public class LessonEntity {
 
     @Column(name = "lesson_type")
     private LessonType lessonType;
+
 }
