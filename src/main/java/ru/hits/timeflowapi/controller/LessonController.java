@@ -2,7 +2,8 @@ package ru.hits.timeflowapi.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.TeacherTimetableDto;
+import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
+import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.service.LessonService;
@@ -24,6 +25,11 @@ public class LessonController {
     @GetMapping("/teacher/{teacherId}")
     public TeacherTimetableDto getLessonsByTeacherId(@PathVariable("teacherId") UUID id) {
         return lessonService.getLessonsByTeacherId(id);
+    }
+
+    @GetMapping("/classroom/{classroomId}")
+    public ClassroomTimetableDto getLessonsByClassroomId(@PathVariable("classroomId") UUID id) {
+        return lessonService.getLessonsByClassroomId(id);
     }
 
     @PostMapping

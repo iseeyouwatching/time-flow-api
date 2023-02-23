@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ru.hits.timeflowapi.model.entity.ClassroomEntity;
 import ru.hits.timeflowapi.model.entity.LessonEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.model.entity.TeacherEntity;
@@ -15,5 +16,7 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
     List<LessonEntity> findByStudentGroup(StudentGroupEntity studentGroup);
 
     List<LessonEntity> findByTeacher(TeacherEntity teacher);
+
+    List<LessonEntity> findByClassroom(ClassroomEntity classroom);
 
 }

@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto;
+package ru.hits.timeflowapi.model.dto.classroom;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

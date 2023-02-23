@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.dto.*;
+import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 
 import java.util.UUID;

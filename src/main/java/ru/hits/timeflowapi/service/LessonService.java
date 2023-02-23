@@ -4,10 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.*;
+import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
+import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
+import ru.hits.timeflowapi.model.entity.ClassroomEntity;
 import ru.hits.timeflowapi.model.entity.LessonEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.model.entity.TeacherEntity;
@@ -87,6 +92,36 @@ public class LessonService {
         }
 
         return new TeacherTimetableDto(teacherDto, lessonDtos);
+
+    }
+
+    public ClassroomTimetableDto getLessonsByClassroomId(UUID id) {
+
+        ClassroomEntity classroom = classroomRepository.findById(id).orElse(null);
+
+        if (classroom == null) {
+            throw new NotFoundException("Аудитории с таким ID " + id + " не существует");
+        }
+
+        ClassroomDto classroomDto = new ClassroomDto(classroom);
+
+        List<LessonEntity> lessonEntities = lessonRepository.findByClassroom(classroom);
+
+        List<LessonDto> lessonDtos = new ArrayList<>();
+
+        for (LessonEntity lesson: lessonEntities) {
+            lessonDtos.add(new LessonDto(
+                    lesson.getId(),
+                    new StudentGroupBasicDto(lesson.getStudentGroup()),
+                    new SubjectDto(lesson.getSubject()),
+                    new TeacherDto(lesson.getTeacher()),
+                    new ClassroomDto(lesson.getClassroom()),
+                    new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
+                    lesson.getLessonType()));
+        }
+
+        return new ClassroomTimetableDto(classroomDto, lessonDtos);
 
     }
 

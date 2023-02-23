@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto;
+package ru.hits.timeflowapi.model.dto.teacher;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassroomTimetableDto {
+public class TeacherTimetableDto {
 
-    private ClassroomDto classroomDto;
+    private TeacherDto teacher;
 
     private List<LessonDto> lessons;
 
