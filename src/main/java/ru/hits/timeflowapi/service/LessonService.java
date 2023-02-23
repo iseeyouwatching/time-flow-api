@@ -10,6 +10,7 @@ import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.model.entity.LessonEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
+import ru.hits.timeflowapi.model.entity.TeacherEntity;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
 
@@ -29,7 +30,7 @@ public class LessonService {
     private final WeekRepository weekRepository;
     private final StudentGroupRepository studentGroupRepository;
 
-    public StudentGroupTimetableDto getLessonsByGroup(UUID id) {
+    public StudentGroupTimetableDto getLessonsByGroupId(UUID id) {
 
         StudentGroupEntity studentGroup = studentGroupRepository.findById(id).orElse(null);
 
@@ -56,6 +57,36 @@ public class LessonService {
         }
 
         return new StudentGroupTimetableDto(studentGroupBasicDto, lessonDtos);
+
+    }
+
+    public TeacherTimetableDto getLessonsByTeacherId(UUID id) {
+
+        TeacherEntity teacher = teacherRepository.findById(id).orElse(null);
+
+        if (teacher == null) {
+            throw new NotFoundException("Преподавателя с таким ID " + id + " не существует");
+        }
+
+        TeacherDto teacherDto = new TeacherDto(teacher);
+
+        List<LessonEntity> lessonEntities = lessonRepository.findByTeacher(teacher);
+
+        List<LessonDto> lessonDtos = new ArrayList<>();
+
+        for (LessonEntity lesson: lessonEntities) {
+            lessonDtos.add(new LessonDto(
+                    lesson.getId(),
+                    new StudentGroupBasicDto(lesson.getStudentGroup()),
+                    new SubjectDto(lesson.getSubject()),
+                    new TeacherDto(lesson.getTeacher()),
+                    new ClassroomDto(lesson.getClassroom()),
+                    new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
+                    lesson.getLessonType()));
+        }
+
+        return new TeacherTimetableDto(teacherDto, lessonDtos);
 
     }
 
