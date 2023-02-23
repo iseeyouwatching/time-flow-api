@@ -28,11 +28,11 @@ public class TimeslotEntity {
     private int sequenceNumber;
 
     @Column(name = "begin_time")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date beginTime;
 
     @Column(name = "end_time")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date endTime;
 
     @OneToMany(mappedBy = "timeslot")
