@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "classroom")
 public class ClassroomEntity {
 
@@ -24,8 +24,9 @@ public class ClassroomEntity {
     )
     private UUID id;
 
-    private int number;
+    private String number;
 
     @OneToMany(mappedBy = "classroom")
     private List<LessonEntity> lessons;
+
 }

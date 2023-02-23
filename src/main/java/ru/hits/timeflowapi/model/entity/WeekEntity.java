@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "week")
 public class WeekEntity {
 

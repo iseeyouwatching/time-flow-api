@@ -8,11 +8,11 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "lesson")
 public class LessonEntity {
 
