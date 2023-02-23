@@ -28,6 +28,7 @@ public class UserEntity {
 
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private String name;

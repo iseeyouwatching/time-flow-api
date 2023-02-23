@@ -25,7 +25,7 @@ public class LessonEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "student_group", nullable = false)
+    @JoinColumn(name = "student_group_id", nullable = false)
     private StudentGroupEntity studentGroup;
 
     @ManyToOne
@@ -48,6 +48,7 @@ public class LessonEntity {
     @JoinColumn(name = "day_id", nullable = false)
     private DayEntity day;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "lesson_type")
     private LessonType lessonType;
 

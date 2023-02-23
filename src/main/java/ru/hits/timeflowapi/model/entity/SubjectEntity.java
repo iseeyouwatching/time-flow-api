@@ -24,6 +24,7 @@ public class SubjectEntity {
     )
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "subject")
