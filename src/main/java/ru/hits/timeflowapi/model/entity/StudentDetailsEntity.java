@@ -27,16 +27,11 @@ public class StudentDetailsEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
+    @Column(unique = true)
     private String studentNumber;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private StudentGroupEntity group;
-
-    public StudentDetailsEntity(UserEntity user, String studentNumber, StudentGroupEntity group) {
-        this.user = user;
-        this.studentNumber = studentNumber;
-        this.group = group;
-    }
 
 }

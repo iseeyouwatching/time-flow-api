@@ -88,11 +88,12 @@ public class AuthService {
 
         user = userRepository.save(user);
 
-        StudentDetailsEntity studentDetails = new StudentDetailsEntity(
-                user,
-                studentSignUpDTO.getStudentNumber(),
-                studentGroupEntity.get()
-        );
+        StudentDetailsEntity studentDetails = StudentDetailsEntity
+                .builder()
+                .user(user)
+                .studentNumber(studentSignUpDTO.getStudentNumber())
+                .group(studentGroupEntity.get())
+                .build();
 
         studentDetails = studentDetailsRepository.save(studentDetails);
 
