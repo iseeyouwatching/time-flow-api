@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "timeslot")
 public class TimeslotEntity {
 
@@ -24,7 +24,7 @@ public class TimeslotEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @Column(name = "sequence_number",unique = true)
+    @Column(name = "sequence_number", unique = true)
     private int sequenceNumber;
 
     @Column(name = "begin_time")

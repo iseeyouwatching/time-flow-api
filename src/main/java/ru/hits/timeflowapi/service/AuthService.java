@@ -38,44 +38,46 @@ public class AuthService {
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmail(userSignUpDTO.getEmail());
 
-        UserEntity userEntity = new UserEntity(
-                userSignUpDTO.getEmail(),
-                Role.ROLE_USER,
-                userSignUpDTO.getName(),
-                userSignUpDTO.getSurname(),
-                userSignUpDTO.getPatronymic(),
-                AccountStatus.ACTIVATE,
-                passwordEncoder.encode(userSignUpDTO.getPassword()),
-                userSignUpDTO.getSex()
-        );
+        UserEntity user = UserEntity
+                .builder()
+                .email(userSignUpDTO.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .name(userSignUpDTO.getName())
+                .surname(userSignUpDTO.getSurname())
+                .patronymic(userSignUpDTO.getPatronymic())
+                .accountStatus(AccountStatus.PENDING)
+                .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
+                .sex(userSignUpDTO.getSex())
+                .build();
 
-        UserEntity savedUser = userRepository.save(userEntity);
+        user = userRepository.save(user);
 
         return new UserDto(
-                savedUser.getId(),
-                savedUser.getEmail(),
-                savedUser.getRole(),
-                savedUser.getName(),
-                savedUser.getSurname(),
-                savedUser.getPatronymic(),
-                savedUser.getAccountStatus(),
-                savedUser.getSex()
+                user.getId(),
+                user.getEmail(),
+                user.getRole(),
+                user.getName(),
+                user.getSurname(),
+                user.getPatronymic(),
+                user.getAccountStatus(),
+                user.getSex()
         );
     }
 
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
         checkEmail(studentSignUpDTO.getEmail());
 
-        UserEntity user = new UserEntity(
-                studentSignUpDTO.getEmail(),
-                Role.ROLE_STUDENT,
-                studentSignUpDTO.getName(),
-                studentSignUpDTO.getSurname(),
-                studentSignUpDTO.getPatronymic(),
-                AccountStatus.PENDING,
-                passwordEncoder.encode(studentSignUpDTO.getPassword()),
-                studentSignUpDTO.getSex()
-        );
+        UserEntity user = UserEntity
+                .builder()
+                .email(studentSignUpDTO.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .name(studentSignUpDTO.getName())
+                .surname(studentSignUpDTO.getSurname())
+                .patronymic(studentSignUpDTO.getPatronymic())
+                .accountStatus(AccountStatus.PENDING)
+                .password(passwordEncoder.encode(studentSignUpDTO.getPassword()))
+                .sex(studentSignUpDTO.getSex())
+                .build();
 
         Optional<StudentGroupEntity> studentGroupEntity =
                 studentGroupRepository.findById(studentSignUpDTO.getGroupId());
@@ -86,11 +88,12 @@ public class AuthService {
 
         user = userRepository.save(user);
 
-        StudentDetailsEntity studentDetails = new StudentDetailsEntity(
-                user,
-                studentSignUpDTO.getStudentNumber(),
-                studentGroupEntity.get()
-        );
+        StudentDetailsEntity studentDetails = StudentDetailsEntity
+                .builder()
+                .user(user)
+                .studentNumber(studentSignUpDTO.getStudentNumber())
+                .group(studentGroupEntity.get())
+                .build();
 
         studentDetails = studentDetailsRepository.save(studentDetails);
 
@@ -114,16 +117,17 @@ public class AuthService {
     public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         checkEmail(employeeSignUpDTO.getEmail());
 
-        UserEntity user = new UserEntity(
-                employeeSignUpDTO.getEmail(),
-                Role.ROLE_EMPLOYEE,
-                employeeSignUpDTO.getName(),
-                employeeSignUpDTO.getSurname(),
-                employeeSignUpDTO.getPatronymic(),
-                AccountStatus.PENDING,
-                passwordEncoder.encode(employeeSignUpDTO.getPassword()),
-                employeeSignUpDTO.getSex()
-        );
+        UserEntity user = UserEntity
+                .builder()
+                .email(employeeSignUpDTO.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .name(employeeSignUpDTO.getName())
+                .surname(employeeSignUpDTO.getSurname())
+                .patronymic(employeeSignUpDTO.getPatronymic())
+                .accountStatus(AccountStatus.PENDING)
+                .password(passwordEncoder.encode(employeeSignUpDTO.getPassword()))
+                .sex(employeeSignUpDTO.getSex())
+                .build();
 
         user = userRepository.save(user);
 

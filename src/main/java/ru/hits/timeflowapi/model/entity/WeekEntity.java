@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "week")
 public class WeekEntity {
 
@@ -37,5 +37,10 @@ public class WeekEntity {
     private Date endDate;
 
     @OneToMany(mappedBy = "week")
-    private List<LessonEntity> lessons;
+    private List<DayEntity> days;
+
+    @ManyToOne
+    @JoinColumn(name = "year_id", nullable = false)
+    private YearEntity year;
+
 }
