@@ -9,6 +9,7 @@ import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.model.dto.user.UserDto;
+import ru.hits.timeflowapi.model.dto.user.signup.BasicSignUpUserDetails;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -38,17 +39,7 @@ public class AuthService {
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmail(userSignUpDTO.getEmail());
 
-        UserEntity user = UserEntity
-                .builder()
-                .email(userSignUpDTO.getEmail())
-                .role(Role.ROLE_EMPLOYEE)
-                .name(userSignUpDTO.getName())
-                .surname(userSignUpDTO.getSurname())
-                .patronymic(userSignUpDTO.getPatronymic())
-                .accountStatus(AccountStatus.PENDING)
-                .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
-                .sex(userSignUpDTO.getSex())
-                .build();
+        UserEntity user = buildUser(userSignUpDTO, AccountStatus.ACTIVATE);
 
         user = userRepository.save(user);
 
@@ -67,17 +58,7 @@ public class AuthService {
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
         checkEmail(studentSignUpDTO.getEmail());
 
-        UserEntity user = UserEntity
-                .builder()
-                .email(studentSignUpDTO.getEmail())
-                .role(Role.ROLE_EMPLOYEE)
-                .name(studentSignUpDTO.getName())
-                .surname(studentSignUpDTO.getSurname())
-                .patronymic(studentSignUpDTO.getPatronymic())
-                .accountStatus(AccountStatus.PENDING)
-                .password(passwordEncoder.encode(studentSignUpDTO.getPassword()))
-                .sex(studentSignUpDTO.getSex())
-                .build();
+        UserEntity user = buildUser(studentSignUpDTO, AccountStatus.PENDING);
 
         Optional<StudentGroupEntity> studentGroupEntity =
                 studentGroupRepository.findById(studentSignUpDTO.getGroupId());
@@ -117,17 +98,7 @@ public class AuthService {
     public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         checkEmail(employeeSignUpDTO.getEmail());
 
-        UserEntity user = UserEntity
-                .builder()
-                .email(employeeSignUpDTO.getEmail())
-                .role(Role.ROLE_EMPLOYEE)
-                .name(employeeSignUpDTO.getName())
-                .surname(employeeSignUpDTO.getSurname())
-                .patronymic(employeeSignUpDTO.getPatronymic())
-                .accountStatus(AccountStatus.PENDING)
-                .password(passwordEncoder.encode(employeeSignUpDTO.getPassword()))
-                .sex(employeeSignUpDTO.getSex())
-                .build();
+        UserEntity user = buildUser(employeeSignUpDTO, AccountStatus.PENDING);
 
         user = userRepository.save(user);
 
@@ -150,6 +121,20 @@ public class AuthService {
                 employeeDetails.getUser().getSex(),
                 employeeDetails.getContactNumber()
         );
+    }
+
+    private UserEntity buildUser(BasicSignUpUserDetails basicSignUpUserDetails, AccountStatus accountStatus) {
+        return UserEntity
+                .builder()
+                .email(basicSignUpUserDetails.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .name(basicSignUpUserDetails.getName())
+                .surname(basicSignUpUserDetails.getSurname())
+                .patronymic(basicSignUpUserDetails.getPatronymic())
+                .accountStatus(accountStatus)
+                .password(passwordEncoder.encode(basicSignUpUserDetails.getPassword()))
+                .sex(basicSignUpUserDetails.getSex())
+                .build();
     }
 
     private void checkEmail(String email) {

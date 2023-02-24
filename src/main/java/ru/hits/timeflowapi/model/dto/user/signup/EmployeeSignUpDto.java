@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class EmployeeSignUpDto {
+public class EmployeeSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Почта", example = "string@string.string")
     @Email(message = "Некорректный формат почты.")
