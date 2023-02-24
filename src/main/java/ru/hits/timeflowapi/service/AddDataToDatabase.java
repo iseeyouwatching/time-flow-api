@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
+import ru.hits.timeflowapi.repository.EmployeePostRepository;
 import ru.hits.timeflowapi.repository.StudentGroupRepository;
 
 @Service
@@ -12,10 +14,12 @@ import ru.hits.timeflowapi.repository.StudentGroupRepository;
 public class AddDataToDatabase {
 
     private final StudentGroupRepository studentGroupRepository;
+    private final EmployeePostRepository employeePostRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void addData() {
         addStudentGroups();
+        addEmployeePosts();
     }
 
     private void addStudentGroups() {
@@ -37,6 +41,32 @@ public class AddDataToDatabase {
         studentGroupRepository.save(StudentGroupEntity.builder().number(972203).build());
         studentGroupRepository.save(StudentGroupEntity.builder().number(972205).build());
         studentGroupRepository.save(StudentGroupEntity.builder().number(972210).build());
+    }
+
+    private void addEmployeePosts() {
+        employeePostRepository.save(
+                EmployeePostEntity
+                        .builder()
+                        .postName("Составитель расписаний")
+                        .postRole("ROLE_SCHEDULE_MAKER")
+                        .build()
+        );
+
+        employeePostRepository.save(
+                EmployeePostEntity
+                        .builder()
+                        .postName("Администратор")
+                        .postRole("ROLE_ADMIN")
+                        .build()
+        );
+
+        employeePostRepository.save(
+                EmployeePostEntity
+                        .builder()
+                        .postName("Преподаватель")
+                        .postRole("ROLE_TEACHER")
+                        .build()
+        );
     }
 
 }
