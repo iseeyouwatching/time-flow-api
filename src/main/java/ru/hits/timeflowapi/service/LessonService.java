@@ -36,6 +36,7 @@ public class LessonService {
     private final ClassroomRepository classroomRepository;
     private final WeekRepository weekRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final DayRepository dayRepository;
 
     public StudentGroupTimetableDto getLessonsByGroupId(UUID id) {
 
@@ -59,7 +60,7 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
+                    new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
@@ -89,7 +90,7 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
+                    new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
@@ -119,7 +120,7 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
+                    new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
@@ -142,8 +143,8 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
-        lesson.setWeek(weekRepository.findById(createLessonDto.getWeekId()).orElse(null));
-        lesson.setLessonType(LessonType.values()[createLessonDto.getLessonType()]);
+        lesson.setDay(dayRepository.findById(createLessonDto.getDayId()).orElse(null));
+        lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
 
         lessonRepository.save(lesson);
 
@@ -165,7 +166,7 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
+                    new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 

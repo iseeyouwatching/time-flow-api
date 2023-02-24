@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,18 +29,17 @@ public class WeekEntity {
     private int sequenceNumber;
 
     @Column(name = "begin_date")
-    @Temporal(TemporalType.DATE)
-    private Date beginDate;
+    private LocalDate beginDate;
 
     @Column(name = "end_date")
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "week")
     private List<DayEntity> days;
 
-    @ManyToOne
-    @JoinColumn(name = "year_id", nullable = false)
-    private YearEntity year;
-
+    public WeekEntity(int sequenceNumber, LocalDate beginDate, LocalDate endDate) {
+        this.sequenceNumber = sequenceNumber;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+    }
 }

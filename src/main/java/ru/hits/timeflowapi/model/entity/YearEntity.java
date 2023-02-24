@@ -25,11 +25,10 @@ public class YearEntity {
     )
     private UUID id;
 
+    @Temporal(TemporalType.DATE)
     private Date beginDate;
 
+    @Temporal(TemporalType.DATE)
     private Date endDate;
-
-    @OneToMany(mappedBy = "year")
-    private List<WeekEntity> weeks;
 
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.entity.WeekEntity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,9 +18,9 @@ public class WeekDto {
 
     private int sequenceNumber;
 
-    private Date beginDate;
+    private LocalDate beginDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
     public WeekDto(WeekEntity entity) {
         this.id = entity.getId();

@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.CustomRuntimeException;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.util.DaysForCurrentYear;
+import ru.hits.timeflowapi.util.WeeksForCurrentYear;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,10 @@ public class AddDataToDatabase {
     private final TimeslotRepository timeslotRepository;
     private final WeekRepository weekRepository;
 
+    private final WeeksForCurrentYear weeksForCurrentYear;
+    private final DaysForCurrentYear daysForCurrentYear;
+    private final DayRepository dayRepository;
+
 
     @EventListener(ApplicationReadyEvent.class)
     public void addData() {
@@ -32,6 +39,7 @@ public class AddDataToDatabase {
         addClassrooms();
         addTimeslots();
         addWeeks();
+        addDays();
     }
 
     private void addStudentGroups() {
@@ -121,16 +129,28 @@ public class AddDataToDatabase {
     }
 
     private void addWeeks() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            weekRepository.save(WeekEntity.builder().sequenceNumber(25).beginDate(new Date(String.valueOf(dateFormat.parse("2023-02-20")))).endDate(new Date(String.valueOf(dateFormat.parse("2023-02-25")))).build());
-            weekRepository.save(WeekEntity.builder().sequenceNumber(26).beginDate(new Date(String.valueOf(dateFormat.parse("2023-02-27")))).endDate(new Date(String.valueOf(dateFormat.parse("2023-03-04")))).build());
-            weekRepository.save(WeekEntity.builder().sequenceNumber(27).beginDate(new Date(String.valueOf(dateFormat.parse("2023-03-06")))).endDate(new Date(String.valueOf(dateFormat.parse("2023-03-11")))).build());
-            weekRepository.save(WeekEntity.builder().sequenceNumber(28).beginDate(new Date(String.valueOf(dateFormat.parse("2023-03-13")))).endDate(new Date(String.valueOf(dateFormat.parse("2023-03-18")))).build());
+
+        List<WeekEntity> weeks = weeksForCurrentYear.getWeeksForCurrentSchoolYear();
+
+        for (WeekEntity week: weeks) {
+            weekRepository.save(
+                    WeekEntity.builder()
+                    .sequenceNumber(week.getSequenceNumber())
+                    .beginDate(week.getBeginDate())
+                    .endDate(week.getEndDate())
+                    .build());
         }
-        catch (ParseException e) {
-            throw new CustomRuntimeException("Таблица 'week' не была заполнена данными");
+
+    }
+
+    private void addDays() {
+
+        List<DayEntity> days = daysForCurrentYear.getDaysForCurrentSchoolYear();
+
+        for (DayEntity day: days) {
+            dayRepository.save(DayEntity.builder().date(day.getDate()).week(day.getWeek()).build());
         }
+
     }
 
 }
