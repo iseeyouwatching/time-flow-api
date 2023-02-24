@@ -1,19 +1,31 @@
 package ru.hits.timeflowapi.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.hits.timeflowapi.model.entity.UserEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-public record UserDetails(UserEntity user) implements org.springframework.security.core.userdetails.UserDetails {
+@RequiredArgsConstructor
+public class UserDetailsImpl implements UserDetails {
+
+    private final UserEntity user;
+    private final List<String> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(
-                new SimpleGrantedAuthority(this.user.getRole().toString())
-        );
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+
+        return authorities;
     }
 
     @Override
@@ -45,4 +57,5 @@ public record UserDetails(UserEntity user) implements org.springframework.securi
     public boolean isEnabled() {
         return true;
     }
+
 }
