@@ -34,6 +34,6 @@ public class ScheduleMakerRequestConfirmEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date closedDate;
 
-    private boolean isCompleted;
+    private boolean isClosed;
 
 }

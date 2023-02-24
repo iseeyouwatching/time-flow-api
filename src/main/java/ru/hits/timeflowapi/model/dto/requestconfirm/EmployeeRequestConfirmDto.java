@@ -19,6 +19,8 @@ public class EmployeeRequestConfirmDto {
 
     private Date closedDate;
 
-    private EmployeeDto employeeDetails;
+    private boolean isClosed;
+
+    private EmployeeDto employee;
 
 }

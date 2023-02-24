@@ -19,8 +19,8 @@ public class StudentRequestConfirmDto {
 
     private Date closedDate;
 
-    private boolean isCompleted;
+    private boolean isClosed;
 
-    private StudentDto studentDto;
+    private StudentDto student;
 
 }

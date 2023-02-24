@@ -103,7 +103,7 @@ public class AuthService {
         StudentRequestConfirmEntity studentRequestConfirm = StudentRequestConfirmEntity
                 .builder()
                 .studentDetails(studentDetails)
-                .isCompleted(false)
+                .isClosed(false)
                 .creationDate(new Date())
                 .build();
 
@@ -139,7 +139,7 @@ public class AuthService {
                 .builder()
                 .employeeDetails(employeeDetails)
                 .creationDate(new Date())
-                .isCompleted(false)
+                .isClosed(false)
                 .build();
 
         employeeRequestConfirmRepository.save(employeeRequestConfirm);
@@ -170,7 +170,7 @@ public class AuthService {
                 .builder()
                 .employeeDetails(employeeDetails)
                 .creationDate(new Date())
-                .isCompleted(false)
+                .isClosed(false)
                 .build();
 
         scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
