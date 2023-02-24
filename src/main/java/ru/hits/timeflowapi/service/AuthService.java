@@ -30,6 +30,7 @@ import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepos
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -103,6 +104,7 @@ public class AuthService {
                 .builder()
                 .studentDetails(studentDetails)
                 .isCompleted(false)
+                .creationDate(new Date())
                 .build();
 
         studentRequestConfirmRepository.save(studentRequestConfirm);
@@ -136,6 +138,7 @@ public class AuthService {
         EmployeeRequestConfirmEntity employeeRequestConfirm = EmployeeRequestConfirmEntity
                 .builder()
                 .employeeDetails(employeeDetails)
+                .creationDate(new Date())
                 .isCompleted(false)
                 .build();
 
@@ -166,6 +169,7 @@ public class AuthService {
         ScheduleMakerRequestConfirmEntity scheduleMakerRequestConfirm = ScheduleMakerRequestConfirmEntity
                 .builder()
                 .employeeDetails(employeeDetails)
+                .creationDate(new Date())
                 .isCompleted(false)
                 .build();
 
