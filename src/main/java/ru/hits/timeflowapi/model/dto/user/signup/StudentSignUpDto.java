@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class StudentSignUpDto {
+public class StudentSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Почта", example = "string@string.string")
     @Email(message = "Некорректный формат почты.")
