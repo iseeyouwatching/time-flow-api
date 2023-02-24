@@ -17,12 +17,18 @@ import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.model.entity.UserEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestConfirmEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestConfirmEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestConfirmEntity;
 import ru.hits.timeflowapi.model.enumeration.AccountStatus;
 import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentGroupRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
 
 import java.util.Optional;
 
@@ -35,6 +41,9 @@ public class AuthService {
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final StudentDetailsRepository studentDetailsRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final EmployeeRequestConfirmRepository employeeRequestConfirmRepository;
+    private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
+    private final StudentRequestConfirmRepository studentRequestConfirmRepository;
 
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmail(userSignUpDTO.getEmail());
@@ -78,6 +87,14 @@ public class AuthService {
 
         studentDetails = studentDetailsRepository.save(studentDetails);
 
+        StudentRequestConfirmEntity studentRequestConfirm = StudentRequestConfirmEntity
+                .builder()
+                .studentDetails(studentDetails)
+                .isCompleted(false)
+                .build();
+
+        studentRequestConfirmRepository.save(studentRequestConfirm);
+
         return new StudentDto(
                 studentDetails.getUser().getId(),
                 studentDetails.getUser().getEmail(),
@@ -96,19 +113,15 @@ public class AuthService {
     }
 
     public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        checkEmail(employeeSignUpDTO.getEmail());
+        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
 
-        UserEntity user = buildUser(employeeSignUpDTO, AccountStatus.PENDING);
-
-        user = userRepository.save(user);
-
-        EmployeeDetailsEntity employeeDetails = EmployeeDetailsEntity
+        EmployeeRequestConfirmEntity employeeRequestConfirm = EmployeeRequestConfirmEntity
                 .builder()
-                .user(user)
-                .contactNumber(employeeSignUpDTO.getContractNumber())
+                .employeeDetails(employeeDetails)
+                .isCompleted(false)
                 .build();
 
-        employeeDetails = employeeDetailsRepository.save(employeeDetails);
+        employeeRequestConfirmRepository.save(employeeRequestConfirm);
 
         return new EmployeeDto(
                 employeeDetails.getUser().getId(),
@@ -122,6 +135,47 @@ public class AuthService {
                 employeeDetails.getContactNumber()
         );
     }
+
+    public EmployeeDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDTO) {
+        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
+
+        ScheduleMakerRequestConfirmEntity scheduleMakerRequestConfirm = ScheduleMakerRequestConfirmEntity
+                .builder()
+                .employeeDetails(employeeDetails)
+                .isCompleted(false)
+                .build();
+
+        scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
+
+        return new EmployeeDto(
+                employeeDetails.getUser().getId(),
+                employeeDetails.getUser().getEmail(),
+                employeeDetails.getUser().getRole(),
+                employeeDetails.getUser().getName(),
+                employeeDetails.getUser().getSurname(),
+                employeeDetails.getUser().getPatronymic(),
+                employeeDetails.getUser().getAccountStatus(),
+                employeeDetails.getUser().getSex(),
+                employeeDetails.getContactNumber()
+        );
+    }
+
+    public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
+        checkEmail(employeeSignUpDTO.getEmail());
+
+        UserEntity user = buildUser(employeeSignUpDTO, AccountStatus.PENDING);
+
+        user = userRepository.save(user);
+
+        EmployeeDetailsEntity employeeDetails = EmployeeDetailsEntity
+                .builder()
+                .user(user)
+                .contactNumber(employeeSignUpDTO.getContractNumber())
+                .build();
+
+        return employeeDetailsRepository.save(employeeDetails);
+    }
+
 
     private UserEntity buildUser(BasicSignUpUserDetails basicSignUpUserDetails, AccountStatus accountStatus) {
         return UserEntity

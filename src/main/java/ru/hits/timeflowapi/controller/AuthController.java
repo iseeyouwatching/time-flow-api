@@ -25,18 +25,23 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("user/sign-up")
-    public ResponseEntity<UserDto> userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDTO) {
-        return new ResponseEntity<>(authService.userSignUp(userSignUpDTO), HttpStatus.OK);
+    public ResponseEntity<UserDto> userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDto) {
+        return new ResponseEntity<>(authService.userSignUp(userSignUpDto), HttpStatus.OK);
     }
 
     @PostMapping("student/sign-up")
-    public ResponseEntity<StudentDto> studentSignUp(@Valid @RequestBody StudentSignUpDto studentSignUpDTO) {
-        return new ResponseEntity<>(authService.studentSignUp(studentSignUpDTO), HttpStatus.OK);
+    public ResponseEntity<StudentDto> studentSignUp(@Valid @RequestBody StudentSignUpDto studentSignUpDto) {
+        return new ResponseEntity<>(authService.studentSignUp(studentSignUpDto), HttpStatus.OK);
     }
 
     @PostMapping("employee/sign-up")
-    public ResponseEntity<EmployeeDto> employeeSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDTO) {
-        return new ResponseEntity<>(authService.employeeSignUp(employeeSignUpDTO), HttpStatus.OK);
+    public ResponseEntity<EmployeeDto> employeeSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
+        return new ResponseEntity<>(authService.employeeSignUp(employeeSignUpDto), HttpStatus.OK);
+    }
+
+    @PostMapping("employee/schedule-maker/sig-up")
+    public ResponseEntity<EmployeeDto> schedulerMakerSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
+        return new ResponseEntity<>(authService.scheduleMakerSignUp(employeeSignUpDto), HttpStatus.OK);
     }
 
 }
