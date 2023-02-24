@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +14,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "employee_post")
-public class EmployeePostEntity {
+@Table(name = "year")
+public class YearEntity {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -23,13 +25,11 @@ public class EmployeePostEntity {
     )
     private UUID id;
 
-    @Column(unique = true)
-    private String postRole;    // пример: "ROLE_ADMIN"
+    private Date beginDate;
 
-    @Column(unique = true)
-    private String postName;    // пример: "Администратор"
+    private Date endDate;
 
-    @ManyToMany(mappedBy = "posts")
-    private List<EmployeeDetailsEntity> employees;
+    @OneToMany(mappedBy = "year")
+    private List<WeekEntity> weeks;
 
 }

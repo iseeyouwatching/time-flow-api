@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "lesson")
 public class LessonEntity {
 
@@ -24,7 +25,7 @@ public class LessonEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "student_group", nullable = false)
+    @JoinColumn(name = "student_group_id", nullable = false)
     private StudentGroupEntity studentGroup;
 
     @ManyToOne
@@ -44,9 +45,10 @@ public class LessonEntity {
     private TimeslotEntity timeslot;
 
     @ManyToOne
-    @JoinColumn(name = "week_id", nullable = false)
-    private WeekEntity week;
+    @JoinColumn(name = "day_id", nullable = false)
+    private DayEntity day;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "lesson_type")
     private LessonType lessonType;
 

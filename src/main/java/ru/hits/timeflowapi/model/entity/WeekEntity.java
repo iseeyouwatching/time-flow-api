@@ -37,5 +37,10 @@ public class WeekEntity {
     private Date endDate;
 
     @OneToMany(mappedBy = "week")
-    private List<LessonEntity> lessons;
+    private List<DayEntity> days;
+
+    @ManyToOne
+    @JoinColumn(name = "year_id", nullable = false)
+    private YearEntity year;
+
 }
