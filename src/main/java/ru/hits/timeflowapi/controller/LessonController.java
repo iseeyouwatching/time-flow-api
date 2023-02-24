@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hits.timeflowapi.model.dto.ResponseBodyMessage;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonsDto;
@@ -36,7 +37,7 @@ public class LessonController {
         return new ResponseEntity<>(lessonService.getLessonsByClassroomId(id), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<LessonDto> getLessonById(@PathVariable("id") UUID id) {
         return new ResponseEntity<>(lessonService.getLessonById(id), HttpStatus.OK);
     }
@@ -44,6 +45,17 @@ public class LessonController {
     @PostMapping
     public ResponseEntity<LessonDto> addLesson(@RequestBody CreateLessonDto createLessonDto) {
         return new ResponseEntity<>(lessonService.addLesson(createLessonDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseBodyMessage> deleteLesson(@PathVariable("id") UUID id) {
+        lessonService.deleteLesson(id);
+        return new ResponseEntity<>(new ResponseBodyMessage("Пара с ID " + id + " была успешно удалена"), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody CreateLessonDto updatedLessonDto) {
+        return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);
     }
 
     @GetMapping

@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
@@ -32,6 +30,7 @@ public class CreateLessonDto {
     @NotBlank(message = "Day ID is required")
     private UUID dayId;
 
+    @NotBlank(message = "Lesson type is required")
     private String lessonType;
 
 }

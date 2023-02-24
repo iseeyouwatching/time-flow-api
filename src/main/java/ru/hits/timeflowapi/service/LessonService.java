@@ -130,7 +130,13 @@ public class LessonService {
 
     public LessonDto getLessonById(UUID id) {
 
-        return new LessonDto(Objects.requireNonNull(lessonRepository.findById(id).orElse(null)));
+        LessonEntity lesson = lessonRepository.findById(id).orElse(null);
+
+        if (lesson == null) {
+            throw new NotFoundException("Пары с таким ID " + id + " не существует");
+        }
+
+        return new LessonDto(lesson);
 
     }
 
@@ -151,6 +157,39 @@ public class LessonService {
         return new LessonDto(lesson);
 
     }
+
+    public void deleteLesson(UUID id) {
+
+        if (lessonRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Пары с таким ID " + id + " не существует");
+        }
+
+        lessonRepository.deleteById(id);
+
+    }
+
+    public LessonDto updateLesson(UUID id, CreateLessonDto updatedLessonDto) {
+
+        LessonEntity lesson = lessonRepository.findById(id).orElse(null);
+
+        if (lesson == null) {
+            throw new NotFoundException("Пары с таким ID " + id + " не существует");
+        }
+
+        lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
+        lesson.setSubject(subjectRepository.findById(updatedLessonDto.getSubjectId()).orElse(null));
+        lesson.setTeacher(teacherRepository.findById(updatedLessonDto.getTeacherId()).orElse(null));
+        lesson.setClassroom(classroomRepository.findById(updatedLessonDto.getClassroomId()).orElse(null));
+        lesson.setTimeslot(timeslotRepository.findById(updatedLessonDto.getTimeslotId()).orElse(null));
+        lesson.setDay(dayRepository.findById(updatedLessonDto.getDayId()).orElse(null));
+        lesson.setLessonType(LessonType.valueOf(updatedLessonDto.getLessonType()));
+
+        lessonRepository.save(lesson);
+
+        return new LessonDto(lesson);
+
+    }
+
 
     public LessonsDto getAllLessons() {
 
