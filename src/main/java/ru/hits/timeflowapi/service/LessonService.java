@@ -6,9 +6,9 @@ import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.*;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
+import ru.hits.timeflowapi.model.dto.day.DayDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonsDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
@@ -193,6 +193,7 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(updatedLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(updatedLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(updatedLessonDto.getTimeslotId()).orElse(null));
+        lesson.setWeek(weekRepository.findById(updatedLessonDto.getWeekId()).orElse(null));
         lesson.setDay(dayRepository.findById(updatedLessonDto.getDayId()).orElse(null));
         lesson.setLessonType(LessonType.valueOf(updatedLessonDto.getLessonType()));
 

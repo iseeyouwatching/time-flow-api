@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.ResponseBodyMessage;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonsDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;

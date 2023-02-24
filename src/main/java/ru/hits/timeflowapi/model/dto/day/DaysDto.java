@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto.lesson;
+package ru.hits.timeflowapi.model.dto.day;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LessonsDto {
+public class DaysDto {
 
-    private List<LessonDto> lessons;
+    List<DayDto> days;
 
 }
