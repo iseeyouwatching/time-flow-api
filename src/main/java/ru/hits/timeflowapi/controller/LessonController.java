@@ -22,19 +22,22 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @GetMapping("/group/{groupId}")
-    public ResponseEntity<StudentGroupTimetableDto> getLessonsByGroupId(@PathVariable("groupId") UUID id) {
-        return new ResponseEntity<>(lessonService.getLessonsByGroupId(id), HttpStatus.OK);
+    @GetMapping("/week/{weekId}/group/{groupId}")
+    public ResponseEntity<StudentGroupTimetableDto> getWeekLessonsByGroupId(@PathVariable("weekId") UUID weekId,
+                                                                            @PathVariable("groupId") UUID groupId) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByGroupId(weekId, groupId), HttpStatus.OK);
     }
 
-    @GetMapping("/teacher/{teacherId}")
-    public ResponseEntity<TeacherTimetableDto> getLessonsByTeacherId(@PathVariable("teacherId") UUID id) {
-        return new ResponseEntity<>(lessonService.getLessonsByTeacherId(id), HttpStatus.OK);
+    @GetMapping("/week/{weekId}/teacher/{teacherId}")
+    public ResponseEntity<TeacherTimetableDto> getWeekLessonsByTeacherId(@PathVariable("weekId") UUID weekId,
+                                                                         @PathVariable("teacherId") UUID teacherId) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByTeacherId(weekId, teacherId), HttpStatus.OK);
     }
 
-    @GetMapping("/classroom/{classroomId}")
-    public ResponseEntity<ClassroomTimetableDto> getLessonsByClassroomId(@PathVariable("classroomId") UUID id) {
-        return new ResponseEntity<>(lessonService.getLessonsByClassroomId(id), HttpStatus.OK);
+    @GetMapping("/week/{weekId}/classroom/{classroomId}")
+    public ResponseEntity<ClassroomTimetableDto> getWeekLessonsByClassroomId(@PathVariable("weekId") UUID weekId,
+                                                                             @PathVariable("classroomId") UUID classroomId) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByClassroomId(weekId, classroomId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -56,11 +59,6 @@ public class LessonController {
     @PatchMapping("/{id}")
     public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody CreateLessonDto updatedLessonDto) {
         return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<LessonsDto> getAllLessons() {
-        return new ResponseEntity<>(lessonService.getAllLessons(), HttpStatus.OK);
     }
 
 }

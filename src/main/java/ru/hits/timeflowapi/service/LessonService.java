@@ -13,16 +13,12 @@ import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
-import ru.hits.timeflowapi.model.entity.ClassroomEntity;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
-import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
-import ru.hits.timeflowapi.model.entity.TeacherEntity;
+import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -34,21 +30,25 @@ public class LessonService {
     private final TeacherRepository teacherRepository;
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
-    private final WeekRepository weekRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
 
-    public StudentGroupTimetableDto getLessonsByGroupId(UUID id) {
+    public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID weekId, UUID groupId) {
 
-        StudentGroupEntity studentGroup = studentGroupRepository.findById(id).orElse(null);
+        StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId).orElse(null);
 
         if (studentGroup == null) {
-            throw new NotFoundException("Студенческой группы с таким ID " + id + " не существует");
+            throw new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует");
         }
 
-        StudentGroupBasicDto studentGroupBasicDto = new StudentGroupBasicDto(studentGroup);
+        WeekEntity week = weekRepository.findById(weekId).orElse(null);
 
-        List<LessonEntity> lessons = lessonRepository.findByStudentGroup(studentGroup);
+        if (week == null) {
+            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+        }
+
+        List<LessonEntity> lessons = lessonRepository.findByStudentGroupAndWeek(studentGroup, week);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
@@ -60,25 +60,30 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
-        return new StudentGroupTimetableDto(studentGroupBasicDto, lessonDtos);
+        return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), lessonDtos);
 
     }
 
-    public TeacherTimetableDto getLessonsByTeacherId(UUID id) {
+    public TeacherTimetableDto getWeekLessonsByTeacherId(UUID weekId, UUID teacherId) {
 
-        TeacherEntity teacher = teacherRepository.findById(id).orElse(null);
+        TeacherEntity teacher = teacherRepository.findById(teacherId).orElse(null);
 
         if (teacher == null) {
-            throw new NotFoundException("Преподавателя с таким ID " + id + " не существует");
+            throw new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует");
         }
 
-        TeacherDto teacherDto = new TeacherDto(teacher);
+        WeekEntity week = weekRepository.findById(weekId).orElse(null);
 
-        List<LessonEntity> lessons = lessonRepository.findByTeacher(teacher);
+        if (week == null) {
+            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+        }
+
+        List<LessonEntity> lessons = lessonRepository.findByTeacherAndWeek(teacher, week);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
@@ -90,23 +95,28 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
-        return new TeacherTimetableDto(teacherDto, lessonDtos);
+        return new TeacherTimetableDto(new TeacherDto(teacher), lessonDtos);
 
     }
 
-    public ClassroomTimetableDto getLessonsByClassroomId(UUID id) {
+    public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID weekId, UUID classroomId) {
 
-        ClassroomEntity classroom = classroomRepository.findById(id).orElse(null);
+        ClassroomEntity classroom = classroomRepository.findById(classroomId).orElse(null);
 
         if (classroom == null) {
-            throw new NotFoundException("Аудитории с таким ID " + id + " не существует");
+            throw new NotFoundException("Аудитории с таким ID " + classroomId + " не существует");
         }
 
-        ClassroomDto classroomDto = new ClassroomDto(classroom);
+        WeekEntity week = weekRepository.findById(weekId).orElse(null);
+
+        if (week == null) {
+            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+        }
 
         List<LessonEntity> lessons = lessonRepository.findByClassroom(classroom);
 
@@ -120,11 +130,12 @@ public class LessonService {
                     new TeacherDto(lesson.getTeacher()),
                     new ClassroomDto(lesson.getClassroom()),
                     new TimeslotDto(lesson.getTimeslot()),
+                    new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
                     lesson.getLessonType()));
         }
 
-        return new ClassroomTimetableDto(classroomDto, lessonDtos);
+        return new ClassroomTimetableDto(new ClassroomDto(classroom), lessonDtos);
 
     }
 
@@ -149,6 +160,7 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
+        lesson.setWeek(weekRepository.findById(createLessonDto.getWeekId()).orElse(null));
         lesson.setDay(dayRepository.findById(createLessonDto.getDayId()).orElse(null));
         lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
 
@@ -190,26 +202,4 @@ public class LessonService {
 
     }
 
-
-    public LessonsDto getAllLessons() {
-
-        List<LessonDto> lessonDtos = new ArrayList<>();
-
-        List<LessonEntity> lessons = lessonRepository.findAll();
-
-        for (LessonEntity lesson: lessons) {
-            lessonDtos.add(new LessonDto(
-                    lesson.getId(),
-                    new StudentGroupBasicDto(lesson.getStudentGroup()),
-                    new SubjectDto(lesson.getSubject()),
-                    new TeacherDto(lesson.getTeacher()),
-                    new ClassroomDto(lesson.getClassroom()),
-                    new TimeslotDto(lesson.getTimeslot()),
-                    new DayDto(lesson.getDay()),
-                    lesson.getLessonType()));
-        }
-
-        return new LessonsDto(lessonDtos);
-
-    }
 }

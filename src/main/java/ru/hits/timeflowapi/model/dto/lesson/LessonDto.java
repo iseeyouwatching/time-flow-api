@@ -29,6 +29,8 @@ public class LessonDto {
 
     private TimeslotDto timeslot;
 
+    private WeekDto week;
+
     private DayDto day;
 
     private LessonType lessonType;
@@ -40,6 +42,7 @@ public class LessonDto {
         this.teacher = new TeacherDto(lesson.getTeacher());
         this.classroom = new ClassroomDto(lesson.getClassroom());
         this.timeslot = new TimeslotDto(lesson.getTimeslot());
+        this.week = new WeekDto(lesson.getWeek());
         this.day = new DayDto(lesson.getDay());
         this.lessonType = lesson.getLessonType();
     }

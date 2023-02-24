@@ -37,6 +37,9 @@ public class WeekEntity {
     @OneToMany(mappedBy = "week")
     private List<DayEntity> days;
 
+    @OneToMany(mappedBy = "week")
+    private List<LessonEntity> lessons;
+
     public WeekEntity(int sequenceNumber, LocalDate beginDate, LocalDate endDate) {
         this.sequenceNumber = sequenceNumber;
         this.beginDate = beginDate;
