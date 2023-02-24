@@ -54,7 +54,7 @@ public class AuthService {
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmail(userSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(userSignUpDTO, AccountStatus.ACTIVATE);
+        UserEntity user = buildUser(userSignUpDTO, Role.ROLE_USER, AccountStatus.ACTIVATE);
 
         user = userRepository.save(user);
 
@@ -79,7 +79,7 @@ public class AuthService {
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
         checkEmail(studentSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(studentSignUpDTO, AccountStatus.PENDING);
+        UserEntity user = buildUser(studentSignUpDTO, Role.ROLE_STUDENT, AccountStatus.PENDING);
 
         Optional<StudentGroupEntity> studentGroupEntity =
                 studentGroupRepository.findById(studentSignUpDTO.getGroupId());
@@ -193,7 +193,7 @@ public class AuthService {
     public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         checkEmail(employeeSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(employeeSignUpDTO, AccountStatus.PENDING);
+        UserEntity user = buildUser(employeeSignUpDTO, Role.ROLE_EMPLOYEE, AccountStatus.PENDING);
 
         user = userRepository.save(user);
 
@@ -211,14 +211,15 @@ public class AuthService {
      * он не сохраняет её в БД!</strong>
      *
      * @param basicSignUpUserDetails информация о пользователе.
+     * @param role                   роль пользователя.
      * @param accountStatus          статус аккаунта.
      * @return сущность пользователя.
      */
-    private UserEntity buildUser(BasicSignUpUserDetails basicSignUpUserDetails, AccountStatus accountStatus) {
+    private UserEntity buildUser(BasicSignUpUserDetails basicSignUpUserDetails, Role role, AccountStatus accountStatus) {
         return UserEntity
                 .builder()
                 .email(basicSignUpUserDetails.getEmail())
-                .role(Role.ROLE_EMPLOYEE)
+                .role(role)
                 .name(basicSignUpUserDetails.getName())
                 .surname(basicSignUpUserDetails.getSurname())
                 .patronymic(basicSignUpUserDetails.getPatronymic())
