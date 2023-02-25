@@ -110,7 +110,7 @@ public class AddDataToDatabase {
                         .builder()
                         .user(user)
                         .posts(List.of(roleAdmin.get()))
-                        .contactNumber("000000")
+                        .contractNumber("000000")
                         .build()
         );
 

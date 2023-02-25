@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.UserMapper;
@@ -29,7 +30,6 @@ import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirm
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,18 +73,22 @@ public class AuthService {
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
         checkEmail(studentSignUpDTO.getEmail());
 
+        if (studentDetailsRepository.existsByStudentNumber(studentSignUpDTO.getStudentNumber())) {
+            throw new ConflictException("Пользователь с таким номером студенческого билета уже существует");
+        }
+
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 studentSignUpDTO,
                 Role.ROLE_STUDENT,
                 AccountStatus.PENDING
         );
 
-        Optional<StudentGroupEntity> studentGroupEntity =
-                studentGroupRepository.findById(studentSignUpDTO.getGroupId());
-
-        if (studentGroupEntity.isEmpty()) {
-            throw new NotFoundException("Группа с таким ID не найдена");
-        }
+        StudentGroupEntity studentGroupEntity =
+                studentGroupRepository
+                        .findById(studentSignUpDTO.getGroupId())
+                        .orElseThrow(() -> {
+                            throw new NotFoundException("Группа с таким ID не найдена");
+                        });
 
         user = userRepository.save(user);
 
@@ -92,7 +96,7 @@ public class AuthService {
                 .builder()
                 .user(user)
                 .studentNumber(studentSignUpDTO.getStudentNumber())
-                .group(studentGroupEntity.get())
+                .group(studentGroupEntity)
                 .build();
 
         studentDetails = studentDetailsRepository.save(studentDetails);
@@ -118,6 +122,10 @@ public class AuthService {
     public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
 
+        if (employeeDetailsRepository.existsByContractNumber(employeeDetails.getContractNumber())) {
+            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
+        }
+
         EmployeeRequestConfirmEntity employeeRequestConfirm = EmployeeRequestConfirmEntity
                 .builder()
                 .employeeDetails(employeeDetails)
@@ -138,6 +146,10 @@ public class AuthService {
      */
     public EmployeeDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
+
+        if (employeeDetailsRepository.existsByContractNumber(employeeDetails.getContractNumber())) {
+            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
+        }
 
         ScheduleMakerRequestConfirmEntity scheduleMakerRequestConfirm = ScheduleMakerRequestConfirmEntity
                 .builder()
@@ -171,7 +183,7 @@ public class AuthService {
         EmployeeDetailsEntity employeeDetails = EmployeeDetailsEntity
                 .builder()
                 .user(user)
-                .contactNumber(employeeSignUpDTO.getContractNumber())
+                .contractNumber(employeeSignUpDTO.getContractNumber())
                 .build();
 
         return employeeDetailsRepository.save(employeeDetails);

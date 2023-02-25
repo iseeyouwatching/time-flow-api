@@ -43,7 +43,7 @@ public class UserMapper {
                 studentDetails.getUser().getPatronymic(),
                 studentDetails.getUser().getAccountStatus(),
                 studentDetails.getUser().getSex(),
-                studentDetails.getUser().getStudent().getStudentNumber(),
+                studentDetails.getStudentNumber(),
                 new StudentGroupBasicDto(
                         studentDetails.getGroup().getId(),
                         studentDetails.getGroup().getNumber()
@@ -61,7 +61,7 @@ public class UserMapper {
                 employeeDetails.getUser().getPatronymic(),
                 employeeDetails.getUser().getAccountStatus(),
                 employeeDetails.getUser().getSex(),
-                employeeDetails.getContactNumber()
+                employeeDetails.getContractNumber()
         );
     }
 
