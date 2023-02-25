@@ -66,7 +66,7 @@ public class LessonService {
                     lesson.getLessonType()));
         }
 
-        return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), lessonDtos);
+        return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), week.getId(), lessonDtos);
 
     }
 
@@ -101,7 +101,7 @@ public class LessonService {
                     lesson.getLessonType()));
         }
 
-        return new TeacherTimetableDto(new TeacherDto(teacher), lessonDtos);
+        return new TeacherTimetableDto(new TeacherDto(teacher), week.getId(), lessonDtos);
 
     }
 
@@ -136,7 +136,7 @@ public class LessonService {
                     lesson.getLessonType()));
         }
 
-        return new ClassroomTimetableDto(new ClassroomDto(classroom), lessonDtos);
+        return new ClassroomTimetableDto(new ClassroomDto(classroom), week.getId(), lessonDtos);
 
     }
 
