@@ -46,6 +46,11 @@ public class ConfirmRequestController {
         return confirmRequestService.confirmStudentRequest(id);
     }
 
+    @PostMapping("/student/{id}/reject")
+    public StudentDto rejectStudentRequest(@PathVariable UUID id) {
+        return confirmRequestService.rejectStudentRequest(id);
+    }
+
     @GetMapping("/employee")
     public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -72,6 +77,12 @@ public class ConfirmRequestController {
         return confirmRequestService.confirmEmployeeRequest(id, postIds);
     }
 
+    @PostMapping("/employee/{id}/reject")
+    public EmployeeDto rejectEmployeeRequest(@PathVariable UUID id) {
+        return confirmRequestService.rejectEmployeeRequest(id);
+    }
+
+
     @GetMapping("/employee/schedule-maker")
     public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -92,9 +103,13 @@ public class ConfirmRequestController {
         return confirmRequestService.getScheduleMakerRequestById(id);
     }
 
-    @PostMapping("/schedule-maker/{id}/accept")
+    @PostMapping("/employee/schedule-maker/{id}/accept")
     public EmployeeDto acceptScheduleMakerRequest(@PathVariable UUID id) {
         return confirmRequestService.confirmScheduleMakerRequest(id);
     }
 
+    @PostMapping("/employee/schedule-maker/{id}/reject")
+    public EmployeeDto rejectScheduleMakerRequest(@PathVariable UUID id) {
+        return confirmRequestService.rejectScheduleMakerRequest(id);
+    }
 }

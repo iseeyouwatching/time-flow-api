@@ -191,4 +191,52 @@ public class ConfirmRequestService {
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
 
+    public StudentDto rejectStudentRequest(UUID requestId) {
+        StudentRequestConfirmEntity request = studentRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка студента с таким ID не найдена.");
+                });
+
+        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.DENIED);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
+
+        request = studentRequestConfirmRepository.save(request);
+
+        return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
+    }
+
+    public EmployeeDto rejectEmployeeRequest(UUID requestId) {
+        EmployeeRequestConfirmEntity request = employeeRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка сотрудникам с таким ID не найдена");
+                });
+
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.DENIED);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
+
+        request = employeeRequestConfirmRepository.save(request);
+
+        return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
+    }
+
+    public EmployeeDto rejectScheduleMakerRequest(UUID requestId) {
+        ScheduleMakerRequestConfirmEntity request = scheduleMakerRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена");
+                });
+
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
+
+        request = scheduleMakerRequestConfirmRepository.save(request);
+
+        return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
+    }
+
 }
