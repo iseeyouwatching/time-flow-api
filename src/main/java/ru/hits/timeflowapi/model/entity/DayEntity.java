@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,11 +25,15 @@ public class DayEntity {
     )
     private UUID id;
 
-    @Temporal(TemporalType.TIME)
-    private Date data;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "week_id", nullable = false)
     private WeekEntity week;
+
+    public DayEntity(LocalDate date, WeekEntity week) {
+        this.date = date;
+        this.week = week;
+    }
 
 }

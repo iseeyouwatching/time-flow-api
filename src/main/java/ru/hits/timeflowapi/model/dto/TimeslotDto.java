@@ -3,6 +3,7 @@ package ru.hits.timeflowapi.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.entity.TimeslotEntity;
 
 import java.util.Date;
 import java.util.UUID;
@@ -16,8 +17,15 @@ public class TimeslotDto {
 
     private int sequenceNumber;
 
-    private Date beginTime;
+    private String beginTime;
 
-    private Date endTime;
+    private String endTime;
+
+    public TimeslotDto(TimeslotEntity entity) {
+        this.id = entity.getId();
+        this.sequenceNumber = entity.getSequenceNumber();
+        this.beginTime = entity.getBeginTime();
+        this.endTime = entity.getEndTime();
+    }
 
 }
