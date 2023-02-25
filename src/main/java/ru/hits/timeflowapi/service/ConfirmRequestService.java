@@ -103,42 +103,26 @@ public class ConfirmRequestService {
         return employees.map(requestMapper::employeeRequestConfirmToDto);
     }
 
-    public StudentRequestConfirmDto getStudentRequestById(UUID id) {
-        Optional<StudentRequestConfirmEntity> request = studentRequestConfirmRepository.findById(id);
+    public StudentRequestConfirmDto getStudentRequestById(UUID requestId) {
+        StudentRequestConfirmEntity request = getStudentRequest(requestId);
 
-        if (request.isPresent()) {
-            return requestMapper.studentRequestConfirmToDto(request.get());
-        }
-
-        throw new NotFoundException("Заявка студента не найдена. ID = " + id);
+        return requestMapper.studentRequestConfirmToDto(request);
     }
 
-    public EmployeeRequestConfirmDto getEmployeeRequestById(UUID id) {
-        Optional<EmployeeRequestConfirmEntity> request = employeeRequestConfirmRepository.findById(id);
+    public EmployeeRequestConfirmDto getEmployeeRequestById(UUID requestId) {
+        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
 
-        if (request.isPresent()) {
-            return requestMapper.employeeRequestConfirmToDto(request.get());
-        }
-
-        throw new NotFoundException("Заявка сотрудника не найдена. ID = " + id);
+        return requestMapper.employeeRequestConfirmToDto(request);
     }
 
     public EmployeeRequestConfirmDto getScheduleMakerRequestById(UUID id) {
-        Optional<ScheduleMakerRequestConfirmEntity> request = scheduleMakerRequestConfirmRepository.findById(id);
+        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(id);
 
-        if (request.isPresent()) {
-            return requestMapper.employeeRequestConfirmToDto(request.get());
-        }
-
-        throw new NotFoundException("Заявка составителя расписаний не найдена. ID = " + id);
+        return requestMapper.employeeRequestConfirmToDto(request);
     }
 
     public StudentDto confirmStudentRequest(UUID requestId) {
-        StudentRequestConfirmEntity request = studentRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка студента с таким ID не найдена.");
-                });
+        StudentRequestConfirmEntity request = getStudentRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -152,11 +136,7 @@ public class ConfirmRequestService {
     }
 
     public EmployeeDto confirmEmployeeRequest(UUID requestId, List<UUID> postIds) {
-        EmployeeRequestConfirmEntity request = employeeRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка сотрудника с таким ID не найдена.");
-                });
+        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -177,11 +157,7 @@ public class ConfirmRequestService {
     }
 
     public EmployeeDto confirmScheduleMakerRequest(UUID requestId) {
-        ScheduleMakerRequestConfirmEntity request = scheduleMakerRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена.");
-                });
+        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -199,11 +175,7 @@ public class ConfirmRequestService {
     }
 
     public StudentDto rejectStudentRequest(UUID requestId) {
-        StudentRequestConfirmEntity request = studentRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка студента с таким ID не найдена.");
-                });
+        StudentRequestConfirmEntity request = getStudentRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -217,11 +189,7 @@ public class ConfirmRequestService {
     }
 
     public EmployeeDto rejectEmployeeRequest(UUID requestId) {
-        EmployeeRequestConfirmEntity request = employeeRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка сотрудникам с таким ID не найдена");
-                });
+        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -235,11 +203,7 @@ public class ConfirmRequestService {
     }
 
     public EmployeeDto rejectScheduleMakerRequest(UUID requestId) {
-        ScheduleMakerRequestConfirmEntity request = scheduleMakerRequestConfirmRepository
-                .findById(requestId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена");
-                });
+        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -256,6 +220,30 @@ public class ConfirmRequestService {
         if (isClosed) {
             throw new ConflictException("Заявка уже закрыта.");
         }
+    }
+
+    private StudentRequestConfirmEntity getStudentRequest(UUID requestId) {
+        return studentRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка студента не найдена, id = '" + requestId + "'.");
+                });
+    }
+
+    private ScheduleMakerRequestConfirmEntity getScheduleMakerRequest(UUID requestId) {
+        return scheduleMakerRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка составителя расписаний не найдена, id = '" + requestId + "'.");
+                });
+    }
+
+    private EmployeeRequestConfirmEntity getEmployeeRequest(UUID requestId) {
+        return employeeRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка сотрудникам не найдена, id = '" + requestId + "'.");
+                });
     }
 
 }
