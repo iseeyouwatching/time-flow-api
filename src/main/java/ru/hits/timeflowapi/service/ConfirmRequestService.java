@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.RequestMapper;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
@@ -17,6 +18,7 @@ import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirm
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -89,6 +91,36 @@ public class ConfirmRequestService {
         }
 
         return employees.map(requestMapper::employeeRequestConfirmToDto);
+    }
+
+    public StudentRequestConfirmDto getStudentRequestById(UUID id) {
+        Optional<StudentRequestConfirmEntity> request = studentRequestConfirmRepository.findById(id);
+
+        if (request.isPresent()) {
+            return requestMapper.studentRequestConfirmToDto(request.get());
+        }
+
+        throw new NotFoundException("Заявка студента не найдена. ID = " + id);
+    }
+
+    public EmployeeRequestConfirmDto getEmployeeRequestById(UUID id) {
+        Optional<EmployeeRequestConfirmEntity> request = employeeRequestConfirmRepository.findById(id);
+
+        if (request.isPresent()) {
+            return requestMapper.employeeRequestConfirmToDto(request.get());
+        }
+
+        throw new NotFoundException("Заявка сотрудника не найдена. ID = " + id);
+    }
+
+    public EmployeeRequestConfirmDto getScheduleMakerRequestById(UUID id) {
+        Optional<ScheduleMakerRequestConfirmEntity> request = scheduleMakerRequestConfirmRepository.findById(id);
+
+        if (request.isPresent()) {
+            return requestMapper.employeeRequestConfirmToDto(request.get());
+        }
+
+        throw new NotFoundException("Заявка составителя расписаний не найдена. ID = " + id);
     }
 
 }

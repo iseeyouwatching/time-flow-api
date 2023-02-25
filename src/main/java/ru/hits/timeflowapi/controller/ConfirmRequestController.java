@@ -3,15 +3,13 @@ package ru.hits.timeflowapi.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
 import ru.hits.timeflowapi.service.ConfirmRequestService;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/request")
@@ -35,6 +33,11 @@ public class ConfirmRequestController {
         );
     }
 
+    @GetMapping("/student/{id}")
+    public StudentRequestConfirmDto getStudentRequestById(@PathVariable UUID id) {
+        return confirmRequestService.getStudentRequestById(id);
+    }
+
     @GetMapping("/employee")
     public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -50,6 +53,12 @@ public class ConfirmRequestController {
         );
     }
 
+    @GetMapping("/employee/{id}")
+    public EmployeeRequestConfirmDto getEmployeeRequestById(@PathVariable UUID id) {
+        return confirmRequestService.getEmployeeRequestById(id);
+    }
+
+
     @GetMapping("/schedule-maker")
     public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -63,6 +72,11 @@ public class ConfirmRequestController {
                 sortDirection,
                 isClosed
         );
+    }
+
+    @GetMapping("/schedule-maker/{id}")
+    public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
+        return confirmRequestService.getScheduleMakerRequestById(id);
     }
 
 }
