@@ -14,6 +14,6 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
     List<LessonEntity> findByTeacherAndWeek(TeacherEntity teacher, WeekEntity week);
 
-    List<LessonEntity> findByClassroom(ClassroomEntity classroom);
+    List<LessonEntity> findByClassroomAndWeek(ClassroomEntity classroom, WeekEntity week);
 
 }

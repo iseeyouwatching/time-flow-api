@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.*;
@@ -34,7 +35,7 @@ public class LessonService {
     private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
 
-    public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID weekId, UUID groupId) {
+    public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, Integer page) {
 
         StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId).orElse(null);
 
@@ -42,10 +43,10 @@ public class LessonService {
             throw new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findById(weekId).orElse(null);
+        WeekEntity week = weekRepository.findBySequenceNumber(page);
 
         if (week == null) {
-            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
         }
 
         List<LessonEntity> lessons = lessonRepository.findByStudentGroupAndWeek(studentGroup, week);
@@ -69,7 +70,7 @@ public class LessonService {
 
     }
 
-    public TeacherTimetableDto getWeekLessonsByTeacherId(UUID weekId, UUID teacherId) {
+    public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, Integer page) {
 
         TeacherEntity teacher = teacherRepository.findById(teacherId).orElse(null);
 
@@ -77,10 +78,10 @@ public class LessonService {
             throw new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findById(weekId).orElse(null);
+        WeekEntity week = weekRepository.findBySequenceNumber(page);
 
         if (week == null) {
-            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
         }
 
         List<LessonEntity> lessons = lessonRepository.findByTeacherAndWeek(teacher, week);
@@ -104,7 +105,7 @@ public class LessonService {
 
     }
 
-    public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID weekId, UUID classroomId) {
+    public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, Integer page) {
 
         ClassroomEntity classroom = classroomRepository.findById(classroomId).orElse(null);
 
@@ -112,13 +113,13 @@ public class LessonService {
             throw new NotFoundException("Аудитории с таким ID " + classroomId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findById(weekId).orElse(null);
+        WeekEntity week = weekRepository.findBySequenceNumber(page);
 
         if (week == null) {
-            throw new NotFoundException("Недели с таким ID " + weekId + " не существует");
+            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
         }
 
-        List<LessonEntity> lessons = lessonRepository.findByClassroom(classroom);
+        List<LessonEntity> lessons = lessonRepository.findByClassroomAndWeek(classroom, week);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 

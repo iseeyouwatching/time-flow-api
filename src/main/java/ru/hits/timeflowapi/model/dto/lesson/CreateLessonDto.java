@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @Data
@@ -12,28 +13,29 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateLessonDto {
 
-    @NotBlank(message = "Student group ID is required")
+    @NotNull(message = "Student group ID is required")
     private UUID studentGroupId;
 
-    @NotBlank(message = "Subject ID is required")
+    @NotNull(message = "Subject ID is required")
     private UUID subjectId;
 
-    @NotBlank(message = "Teacher ID is required")
+    @NotNull(message = "Teacher ID is required")
     private UUID teacherId;
 
-    @NotBlank(message = "Classroom ID is required")
+    @NotNull(message = "Classroom ID is required")
     private UUID classroomId;
 
-    @NotBlank(message = "Timeslot ID is required")
+    @NotNull(message = "Timeslot ID is required")
     private UUID timeslotId;
 
-    @NotBlank(message = "Week ID is required")
+    @NotNull(message = "Week ID is required")
     private UUID weekId;
 
-    @NotBlank(message = "Day ID is required")
+    @NotNull(message = "Day ID is required")
     private UUID dayId;
 
-    @NotBlank(message = "Lesson type is required")
+    @NotNull(message = "Lesson type is required")
+    @Pattern(regexp = "LECTURE|SEMINAR|PRACTICAL_LESSON|LABORATORY_LESSON|EXAM", message = "Incorrect value. Possible: LECTURE, SEMINAR, PRACTICAL_LESSON, LABORATORY_LESSON, EXAM")
     private String lessonType;
 
 }

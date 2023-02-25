@@ -119,13 +119,13 @@ public class AddDataToDatabase {
     }
 
     private void addTimeslots() {
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(0).beginTime("8:45").endTime("10:20").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(1).beginTime("10:35").endTime("12:10").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(2).beginTime("12:25").endTime("14:00").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(3).beginTime("14:45").endTime("16:20").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(4).beginTime("16:35").endTime("18:10").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(5).beginTime("18:25").endTime("20:00").build());
-        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(6).beginTime("20:15").endTime("21:50").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(1).beginTime("8:45").endTime("10:20").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(2).beginTime("10:35").endTime("12:10").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(3).beginTime("12:25").endTime("14:00").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(4).beginTime("14:45").endTime("16:20").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(5).beginTime("16:35").endTime("18:10").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(6).beginTime("18:25").endTime("20:00").build());
+        timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(7).beginTime("20:15").endTime("21:50").build());
     }
 
     private void addWeeks() {

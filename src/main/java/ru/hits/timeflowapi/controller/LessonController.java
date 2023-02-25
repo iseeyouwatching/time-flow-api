@@ -12,6 +12,7 @@ import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.service.LessonService;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -21,22 +22,22 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @GetMapping("/week/{weekId}/group/{groupId}")
-    public ResponseEntity<StudentGroupTimetableDto> getWeekLessonsByGroupId(@PathVariable("weekId") UUID weekId,
-                                                                            @PathVariable("groupId") UUID groupId) {
-        return new ResponseEntity<>(lessonService.getWeekLessonsByGroupId(weekId, groupId), HttpStatus.OK);
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<StudentGroupTimetableDto> getWeekLessonsByGroupId(@PathVariable("groupId") UUID groupId,
+                                                                            @RequestParam(value = "page") Integer page) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByGroupId(groupId, page), HttpStatus.OK);
     }
 
-    @GetMapping("/week/{weekId}/teacher/{teacherId}")
-    public ResponseEntity<TeacherTimetableDto> getWeekLessonsByTeacherId(@PathVariable("weekId") UUID weekId,
-                                                                         @PathVariable("teacherId") UUID teacherId) {
-        return new ResponseEntity<>(lessonService.getWeekLessonsByTeacherId(weekId, teacherId), HttpStatus.OK);
+    @GetMapping("/teacher/{teacherId}")
+    public ResponseEntity<TeacherTimetableDto> getWeekLessonsByTeacherId(@PathVariable("teacherId") UUID teacherId,
+                                                                         @RequestParam(value = "page") Integer page) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByTeacherId(teacherId, page), HttpStatus.OK);
     }
 
-    @GetMapping("/week/{weekId}/classroom/{classroomId}")
-    public ResponseEntity<ClassroomTimetableDto> getWeekLessonsByClassroomId(@PathVariable("weekId") UUID weekId,
-                                                                             @PathVariable("classroomId") UUID classroomId) {
-        return new ResponseEntity<>(lessonService.getWeekLessonsByClassroomId(weekId, classroomId), HttpStatus.OK);
+    @GetMapping("/classroom/{classroomId}")
+    public ResponseEntity<ClassroomTimetableDto> getWeekLessonsByClassroomId(@PathVariable("classroomId") UUID classroomId,
+                                                                             @RequestParam(value = "page") Integer page) {
+        return new ResponseEntity<>(lessonService.getWeekLessonsByClassroomId(classroomId, page), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +46,7 @@ public class LessonController {
     }
 
     @PostMapping
-    public ResponseEntity<LessonDto> addLesson(@RequestBody CreateLessonDto createLessonDto) {
+    public ResponseEntity<LessonDto> addLesson(@RequestBody @Valid CreateLessonDto createLessonDto) {
         return new ResponseEntity<>(lessonService.addLesson(createLessonDto), HttpStatus.OK);
     }
 
@@ -56,7 +57,7 @@ public class LessonController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody CreateLessonDto updatedLessonDto) {
+    public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody @Valid CreateLessonDto updatedLessonDto) {
         return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);
     }
 
