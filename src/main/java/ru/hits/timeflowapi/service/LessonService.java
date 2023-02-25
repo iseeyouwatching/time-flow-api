@@ -1,10 +1,12 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.model.dto.*;
+import ru.hits.timeflowapi.model.dto.SubjectDto;
+import ru.hits.timeflowapi.model.dto.TimeslotDto;
+import ru.hits.timeflowapi.model.dto.WeekDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.day.DayDto;
@@ -63,7 +65,8 @@ public class LessonService {
                     new TimeslotDto(lesson.getTimeslot()),
                     new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
-                    lesson.getLessonType()));
+                    lesson.getLessonType())
+            );
         }
 
         return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), week.getId(), lessonDtos);
@@ -98,7 +101,8 @@ public class LessonService {
                     new TimeslotDto(lesson.getTimeslot()),
                     new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
-                    lesson.getLessonType()));
+                    lesson.getLessonType())
+            );
         }
 
         return new TeacherTimetableDto(new TeacherDto(teacher), week.getId(), lessonDtos);
@@ -133,7 +137,8 @@ public class LessonService {
                     new TimeslotDto(lesson.getTimeslot()),
                     new WeekDto(lesson.getWeek()),
                     new DayDto(lesson.getDay()),
-                    lesson.getLessonType()));
+                    lesson.getLessonType())
+            );
         }
 
         return new ClassroomTimetableDto(new ClassroomDto(classroom), week.getId(), lessonDtos);
@@ -153,6 +158,21 @@ public class LessonService {
     }
 
     public LessonDto addLesson(CreateLessonDto createLessonDto) {
+
+        DayEntity day = dayRepository.findById(createLessonDto.getDayId()).orElse(null);
+        WeekEntity week = weekRepository.findById(createLessonDto.getWeekId()).orElse(null);
+
+        if (day == null) {
+            throw new NotFoundException("Дня с таким ID " + createLessonDto.getDayId() + " не существует");
+        }
+
+        if (week == null) {
+            throw new NotFoundException("Недели с таким ID " + createLessonDto.getWeekId() + " не существует");
+        }
+
+        if (day.getWeek().getId().compareTo(week.getId()) != 0) {
+            throw new ConflictException("День с ID " + createLessonDto.getDayId() + " не соответствует неделе c ID " + createLessonDto.getWeekId());
+        }
 
         LessonEntity lesson = new LessonEntity();
 
@@ -187,6 +207,21 @@ public class LessonService {
 
         if (lesson == null) {
             throw new NotFoundException("Пары с таким ID " + id + " не существует");
+        }
+
+        DayEntity day = dayRepository.findById(updatedLessonDto.getDayId()).orElse(null);
+        WeekEntity week = weekRepository.findById(updatedLessonDto.getWeekId()).orElse(null);
+
+        if (day == null) {
+            throw new NotFoundException("Дня с таким ID " + updatedLessonDto.getDayId() + " не существует");
+        }
+
+        if (week == null) {
+            throw new NotFoundException("Недели с таким ID " + updatedLessonDto.getWeekId() + " не существует");
+        }
+
+        if (day.getWeek().getId().compareTo(week.getId()) != 0) {
+            throw new ConflictException("День с ID " + day.getId() + " не соответствует неделе c ID " + updatedLessonDto.getWeekId());
         }
 
         lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
