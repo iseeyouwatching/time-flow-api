@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.RequestMapper;
 import ru.hits.timeflowapi.mapper.UserMapper;
@@ -60,10 +61,10 @@ public class ConfirmRequestService {
         return students.map(requestMapper::studentRequestConfirmToDto);
     }
 
-    public Page<EmployeeRequestConfirmDto> getEmployeeRequestsPage(int pageNumber,
-                                                                   int pageSize,
-                                                                   Sort.Direction direction,
-                                                                   Optional<Boolean> isClosed
+    public Page<EmployeeRequestConfirmDto> getScheduleMakerRequestsPage(int pageNumber,
+                                                                        int pageSize,
+                                                                        Sort.Direction direction,
+                                                                        Optional<Boolean> isClosed
     ) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
 
@@ -81,10 +82,10 @@ public class ConfirmRequestService {
         return scheduleMakers.map(requestMapper::employeeRequestConfirmToDto);
     }
 
-    public Page<EmployeeRequestConfirmDto> getScheduleMakerRequestsPage(int pageNumber,
-                                                                        int pageSize,
-                                                                        Sort.Direction direction,
-                                                                        Optional<Boolean> isClosed
+    public Page<EmployeeRequestConfirmDto> getEmployeeRequestsPage(int pageNumber,
+                                                                   int pageSize,
+                                                                   Sort.Direction direction,
+                                                                   Optional<Boolean> isClosed
     ) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
 
@@ -139,6 +140,8 @@ public class ConfirmRequestService {
                     throw new NotFoundException("Заявка студента с таким ID не найдена.");
                 });
 
+        checkRequestStatus(request.isClosed());
+
         request.getStudentDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
         request.setClosed(true);
         request.setClosedDate(new Date());
@@ -154,6 +157,8 @@ public class ConfirmRequestService {
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка сотрудника с таким ID не найдена.");
                 });
+
+        checkRequestStatus(request.isClosed());
 
         request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
         request.setClosed(true);
@@ -178,6 +183,8 @@ public class ConfirmRequestService {
                     throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена.");
                 });
 
+        checkRequestStatus(request.isClosed());
+
         request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
         request.setClosed(true);
         request.setClosedDate(new Date());
@@ -198,6 +205,8 @@ public class ConfirmRequestService {
                     throw new NotFoundException("Заявка студента с таким ID не найдена.");
                 });
 
+        checkRequestStatus(request.isClosed());
+
         request.getStudentDetails().getUser().setAccountStatus(AccountStatus.DENIED);
         request.setClosed(true);
         request.setClosedDate(new Date());
@@ -213,6 +222,8 @@ public class ConfirmRequestService {
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка сотрудникам с таким ID не найдена");
                 });
+
+        checkRequestStatus(request.isClosed());
 
         request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.DENIED);
         request.setClosed(true);
@@ -230,13 +241,21 @@ public class ConfirmRequestService {
                     throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена");
                 });
 
-        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        checkRequestStatus(request.isClosed());
+
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.DENIED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
         request = scheduleMakerRequestConfirmRepository.save(request);
 
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
+    }
+
+    void checkRequestStatus(boolean isClosed) {
+        if (isClosed) {
+            throw new ConflictException("Заявка уже закрыта.");
+        }
     }
 
 }

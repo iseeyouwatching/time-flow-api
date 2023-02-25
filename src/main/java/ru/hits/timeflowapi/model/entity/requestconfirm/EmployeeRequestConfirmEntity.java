@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "employee_maker_request_confirm")
+@Table(name = "employee_request_confirm")
 public class EmployeeRequestConfirmEntity {
 
     @Id

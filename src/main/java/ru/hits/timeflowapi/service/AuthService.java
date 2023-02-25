@@ -120,11 +120,11 @@ public class AuthService {
      * @return сохраненная информация о сотруднике.
      */
     public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
-
-        if (employeeDetailsRepository.existsByContractNumber(employeeDetails.getContractNumber())) {
+        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDTO.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
+
+        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
 
         EmployeeRequestConfirmEntity employeeRequestConfirm = EmployeeRequestConfirmEntity
                 .builder()
@@ -145,11 +145,12 @@ public class AuthService {
      * @return сохраненная информация о составителе расписаний.
      */
     public EmployeeDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
-
-        if (employeeDetailsRepository.existsByContractNumber(employeeDetails.getContractNumber())) {
+        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDTO.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
+
+        EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDTO);
+
 
         ScheduleMakerRequestConfirmEntity scheduleMakerRequestConfirm = ScheduleMakerRequestConfirmEntity
                 .builder()
