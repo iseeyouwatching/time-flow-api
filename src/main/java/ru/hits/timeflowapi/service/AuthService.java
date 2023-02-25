@@ -1,15 +1,13 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.model.dto.user.UserDto;
-import ru.hits.timeflowapi.model.dto.user.signup.BasicSignUpUserDetails;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -37,7 +35,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final StudentDetailsRepository studentDetailsRepository;
@@ -45,6 +42,7 @@ public class AuthService {
     private final EmployeeRequestConfirmRepository employeeRequestConfirmRepository;
     private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
+    private final UserMapper userMapper;
 
     /**
      * Метод для регистрации внешнего пользователя.
@@ -55,20 +53,15 @@ public class AuthService {
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmail(userSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(userSignUpDTO, Role.ROLE_USER, AccountStatus.ACTIVATE);
+        UserEntity user = userMapper.basicSignUpDetailsToUser(
+                userSignUpDTO,
+                Role.ROLE_USER,
+                AccountStatus.ACTIVATE
+        );
 
         user = userRepository.save(user);
 
-        return new UserDto(
-                user.getId(),
-                user.getEmail(),
-                user.getRole(),
-                user.getName(),
-                user.getSurname(),
-                user.getPatronymic(),
-                user.getAccountStatus(),
-                user.getSex()
-        );
+        return userMapper.userToUserDto(user);
     }
 
     /**
@@ -80,7 +73,11 @@ public class AuthService {
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
         checkEmail(studentSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(studentSignUpDTO, Role.ROLE_STUDENT, AccountStatus.PENDING);
+        UserEntity user = userMapper.basicSignUpDetailsToUser(
+                studentSignUpDTO,
+                Role.ROLE_STUDENT,
+                AccountStatus.PENDING
+        );
 
         Optional<StudentGroupEntity> studentGroupEntity =
                 studentGroupRepository.findById(studentSignUpDTO.getGroupId());
@@ -109,21 +106,7 @@ public class AuthService {
 
         studentRequestConfirmRepository.save(studentRequestConfirm);
 
-        return new StudentDto(
-                studentDetails.getUser().getId(),
-                studentDetails.getUser().getEmail(),
-                studentDetails.getUser().getRole(),
-                studentDetails.getUser().getName(),
-                studentDetails.getUser().getSurname(),
-                studentDetails.getUser().getPatronymic(),
-                studentDetails.getUser().getAccountStatus(),
-                studentDetails.getUser().getSex(),
-                studentDetails.getStudentNumber(),
-                new StudentGroupBasicDto(
-                        studentDetails.getGroup().getId(),
-                        studentDetails.getGroup().getNumber()
-                ));
-
+        return userMapper.studentDetailsToStudentDto(studentDetails);
     }
 
     /**
@@ -144,17 +127,7 @@ public class AuthService {
 
         employeeRequestConfirmRepository.save(employeeRequestConfirm);
 
-        return new EmployeeDto(
-                employeeDetails.getUser().getId(),
-                employeeDetails.getUser().getEmail(),
-                employeeDetails.getUser().getRole(),
-                employeeDetails.getUser().getName(),
-                employeeDetails.getUser().getSurname(),
-                employeeDetails.getUser().getPatronymic(),
-                employeeDetails.getUser().getAccountStatus(),
-                employeeDetails.getUser().getSex(),
-                employeeDetails.getContactNumber()
-        );
+        return userMapper.employeeDetailsToEmployeeDto(employeeDetails);
     }
 
     /**
@@ -175,17 +148,7 @@ public class AuthService {
 
         scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
 
-        return new EmployeeDto(
-                employeeDetails.getUser().getId(),
-                employeeDetails.getUser().getEmail(),
-                employeeDetails.getUser().getRole(),
-                employeeDetails.getUser().getName(),
-                employeeDetails.getUser().getSurname(),
-                employeeDetails.getUser().getPatronymic(),
-                employeeDetails.getUser().getAccountStatus(),
-                employeeDetails.getUser().getSex(),
-                employeeDetails.getContactNumber()
-        );
+        return userMapper.employeeDetailsToEmployeeDto(employeeDetails);
     }
 
     /**
@@ -197,7 +160,11 @@ public class AuthService {
     public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         checkEmail(employeeSignUpDTO.getEmail());
 
-        UserEntity user = buildUser(employeeSignUpDTO, Role.ROLE_EMPLOYEE, AccountStatus.PENDING);
+        UserEntity user = userMapper.basicSignUpDetailsToUser(
+                employeeSignUpDTO,
+                Role.ROLE_EMPLOYEE,
+                AccountStatus.PENDING
+        );
 
         user = userRepository.save(user);
 
@@ -208,29 +175,6 @@ public class AuthService {
                 .build();
 
         return employeeDetailsRepository.save(employeeDetails);
-    }
-
-    /**
-     * Метод для создания сущности пользователя. <strong>Метод только создает сущность пользователя,
-     * он не сохраняет её в БД!</strong>
-     *
-     * @param basicSignUpUserDetails информация о пользователе.
-     * @param role                   роль пользователя.
-     * @param accountStatus          статус аккаунта.
-     * @return сущность пользователя.
-     */
-    private UserEntity buildUser(BasicSignUpUserDetails basicSignUpUserDetails, Role role, AccountStatus accountStatus) {
-        return UserEntity
-                .builder()
-                .email(basicSignUpUserDetails.getEmail())
-                .role(role)
-                .name(basicSignUpUserDetails.getName())
-                .surname(basicSignUpUserDetails.getSurname())
-                .patronymic(basicSignUpUserDetails.getPatronymic())
-                .accountStatus(accountStatus)
-                .password(passwordEncoder.encode(basicSignUpUserDetails.getPassword()))
-                .sex(basicSignUpUserDetails.getSex())
-                .build();
     }
 
     /**

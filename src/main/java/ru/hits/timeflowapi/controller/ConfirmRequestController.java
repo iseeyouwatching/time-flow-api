@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
 import ru.hits.timeflowapi.service.ConfirmRequestService;
 
@@ -26,7 +27,7 @@ public class ConfirmRequestController {
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getAllStudentRequestConfirmEntities(
+        return confirmRequestService.getStudentRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
@@ -35,13 +36,13 @@ public class ConfirmRequestController {
     }
 
     @GetMapping("/employee")
-    public Page<StudentRequestConfirmDto> getEmployeeRequests(
+    public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getAllStudentRequestConfirmEntities(
+        return confirmRequestService.getEmployeeRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
@@ -50,13 +51,13 @@ public class ConfirmRequestController {
     }
 
     @GetMapping("/schedule-maker")
-    public Page<StudentRequestConfirmDto> getScheduleMakerRequests(
+    public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getAllStudentRequestConfirmEntities(
+        return confirmRequestService.getScheduleMakerRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
