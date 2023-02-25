@@ -6,9 +6,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.service.ConfirmRequestService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +41,11 @@ public class ConfirmRequestController {
         return confirmRequestService.getStudentRequestById(id);
     }
 
+    @PostMapping("/student/{id}/accept")
+    public StudentDto acceptStudentRequest(@PathVariable UUID id) {
+        return confirmRequestService.confirmStudentRequest(id);
+    }
+
     @GetMapping("/employee")
     public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -59,8 +66,13 @@ public class ConfirmRequestController {
         return confirmRequestService.getEmployeeRequestById(id);
     }
 
+    @PostMapping("/employee/{id}/accept")
+    public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
+                                             @RequestParam List<UUID> postIds) {
+        return confirmRequestService.confirmEmployeeRequest(id, postIds);
+    }
 
-    @GetMapping("/schedule-maker")
+    @GetMapping("/employee/schedule-maker")
     public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -75,14 +87,14 @@ public class ConfirmRequestController {
         );
     }
 
-    @GetMapping("/schedule-maker/{id}")
+    @GetMapping("/employee/schedule-maker/{id}")
     public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
         return confirmRequestService.getScheduleMakerRequestById(id);
     }
 
-    @PostMapping("/student/{id}/accept")
-    public StudentDto acceptStudentRequest(@PathVariable UUID id) {
-        return confirmRequestService.confirmStudentRequest(id);
+    @PostMapping("/schedule-maker/{id}/accept")
+    public EmployeeDto acceptScheduleMakerRequest(@PathVariable UUID id) {
+        return confirmRequestService.confirmScheduleMakerRequest(id);
     }
 
 }

@@ -11,7 +11,9 @@ import ru.hits.timeflowapi.mapper.RequestMapper;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
+import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestConfirmEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestConfirmEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestConfirmEntity;
@@ -20,6 +22,8 @@ import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepos
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +37,7 @@ public class ConfirmRequestService {
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final EmployeeRequestConfirmRepository employeeRequestConfirmRepository;
     private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
+    private final EmployeePostService employeePostService;
 
     public Page<StudentRequestConfirmDto> getStudentRequestsPage(int pageNumber,
                                                                  int pageSize,
@@ -131,14 +136,59 @@ public class ConfirmRequestService {
         StudentRequestConfirmEntity request = studentRequestConfirmRepository
                 .findById(requestId)
                 .orElseThrow(() -> {
-                    throw new NotFoundException("Заявка студента не найдена. ID = " + requestId);
+                    throw new NotFoundException("Заявка студента с таким ID не найдена.");
                 });
 
         request.getStudentDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
 
         request = studentRequestConfirmRepository.save(request);
 
         return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
+    }
+
+    public EmployeeDto confirmEmployeeRequest(UUID requestId, List<UUID> postIds) {
+        EmployeeRequestConfirmEntity request = employeeRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка сотрудника с таким ID не найдена.");
+                });
+
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
+
+        List<EmployeePostEntity> employeePostEntities = postIds
+                .stream()
+                .map(employeePostService::getPostEntityById)
+                .toList();
+
+        request.getEmployeeDetails().setPosts(employeePostEntities);
+
+        request = employeeRequestConfirmRepository.save(request);
+
+        return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
+    }
+
+    public EmployeeDto confirmScheduleMakerRequest(UUID requestId) {
+        ScheduleMakerRequestConfirmEntity request = scheduleMakerRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка составителя расписаний с таким ID не найдена.");
+                });
+
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.setClosed(true);
+        request.setClosedDate(new Date());
+
+        request
+                .getEmployeeDetails()
+                .setPosts(List.of(employeePostService.getPostEntityByPostRole("ROLE_SCHEDULE_MAKER")));
+
+        request = scheduleMakerRequestConfirmRepository.save(request);
+
+        return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
 
 }
