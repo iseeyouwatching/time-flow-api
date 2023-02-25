@@ -24,7 +24,7 @@ public class EmployeeDetailsEntity {
     )
     private UUID id;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_posts",
             joinColumns = @JoinColumn(name = "employee_id"),
@@ -36,6 +36,6 @@ public class EmployeeDetailsEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    private String contactNumber;
+    private String contractNumber;
 
 }

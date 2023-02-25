@@ -50,7 +50,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiError> conflictException(ConflictException exception, WebRequest request) {
+    public ResponseEntity<ApiError> handleConflictException(ConflictException exception, WebRequest request) {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
