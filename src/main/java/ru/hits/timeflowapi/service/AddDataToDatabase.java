@@ -3,19 +3,51 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
-import ru.hits.timeflowapi.repository.StudentGroupRepository;
+import ru.hits.timeflowapi.model.entity.*;
+import ru.hits.timeflowapi.model.enumeration.AccountStatus;
+import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.model.enumeration.Sex;
+import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.util.DaysForCurrentYear;
+import ru.hits.timeflowapi.util.WeeksForCurrentYear;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AddDataToDatabase {
 
     private final StudentGroupRepository studentGroupRepository;
+    private final SubjectRepository subjectRepository;
+    private final ClassroomRepository classroomRepository;
+    private final TeacherRepository teacherRepository;
+    private final TimeslotRepository timeslotRepository;
+    private final WeekRepository weekRepository;
+    private final EmployeePostRepository employeePostRepository;
+    private final UserRepository userRepository;
+    private final EmployeeDetailsRepository employeeDetailsRepository;
+
+    private final WeeksForCurrentYear weeksForCurrentYear;
+    private final DaysForCurrentYear daysForCurrentYear;
+    private final DayRepository dayRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @EventListener(ApplicationReadyEvent.class)
     public void addData() {
         addStudentGroups();
+        addSubjects();
+        addTeachers();
+        addClassrooms();
+        addTimeslots();
+        addWeeks();
+        addDays();
+
+        addEmployeePosts();
+        addAdmin();
     }
 
     private void addStudentGroups() {
@@ -108,13 +140,13 @@ public class AddDataToDatabase {
 
         List<WeekEntity> weeks = weeksForCurrentYear.getWeeksForCurrentSchoolYear();
 
-        for (WeekEntity week: weeks) {
+        for (WeekEntity week : weeks) {
             weekRepository.save(
                     WeekEntity.builder()
-                    .sequenceNumber(week.getSequenceNumber())
-                    .beginDate(week.getBeginDate())
-                    .endDate(week.getEndDate())
-                    .build());
+                            .sequenceNumber(week.getSequenceNumber())
+                            .beginDate(week.getBeginDate())
+                            .endDate(week.getEndDate())
+                            .build());
         }
 
     }
@@ -123,7 +155,7 @@ public class AddDataToDatabase {
 
         List<DayEntity> days = daysForCurrentYear.getDaysForCurrentSchoolYear();
 
-        for (DayEntity day: days) {
+        for (DayEntity day : days) {
             dayRepository.save(DayEntity.builder().date(day.getDate()).week(day.getWeek()).build());
         }
 
