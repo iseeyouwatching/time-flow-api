@@ -8,4 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface WeekRepository extends JpaRepository<WeekEntity, UUID> {
+
+    WeekEntity findBySequenceNumber(Integer page);
+
 }
