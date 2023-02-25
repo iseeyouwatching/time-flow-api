@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.ApiError;
 
 import java.util.HashMap;
@@ -48,4 +49,8 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> emailAlreadyUsedException(UnauthorizedException exception, WebRequest request) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
 }
