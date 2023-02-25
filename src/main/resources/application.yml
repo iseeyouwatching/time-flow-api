@@ -11,3 +11,10 @@ spring:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
+credentials:
+  admin:
+    email: admin
+    password: admin
+    name: admin_name
+    surname: admin_surname
+    patronymic: admin_patronymic

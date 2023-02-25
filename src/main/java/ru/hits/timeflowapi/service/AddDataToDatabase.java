@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,21 @@ public class AddDataToDatabase {
     private final DayRepository dayRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${credentials.admin.email}")
+    private String adminEmail;
+
+    @Value("${credentials.admin.password}")
+    private String adminPassword;
+
+    @Value("${credentials.admin.name}")
+    private String adminName;
+
+    @Value("${credentials.admin.surname}")
+    private String adminSurname;
+
+    @Value("${credentials.admin.patronymic}")
+    private String adminPatronymic;
 
     @EventListener(ApplicationReadyEvent.class)
     public void addData() {
@@ -196,13 +212,13 @@ public class AddDataToDatabase {
 
         UserEntity user = UserEntity
                 .builder()
-                .email("email@gmail.com")
+                .email(adminEmail)
                 .role(Role.ROLE_EMPLOYEE)
-                .name("Иван")
-                .surname("Иванов")
-                .patronymic("Иванович")
+                .name(adminName)
+                .surname(adminSurname)
+                .patronymic(adminPatronymic)
                 .accountStatus(AccountStatus.ACTIVATE)
-                .password(passwordEncoder.encode("root"))
+                .password(passwordEncoder.encode(adminPassword))
                 .sex(Sex.MALE)
                 .build();
 
@@ -213,7 +229,7 @@ public class AddDataToDatabase {
                         .builder()
                         .user(user)
                         .posts(List.of(roleAdmin.get()))
-                        .contractNumber("000000")
+                        .contractNumber("admin")
                         .build()
         );
 
