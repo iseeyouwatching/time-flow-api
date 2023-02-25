@@ -3,10 +3,12 @@ package ru.hits.timeflowapi.model.dto.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.model.dto.EmployeePostDto;
 import ru.hits.timeflowapi.model.enumeration.AccountStatus;
 import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.model.enumeration.Sex;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -31,5 +33,7 @@ public class EmployeeDto {
     private Sex sex;
 
     private String contractNumber;
+
+    private List<EmployeePostDto> posts;
 
 }

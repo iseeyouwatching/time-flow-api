@@ -19,6 +19,7 @@ import ru.hits.timeflowapi.model.enumeration.Role;
 public class UserMapper {
 
     private final PasswordEncoder passwordEncoder;
+    private final PostMapper postMapper;
 
     public UserDto userToUserDto(UserEntity user) {
         return new UserDto(
@@ -61,7 +62,8 @@ public class UserMapper {
                 employeeDetails.getUser().getPatronymic(),
                 employeeDetails.getUser().getAccountStatus(),
                 employeeDetails.getUser().getSex(),
-                employeeDetails.getContractNumber()
+                employeeDetails.getContractNumber(),
+                postMapper.employeePostListToDtoList(employeeDetails.getPosts())
         );
     }
 
