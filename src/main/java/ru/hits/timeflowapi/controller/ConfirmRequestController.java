@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.service.ConfirmRequestService;
 
 import java.util.Optional;
@@ -77,6 +78,11 @@ public class ConfirmRequestController {
     @GetMapping("/schedule-maker/{id}")
     public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
         return confirmRequestService.getScheduleMakerRequestById(id);
+    }
+
+    @PostMapping("/student/{id}/accept")
+    public StudentDto acceptStudentRequest(@PathVariable UUID id) {
+        return confirmRequestService.confirmStudentRequest(id);
     }
 
 }

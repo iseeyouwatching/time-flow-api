@@ -8,11 +8,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.RequestMapper;
+import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
 import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestConfirmEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestConfirmEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestConfirmEntity;
+import ru.hits.timeflowapi.model.enumeration.AccountStatus;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class ConfirmRequestService {
 
     private static final String SORT_PROPERTY = "creationDate";
+    private final UserMapper userMapper;
     private final RequestMapper requestMapper;
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final EmployeeRequestConfirmRepository employeeRequestConfirmRepository;
@@ -121,6 +125,20 @@ public class ConfirmRequestService {
         }
 
         throw new NotFoundException("Заявка составителя расписаний не найдена. ID = " + id);
+    }
+
+    public StudentDto confirmStudentRequest(UUID requestId) {
+        StudentRequestConfirmEntity request = studentRequestConfirmRepository
+                .findById(requestId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Заявка студента не найдена. ID = " + requestId);
+                });
+
+        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+
+        request = studentRequestConfirmRepository.save(request);
+
+        return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
     }
 
 }
