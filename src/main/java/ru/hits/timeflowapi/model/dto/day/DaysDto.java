@@ -1,18 +1,16 @@
-package ru.hits.timeflowapi.model.dto;
+package ru.hits.timeflowapi.model.dto.day;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassroomDto {
+public class DaysDto {
 
-    private UUID id;
-
-    private int number;
+    List<DayDto> days;
 
 }

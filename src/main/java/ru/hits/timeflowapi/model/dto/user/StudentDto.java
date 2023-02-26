@@ -33,6 +33,6 @@ public class StudentDto {
 
     private String studentNumber;
 
-    private StudentGroupBasicDto groupNumber;
+    private StudentGroupBasicDto group;
 
 }

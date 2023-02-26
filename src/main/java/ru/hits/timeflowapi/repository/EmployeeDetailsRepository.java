@@ -8,4 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface EmployeeDetailsRepository extends JpaRepository<EmployeeDetailsEntity, UUID> {
+
+    boolean existsByContractNumber(String contractNumber);
+
 }

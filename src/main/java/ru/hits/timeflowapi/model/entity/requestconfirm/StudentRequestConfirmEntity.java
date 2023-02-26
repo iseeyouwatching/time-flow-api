@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,12 @@ public class StudentRequestConfirmEntity {
     @OneToOne
     private StudentDetailsEntity studentDetails;
 
-    private boolean isCompleted;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date closedDate;
+
+    private boolean isClosed;
 
 }

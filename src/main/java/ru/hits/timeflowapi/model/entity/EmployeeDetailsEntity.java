@@ -36,6 +36,6 @@ public class EmployeeDetailsEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    private String contactNumber;
+    private String contractNumber;
 
 }

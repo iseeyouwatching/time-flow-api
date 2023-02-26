@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "employee_maker_request_confirm")
+@Table(name = "employee_request_confirm")
 public class EmployeeRequestConfirmEntity {
 
     @Id
@@ -27,6 +28,12 @@ public class EmployeeRequestConfirmEntity {
     @OneToOne
     private EmployeeDetailsEntity employeeDetails;
 
-    private boolean isCompleted;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date closedDate;
+
+    private boolean isClosed;
 
 }
