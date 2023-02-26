@@ -2,7 +2,6 @@ package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
@@ -159,21 +158,6 @@ public class LessonService {
 
     public LessonDto addLesson(CreateLessonDto createLessonDto) {
 
-        DayEntity day = dayRepository.findById(createLessonDto.getDayId()).orElse(null);
-        WeekEntity week = weekRepository.findById(createLessonDto.getWeekId()).orElse(null);
-
-        if (day == null) {
-            throw new NotFoundException("Дня с таким ID " + createLessonDto.getDayId() + " не существует");
-        }
-
-        if (week == null) {
-            throw new NotFoundException("Недели с таким ID " + createLessonDto.getWeekId() + " не существует");
-        }
-
-        if (day.getWeek().getId().compareTo(week.getId()) != 0) {
-            throw new ConflictException("День с ID " + createLessonDto.getDayId() + " не соответствует неделе c ID " + createLessonDto.getWeekId());
-        }
-
         LessonEntity lesson = new LessonEntity();
 
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
@@ -181,7 +165,7 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
-        lesson.setWeek(weekRepository.findById(createLessonDto.getWeekId()).orElse(null));
+        lesson.setWeek(dayRepository.findById(createLessonDto.getDayId()).get().getWeek());
         lesson.setDay(dayRepository.findById(createLessonDto.getDayId()).orElse(null));
         lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
 
@@ -209,27 +193,12 @@ public class LessonService {
             throw new NotFoundException("Пары с таким ID " + id + " не существует");
         }
 
-        DayEntity day = dayRepository.findById(updatedLessonDto.getDayId()).orElse(null);
-        WeekEntity week = weekRepository.findById(updatedLessonDto.getWeekId()).orElse(null);
-
-        if (day == null) {
-            throw new NotFoundException("Дня с таким ID " + updatedLessonDto.getDayId() + " не существует");
-        }
-
-        if (week == null) {
-            throw new NotFoundException("Недели с таким ID " + updatedLessonDto.getWeekId() + " не существует");
-        }
-
-        if (day.getWeek().getId().compareTo(week.getId()) != 0) {
-            throw new ConflictException("День с ID " + day.getId() + " не соответствует неделе c ID " + updatedLessonDto.getWeekId());
-        }
-
         lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(updatedLessonDto.getSubjectId()).orElse(null));
         lesson.setTeacher(teacherRepository.findById(updatedLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(updatedLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(updatedLessonDto.getTimeslotId()).orElse(null));
-        lesson.setWeek(weekRepository.findById(updatedLessonDto.getWeekId()).orElse(null));
+        lesson.setWeek(dayRepository.findById(updatedLessonDto.getDayId()).get().getWeek());
         lesson.setDay(dayRepository.findById(updatedLessonDto.getDayId()).orElse(null));
         lesson.setLessonType(LessonType.valueOf(updatedLessonDto.getLessonType()));
 

@@ -28,9 +28,6 @@ public class CreateLessonDto {
     @NotNull(message = "Timeslot ID is required")
     private UUID timeslotId;
 
-    @NotNull(message = "Week ID is required")
-    private UUID weekId;
-
     @NotNull(message = "Day ID is required")
     private UUID dayId;
 
