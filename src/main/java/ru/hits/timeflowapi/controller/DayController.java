@@ -14,7 +14,7 @@ import ru.hits.timeflowapi.service.DayService;
 
 import java.util.UUID;
 
-@Tag(name = "Day")
+@Tag(name = "День.")
 @RestController
 @RequestMapping("/api/v1/day")
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class DayController {
 
     private final DayService dayService;
 
-    @Operation(summary = "Получить все дни учебной недели")
+    @Operation(summary = "Получить все дни учебной недели.")
     @GetMapping("/week/{weekId}")
     public ResponseEntity<DaysDto> getDaysByWeekId(@PathVariable("weekId") UUID weekId) {
         return new ResponseEntity<>(dayService.getDaysByWeekId(weekId), HttpStatus.OK);

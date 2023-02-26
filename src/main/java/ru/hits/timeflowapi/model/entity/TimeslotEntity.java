@@ -24,7 +24,7 @@ public class TimeslotEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @Column(name = "sequence_number", unique = true)
+    @Column(name = "sequence_number")
     private int sequenceNumber;
 
     @Column(name = "begin_time")
