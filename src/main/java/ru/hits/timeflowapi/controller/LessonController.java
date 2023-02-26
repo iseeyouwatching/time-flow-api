@@ -8,19 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.ResponseBodyMessage;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
+import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.service.LessonService;
 
 import javax.validation.Valid;
 import java.util.UUID;
 
-@Tag(name = "Пара.")
 @RestController
 @RequestMapping("/api/v1/lesson")
+@CrossOrigin
 @RequiredArgsConstructor
+@Tag(name = "Пара.")
+
 public class LessonController {
 
     private final LessonService lessonService;
