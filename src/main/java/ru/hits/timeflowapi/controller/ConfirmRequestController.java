@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/request")
+@CrossOrigin
 @RequiredArgsConstructor
 public class ConfirmRequestController {
 
