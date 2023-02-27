@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.ApiError;
@@ -49,13 +48,6 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
                                                             WebRequest request
     ) {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(EmailAlreadyUsedException.class)
-    public ResponseEntity<ApiError> handleEmailAlreadyUsedException(EmailAlreadyUsedException exception,
-                                                                    WebRequest request
-    ) {
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ConflictException.class)

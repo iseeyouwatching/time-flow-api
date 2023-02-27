@@ -12,6 +12,7 @@ import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.UserInfoService;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -22,29 +23,30 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
     private final CheckEmailService checkEmailService;
 
-    private String GetUserEmail() {
+    private UUID extractId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
+        return UUID.fromString(authentication.getName());
     }
 
     @GetMapping
     UserDto getUserInfo() {
-        String email = GetUserEmail();
-        return userInfoService.getUserInfo(email);
+        UUID id = extractId();
+        return userInfoService.getUserInfo(id);
     }
 
     @PutMapping("/email")
-    UserDto PutEmail(@Valid @RequestBody EditEmailDto editEmailDto) {
-
+    UserDto updateEmail(@Valid @RequestBody EditEmailDto editEmailDto) {
         checkEmailService.checkEmail(editEmailDto.getEmail());
-        String email = GetUserEmail();
-        return userInfoService.PutEmail(email, editEmailDto);
+        UUID id = extractId();
+
+        return userInfoService.updateEmail(id, editEmailDto);
     }
 
     @PutMapping("/password")
-    UserDto PutPassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
-        String email = GetUserEmail();
-        return userInfoService.PutPassword(email, editPasswordDto);
+    UserDto updatePassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
+        UUID id = extractId();
+
+        return userInfoService.updatePassword(id, editPasswordDto);
     }
 
 }

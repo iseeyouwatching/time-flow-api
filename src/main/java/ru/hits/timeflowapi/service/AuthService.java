@@ -66,7 +66,7 @@ public class AuthService {
         user = userRepository.save(user);
 
         return new TokenDto(
-                jwtUtil.generateToken(user.getEmail()),
+                jwtUtil.generateToken(user.getId()),
                 null
         );
     }
@@ -118,7 +118,7 @@ public class AuthService {
         studentRequestConfirmRepository.save(studentRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(user.getEmail()),
+                jwtUtil.generateToken(user.getId()),
                 null
         );
     }
@@ -146,7 +146,7 @@ public class AuthService {
         employeeRequestConfirmRepository.save(employeeRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(employeeDetails.getUser().getEmail()),
+                jwtUtil.generateToken(employeeDetails.getUser().getId()),
                 null
         );
     }
@@ -175,7 +175,7 @@ public class AuthService {
         scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(employeeDetails.getUser().getEmail()),
+                jwtUtil.generateToken(employeeDetails.getUser().getId()),
                 null
         );
     }
@@ -214,7 +214,7 @@ public class AuthService {
                 });
 
         if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
-            String token = jwtUtil.generateToken(signInDto.getEmail());
+            String token = jwtUtil.generateToken(user.getId());
 
             return new TokenDto(token, null);
 

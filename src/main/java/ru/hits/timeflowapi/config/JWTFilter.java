@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.security.JWTUtil;
 import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,20 +26,24 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain
+    ) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
 
             if (jwt.isBlank()) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Не авторизован.");
+                throw new UnauthorizedException("Не авторизован");
             } else {
                 try {
-                    String email = jwtUtil.validateTokenAndRetrieveClaim(jwt);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                    UUID id = jwtUtil.verifyTokenAndGetId(jwt);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(id.toString());
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
                             userDetails.getPassword(),
                             userDetails.getAuthorities()
                     );
@@ -46,7 +52,7 @@ public class JWTFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 } catch (JWTVerificationException exception) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Не авторизован.");
+                    throw new UnauthorizedException("Не авторизован");
                 }
 
             }

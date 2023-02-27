@@ -10,34 +10,43 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JWTUtil {
 
-    @Value("${credentials.jwt-secret}")
+    @Value("${token.jwt-secret-key}")
     private String secret;
 
-    public String generateToken(String email) {
-        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
+    @Value("${token.access-token-lifetime}")
+    private Integer tokenLifetime;
+
+    @Value("${token.issuer}")
+    private String issuer;
+
+    public String generateToken(UUID id) {
+        Date issuedAt = new Date();
+        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(tokenLifetime).toInstant());
 
         return JWT
                 .create()
-                .withSubject("User details")
-                .withClaim("email", email)
-                .withIssuer("time-flow-api")
-                .withIssuedAt(new Date())
+                .withClaim("id", id.toString())
+                .withIssuedAt(issuedAt)
                 .withExpiresAt(expirationDate)
+                .withIssuer(issuer)
                 .sign(Algorithm.HMAC256(secret));
     }
 
-    public String validateTokenAndRetrieveClaim(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-                .withSubject("User details")
+    public UUID verifyTokenAndGetId(String token) throws JWTVerificationException {
+        JWTVerifier verifier = JWT
+                .require(Algorithm.HMAC256(secret))
                 .withIssuer("time-flow-api")
                 .build();
 
-        DecodedJWT jwt = verifier.verify(token);
-        return jwt.getClaim("email").asString();
+        DecodedJWT decodedJWT = verifier.verify(token);
+        return UUID.fromString(decodedJWT
+                .getClaim("id")
+                .asString());
     }
 
 }
