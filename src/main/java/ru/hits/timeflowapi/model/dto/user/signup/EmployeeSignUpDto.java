@@ -39,8 +39,8 @@ public class EmployeeSignUpDto implements BasicSignUpUserDetails {
     @Size(min = 8, max = 32, message = "Длина пароля должна быть от 8 до 32 символов.")
     private String password;
 
-    @Schema(description = "Номер трудового договора", example = "123456")
-    @Size(min = 6, max = 6, message = "Длина номера трудового договора должна быть 6 символов.")
+    @Schema(description = "Номер трудового договора", example = "0000-23/01")
+    @Pattern(regexp = "\\d{4}-\\d{2}/((0\\d)|(1[1-2]))", message = "Некорректный формат номера трудового договора.")
     private String contractNumber;
 
 }

@@ -11,8 +11,6 @@ import ru.hits.timeflowapi.model.enumeration.AccountStatus;
 import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.model.enumeration.Sex;
 import ru.hits.timeflowapi.repository.*;
-import ru.hits.timeflowapi.util.DaysForCurrentYear;
-import ru.hits.timeflowapi.util.WeeksForCurrentYear;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +24,9 @@ public class AddDataToDatabase {
     private final ClassroomRepository classroomRepository;
     private final TeacherRepository teacherRepository;
     private final TimeslotRepository timeslotRepository;
-    private final WeekRepository weekRepository;
     private final EmployeePostRepository employeePostRepository;
     private final UserRepository userRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
-
-    private final WeeksForCurrentYear weeksForCurrentYear;
-    private final DaysForCurrentYear daysForCurrentYear;
-    private final DayRepository dayRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -59,8 +52,6 @@ public class AddDataToDatabase {
         addTeachers();
         addClassrooms();
         addTimeslots();
-        addWeeks();
-        addDays();
 
         addEmployeePosts();
         addAdmin();
@@ -150,31 +141,6 @@ public class AddDataToDatabase {
         timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(5).beginTime("16:35").endTime("18:10").build());
         timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(6).beginTime("18:25").endTime("20:00").build());
         timeslotRepository.save(TimeslotEntity.builder().sequenceNumber(7).beginTime("20:15").endTime("21:50").build());
-    }
-
-    private void addWeeks() {
-
-        List<WeekEntity> weeks = weeksForCurrentYear.getWeeksForCurrentSchoolYear();
-
-        for (WeekEntity week : weeks) {
-            weekRepository.save(
-                    WeekEntity.builder()
-                            .sequenceNumber(week.getSequenceNumber())
-                            .beginDate(week.getBeginDate())
-                            .endDate(week.getEndDate())
-                            .build());
-        }
-
-    }
-
-    private void addDays() {
-
-        List<DayEntity> days = daysForCurrentYear.getDaysForCurrentSchoolYear();
-
-        for (DayEntity day : days) {
-            dayRepository.save(DayEntity.builder().date(day.getDate()).week(day.getWeek()).build());
-        }
-
     }
 
     private void addEmployeePosts() {

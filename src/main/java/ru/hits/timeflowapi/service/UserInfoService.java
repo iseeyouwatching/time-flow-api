@@ -1,38 +1,55 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.UnauthorizedException;
+import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.mapper.UserMapper;
+import ru.hits.timeflowapi.model.dto.user.EditEmailDto;
+import ru.hits.timeflowapi.model.dto.user.EditPasswordDto;
 import ru.hits.timeflowapi.model.dto.user.UserDto;
 import ru.hits.timeflowapi.model.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 
-import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserDto getUserInfo(String email) {
-        UserDto userDto;
-        List<UserEntity> users = userRepository.findAll();
+    public UserDto getUserInfo(UUID id) {
+        UserEntity user = getUserById(id);
 
-        for (UserEntity user : users) {
-            if (user.getEmail().equals(email)) {
-                userDto = (new UserDto(
-                        user.getId(),
-                        user.getEmail(),
-                        user.getRole(),
-                        user.getName(),
-                        user.getSurname(),
-                        user.getPatronymic(),
-                        user.getAccountStatus(),
-                        user.getSex()));
-                return userDto;
-            }
-        }
-        throw new UnauthorizedException("Не авторизован.");
+        return userMapper.userToUserDto(user);
     }
+
+    public UserDto updatePassword(UUID id, EditPasswordDto editPasswordDto) {
+        UserEntity user = getUserById(id);
+
+        user.setPassword(passwordEncoder.encode(editPasswordDto.getPassword()));
+        user = userRepository.save(user);
+
+        return userMapper.userToUserDto(user);
+    }
+
+    public UserDto updateEmail(UUID id, EditEmailDto editEmailDto) {
+        UserEntity user = getUserById(id);
+
+        user.setEmail(editEmailDto.getEmail());
+        user = userRepository.save(user);
+        return userMapper.userToUserDto(user);
+    }
+
+    private UserEntity getUserById(UUID id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Не авторизован.");
+                });
+    }
+
 }

@@ -7,8 +7,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 
 @EnableWebSecurity
@@ -17,22 +19,21 @@ import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final JWTFilter jwtFilter;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/secured").authenticated()
-                //.antMatchers("/api/v1/users").hasRole("ADMIN")
-                .antMatchers("/api/v1/user").authenticated()
                 .antMatchers("/api/v1/request/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/user/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .logout()
-                .logoutUrl("/api/v1/logout")
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .httpBasic();
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

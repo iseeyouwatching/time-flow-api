@@ -1,14 +1,14 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.mapper.UserMapper;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
+import ru.hits.timeflowapi.model.dto.signin.SignInDto;
+import ru.hits.timeflowapi.model.dto.signin.TokenDto;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -28,6 +28,7 @@ import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
+import ru.hits.timeflowapi.security.JWTUtil;
 
 import java.util.Date;
 
@@ -43,6 +44,9 @@ public class AuthService {
     private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final UserMapper userMapper;
+    private final CheckEmailService checkEmailService;
+    private final JWTUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Метод для регистрации внешнего пользователя.
@@ -50,8 +54,8 @@ public class AuthService {
      * @param userSignUpDTO информация для регистрации внешнего пользователя.
      * @return сохраненная информация о внешнем пользователе.
      */
-    public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
-        checkEmail(userSignUpDTO.getEmail());
+    public TokenDto userSignUp(UserSignUpDto userSignUpDTO) {
+        checkEmailService.checkEmail(userSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
@@ -61,7 +65,10 @@ public class AuthService {
 
         user = userRepository.save(user);
 
-        return userMapper.userToUserDto(user);
+        return new TokenDto(
+                jwtUtil.generateToken(user.getId()),
+                null
+        );
     }
 
     /**
@@ -70,8 +77,8 @@ public class AuthService {
      * @param studentSignUpDTO информация о студента для регистрации.
      * @return сохраненная информация о студенте.
      */
-    public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
-        checkEmail(studentSignUpDTO.getEmail());
+    public TokenDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
+        checkEmailService.checkEmail(studentSignUpDTO.getEmail());
 
         if (studentDetailsRepository.existsByStudentNumber(studentSignUpDTO.getStudentNumber())) {
             throw new ConflictException("Пользователь с таким номером студенческого билета уже существует");
@@ -110,16 +117,19 @@ public class AuthService {
 
         studentRequestConfirmRepository.save(studentRequestConfirm);
 
-        return userMapper.studentDetailsToStudentDto(studentDetails);
+        return new TokenDto(
+                jwtUtil.generateToken(user.getId()),
+                null
+        );
     }
 
     /**
      * Метод для регистрации сотрудника.
      *
      * @param employeeSignUpDTO информация о сотруднике для регистрации.
-     * @return сохраненная информация о сотруднике.
+     * @return токен.
      */
-    public EmployeeDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
+    public TokenDto employeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDTO.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
@@ -135,16 +145,19 @@ public class AuthService {
 
         employeeRequestConfirmRepository.save(employeeRequestConfirm);
 
-        return userMapper.employeeDetailsToEmployeeDto(employeeDetails);
+        return new TokenDto(
+                jwtUtil.generateToken(employeeDetails.getUser().getId()),
+                null
+        );
     }
 
     /**
      * Метод для регистрации составителя расписаний.
      *
      * @param employeeSignUpDTO информация для регистрации составителя расписаний.
-     * @return сохраненная информация о составителе расписаний.
+     * @return токен.
      */
-    public EmployeeDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDTO) {
+    public TokenDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDTO) {
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDTO.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
@@ -161,7 +174,10 @@ public class AuthService {
 
         scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
 
-        return userMapper.employeeDetailsToEmployeeDto(employeeDetails);
+        return new TokenDto(
+                jwtUtil.generateToken(employeeDetails.getUser().getId()),
+                null
+        );
     }
 
     /**
@@ -171,7 +187,7 @@ public class AuthService {
      * @return сохраненную сущность сотрудника в БД.
      */
     public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        checkEmail(employeeSignUpDTO.getEmail());
+        checkEmailService.checkEmail(employeeSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 employeeSignUpDTO,
@@ -190,17 +206,20 @@ public class AuthService {
         return employeeDetailsRepository.save(employeeDetails);
     }
 
-    /**
-     * Метод для проверки существования пользователя с заданной почтой. Если эта почта занята,
-     * то выбросится исключение.
-     *
-     * @param email почта.
-     * @throws EmailAlreadyUsedException выбрасывается, если заданная почта уже используется.
-     */
-    private void checkEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyUsedException("Пользователь с такой почтой уже существует");
-        }
-    }
+    public TokenDto signIn(SignInDto signInDto) {
+        UserEntity user = userRepository
+                .findByEmail(signInDto.getEmail())
+                .orElseThrow(() -> {
+                    throw new UnauthorizedException("Неверный логин и/или пароль.");
+                });
 
+        if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
+            String token = jwtUtil.generateToken(user.getId());
+
+            return new TokenDto(token, null);
+
+        }
+
+        throw new UnauthorizedException("Неверный логин и/или пароль.");
+    }
 }

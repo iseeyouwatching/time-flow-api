@@ -18,6 +18,10 @@ import ru.hits.timeflowapi.model.dto.ApiError;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Контроллер для обработки исключений. Здесь должны отлавливаться и обрабатываться все ошибки,
+ * которые идут на контроллер.
+ */
 @ControllerAdvice
 public class ValidationHandler extends ResponseEntityExceptionHandler {
 
@@ -30,10 +34,10 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     ) {
         Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-
+        exception.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
+
             errors.put(fieldName, message);
         });
 
@@ -41,18 +45,24 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiError> notFoundException(NotFoundException exception, WebRequest request) {
+    public ResponseEntity<ApiError> handleNotFoundException(NotFoundException exception,
+                                                            WebRequest request
+    ) {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(EmailAlreadyUsedException.class)
-    public ResponseEntity<ApiError> emailAlreadyUsedException(EmailAlreadyUsedException exception, WebRequest request) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiError> handleConflictException(ConflictException exception,
+                                                            WebRequest request
+    ) {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiError> handleConflictException(ConflictException exception, WebRequest request) {
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
+                                                                WebRequest request
+    ) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
 }
