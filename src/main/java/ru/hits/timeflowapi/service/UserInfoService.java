@@ -20,7 +20,7 @@ public class UserInfoService {
     private final PasswordEncoder passwordEncoder;
 
     public UserDto getUserInfo(String email) {
-        UserDto userDto;
+
         UserEntity user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> {
@@ -35,7 +35,7 @@ public class UserInfoService {
         UserEntity user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> {
-                    throw new NotFoundException("Пользователь с таким id не найден");
+                    throw new UnauthorizedException("Необходимо перелогиниться.");
                 });
 
         user.setPassword(passwordEncoder.encode(editPasswordDto.getPassword()));
@@ -49,7 +49,7 @@ public class UserInfoService {
         UserEntity user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> {
-                    throw new NotFoundException("Пользователь с таким id не найден");
+                    throw new NotFoundException("Необходимо перелогиниться.");
                 });
 
         user.setEmail(editEmailDto.getEmail());
