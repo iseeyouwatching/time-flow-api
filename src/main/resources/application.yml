@@ -11,6 +11,10 @@ spring:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
+token:
+  jwt-secret-key: secret_key
+  access-token-lifetime: 15
+  issuer: time-flow-api
 credentials:
   admin:
     email: admin

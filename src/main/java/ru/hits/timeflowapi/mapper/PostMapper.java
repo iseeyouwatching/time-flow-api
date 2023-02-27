@@ -23,8 +23,11 @@ public class PostMapper {
     List<EmployeePostDto> employeePostListToDtoList(List<EmployeePostEntity> entityList) {
         List<EmployeePostDto> dtoList = new ArrayList<>();
 
-        for (EmployeePostEntity entity : entityList) {
-            dtoList.add(employeePostToDto(entity));
+
+        if (entityList != null) {
+            for (EmployeePostEntity entity : entityList) {
+                dtoList.add(employeePostToDto(entity));
+            }
         }
 
         return dtoList;
