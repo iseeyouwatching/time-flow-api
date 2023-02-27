@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -24,7 +25,11 @@ public class ConfirmRequestController {
     private final ConfirmRequestService confirmRequestService;
 
     @GetMapping("/student")
-    @Operation(summary = "Получить заявки студентов.", tags = {"Заявки студентов."})
+    @Operation(
+            summary = "Получить заявки студентов.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки студентов."}
+    )
     public Page<StudentRequestConfirmDto> getStudentRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
