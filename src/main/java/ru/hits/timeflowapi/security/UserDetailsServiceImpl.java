@@ -13,6 +13,7 @@ import ru.hits.timeflowapi.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> user = userRepository.findByEmail(username);
+    public UserDetailsImpl loadUserByUsername(String id) throws UsernameNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(UUID.fromString(id));
 
         if (user.isPresent()) {
             List<String> postRoles = new ArrayList<>();
