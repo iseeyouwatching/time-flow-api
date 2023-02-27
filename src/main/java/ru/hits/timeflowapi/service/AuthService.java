@@ -1,7 +1,6 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
@@ -10,6 +9,9 @@ import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.signin.SignInDto;
 import ru.hits.timeflowapi.model.dto.signin.TokenDto;
+import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.model.dto.user.StudentDto;
+import ru.hits.timeflowapi.model.dto.user.UserDto;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -29,7 +31,6 @@ import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
-import ru.hits.timeflowapi.security.JWTUtil;
 
 import java.util.Date;
 
@@ -45,6 +46,7 @@ public class AuthService {
     private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final UserMapper userMapper;
+    private final CheckEmailService checkEmailService;
     private final JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -52,10 +54,10 @@ public class AuthService {
      * Метод для регистрации внешнего пользователя.
      *
      * @param userSignUpDTO информация для регистрации внешнего пользователя.
-     * @return токен.
+     * @return сохраненная информация о внешнем пользователе.
      */
-    public TokenDto userSignUp(UserSignUpDto userSignUpDTO) {
-        checkEmail(userSignUpDTO.getEmail());
+    public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
+        checkEmailService.checkEmail(userSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
@@ -75,10 +77,10 @@ public class AuthService {
      * Метод для регистрации студента.
      *
      * @param studentSignUpDTO информация о студента для регистрации.
-     * @return токен.
+     * @return сохраненная информация о студенте.
      */
     public TokenDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
-        checkEmail(studentSignUpDTO.getEmail());
+        checkEmailService.checkEmail(studentSignUpDTO.getEmail());
 
         if (studentDetailsRepository.existsByStudentNumber(studentSignUpDTO.getStudentNumber())) {
             throw new ConflictException("Пользователь с таким номером студенческого билета уже существует");
@@ -187,7 +189,7 @@ public class AuthService {
      * @return сохраненную сущность сотрудника в БД.
      */
     public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        checkEmail(employeeSignUpDTO.getEmail());
+        checkEmailService.checkEmail(employeeSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 employeeSignUpDTO,
@@ -222,18 +224,4 @@ public class AuthService {
 
         throw new UnauthorizedException("Неверный логин и/или пароль.");
     }
-
-    /**
-     * Метод для проверки существования пользователя с заданной почтой. Если эта почта занята,
-     * то выбросится исключение.
-     *
-     * @param email почта.
-     * @throws EmailAlreadyUsedException выбрасывается, если заданная почта уже используется.
-     */
-    private void checkEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyUsedException("Пользователь с такой почтой уже существует");
-        }
-    }
-
 }
