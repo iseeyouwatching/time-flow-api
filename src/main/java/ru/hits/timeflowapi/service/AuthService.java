@@ -3,7 +3,6 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
@@ -43,6 +42,7 @@ public class AuthService {
     private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final UserMapper userMapper;
+    private final CheckEmailService checkEmailService;
 
     /**
      * Метод для регистрации внешнего пользователя.
@@ -51,7 +51,7 @@ public class AuthService {
      * @return сохраненная информация о внешнем пользователе.
      */
     public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
-        checkEmail(userSignUpDTO.getEmail());
+        checkEmailService.checkEmail(userSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
@@ -71,7 +71,7 @@ public class AuthService {
      * @return сохраненная информация о студенте.
      */
     public StudentDto studentSignUp(StudentSignUpDto studentSignUpDTO) {
-        checkEmail(studentSignUpDTO.getEmail());
+        checkEmailService.checkEmail(studentSignUpDTO.getEmail());
 
         if (studentDetailsRepository.existsByStudentNumber(studentSignUpDTO.getStudentNumber())) {
             throw new ConflictException("Пользователь с таким номером студенческого билета уже существует");
@@ -171,7 +171,7 @@ public class AuthService {
      * @return сохраненную сущность сотрудника в БД.
      */
     public EmployeeDetailsEntity basicEmployeeSignUp(EmployeeSignUpDto employeeSignUpDTO) {
-        checkEmail(employeeSignUpDTO.getEmail());
+        checkEmailService.checkEmail(employeeSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 employeeSignUpDTO,
@@ -188,19 +188,6 @@ public class AuthService {
                 .build();
 
         return employeeDetailsRepository.save(employeeDetails);
-    }
-
-    /**
-     * Метод для проверки существования пользователя с заданной почтой. Если эта почта занята,
-     * то выбросится исключение.
-     *
-     * @param email почта.
-     * @throws EmailAlreadyUsedException выбрасывается, если заданная почта уже используется.
-     */
-    private void checkEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyUsedException("Пользователь с такой почтой уже существует");
-        }
     }
 
 }

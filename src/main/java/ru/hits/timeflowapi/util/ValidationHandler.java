@@ -55,4 +55,8 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> emailAlreadyUsedException(UnauthorizedException exception, WebRequest request) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
 }
