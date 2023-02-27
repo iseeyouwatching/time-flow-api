@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.entity.TimeslotEntity;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Data
