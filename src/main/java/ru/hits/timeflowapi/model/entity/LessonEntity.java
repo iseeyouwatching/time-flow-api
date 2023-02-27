@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -44,13 +45,7 @@ public class LessonEntity {
     @JoinColumn(name = "timeslot_id", nullable = false)
     private TimeslotEntity timeslot;
 
-    @ManyToOne
-    @JoinColumn(name = "week_id", nullable = false)
-    private WeekEntity week;
-
-    @ManyToOne
-    @JoinColumn(name = "day_id", nullable = false)
-    private DayEntity day;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "lesson_type")

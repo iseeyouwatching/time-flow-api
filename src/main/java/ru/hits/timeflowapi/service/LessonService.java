@@ -1,14 +1,13 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
-import ru.hits.timeflowapi.model.dto.WeekDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
-import ru.hits.timeflowapi.model.dto.day.DayDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
@@ -19,6 +18,7 @@ import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,10 +33,8 @@ public class LessonService {
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
-    private final WeekRepository weekRepository;
-    private final DayRepository dayRepository;
 
-    public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, Integer page) {
+    public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
 
         StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId).orElse(null);
 
@@ -44,35 +42,30 @@ public class LessonService {
             throw new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findBySequenceNumber(page);
-
-        if (week == null) {
-            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
-        }
-
-        List<LessonEntity> lessons = lessonRepository.findByStudentGroupAndWeek(studentGroup, week);
+        List<LessonEntity> lessons = lessonRepository.findByStudentGroup(studentGroup, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            lessonDtos.add(new LessonDto(
-                    lesson.getId(),
-                    new StudentGroupBasicDto(lesson.getStudentGroup()),
-                    new SubjectDto(lesson.getSubject()),
-                    new TeacherDto(lesson.getTeacher()),
-                    new ClassroomDto(lesson.getClassroom()),
-                    new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
-                    new DayDto(lesson.getDay()),
-                    lesson.getLessonType())
-            );
+            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+                lessonDtos.add(new LessonDto(
+                        lesson.getId(),
+                        new StudentGroupBasicDto(lesson.getStudentGroup()),
+                        new SubjectDto(lesson.getSubject()),
+                        new TeacherDto(lesson.getTeacher()),
+                        new ClassroomDto(lesson.getClassroom()),
+                        new TimeslotDto(lesson.getTimeslot()),
+                        lesson.getDate(),
+                        lesson.getLessonType())
+                );
+            }
         }
 
-        return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), week.getId(), lessonDtos);
+        return new StudentGroupTimetableDto(new StudentGroupBasicDto(studentGroup), lessonDtos);
 
     }
 
-    public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, Integer page) {
+    public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, LocalDate startDate, LocalDate endDate) {
 
         TeacherEntity teacher = teacherRepository.findById(teacherId).orElse(null);
 
@@ -80,35 +73,30 @@ public class LessonService {
             throw new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findBySequenceNumber(page);
-
-        if (week == null) {
-            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
-        }
-
-        List<LessonEntity> lessons = lessonRepository.findByTeacherAndWeek(teacher, week);
+        List<LessonEntity> lessons = lessonRepository.findByTeacher(teacher, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            lessonDtos.add(new LessonDto(
-                    lesson.getId(),
-                    new StudentGroupBasicDto(lesson.getStudentGroup()),
-                    new SubjectDto(lesson.getSubject()),
-                    new TeacherDto(lesson.getTeacher()),
-                    new ClassroomDto(lesson.getClassroom()),
-                    new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
-                    new DayDto(lesson.getDay()),
-                    lesson.getLessonType())
-            );
+            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+                lessonDtos.add(new LessonDto(
+                        lesson.getId(),
+                        new StudentGroupBasicDto(lesson.getStudentGroup()),
+                        new SubjectDto(lesson.getSubject()),
+                        new TeacherDto(lesson.getTeacher()),
+                        new ClassroomDto(lesson.getClassroom()),
+                        new TimeslotDto(lesson.getTimeslot()),
+                        lesson.getDate(),
+                        lesson.getLessonType())
+                );
+            }
         }
 
-        return new TeacherTimetableDto(new TeacherDto(teacher), week.getId(), lessonDtos);
+        return new TeacherTimetableDto(new TeacherDto(teacher), lessonDtos);
 
     }
 
-    public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, Integer page) {
+    public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, LocalDate startDate, LocalDate endDate) {
 
         ClassroomEntity classroom = classroomRepository.findById(classroomId).orElse(null);
 
@@ -116,31 +104,26 @@ public class LessonService {
             throw new NotFoundException("Аудитории с таким ID " + classroomId + " не существует");
         }
 
-        WeekEntity week = weekRepository.findBySequenceNumber(page);
-
-        if (week == null) {
-            throw new NotFoundException("Недели с таким порядковым номером " + page + " не существует");
-        }
-
-        List<LessonEntity> lessons = lessonRepository.findByClassroomAndWeek(classroom, week);
+        List<LessonEntity> lessons = lessonRepository.findByClassroom(classroom, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            lessonDtos.add(new LessonDto(
-                    lesson.getId(),
-                    new StudentGroupBasicDto(lesson.getStudentGroup()),
-                    new SubjectDto(lesson.getSubject()),
-                    new TeacherDto(lesson.getTeacher()),
-                    new ClassroomDto(lesson.getClassroom()),
-                    new TimeslotDto(lesson.getTimeslot()),
-                    new WeekDto(lesson.getWeek()),
-                    new DayDto(lesson.getDay()),
-                    lesson.getLessonType())
-            );
+            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+                lessonDtos.add(new LessonDto(
+                        lesson.getId(),
+                        new StudentGroupBasicDto(lesson.getStudentGroup()),
+                        new SubjectDto(lesson.getSubject()),
+                        new TeacherDto(lesson.getTeacher()),
+                        new ClassroomDto(lesson.getClassroom()),
+                        new TimeslotDto(lesson.getTimeslot()),
+                        lesson.getDate(),
+                        lesson.getLessonType())
+                );
+            }
         }
 
-        return new ClassroomTimetableDto(new ClassroomDto(classroom), week.getId(), lessonDtos);
+        return new ClassroomTimetableDto(new ClassroomDto(classroom), lessonDtos);
 
     }
 
@@ -165,8 +148,7 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
-        lesson.setWeek(dayRepository.findById(createLessonDto.getDayId()).get().getWeek());
-        lesson.setDay(dayRepository.findById(createLessonDto.getDayId()).orElse(null));
+        lesson.setDate(createLessonDto.getDate());
         lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
 
         lessonRepository.save(lesson);
@@ -185,6 +167,18 @@ public class LessonService {
 
     }
 
+    public void deleteAllLessonsByWeek(LocalDate startDate, LocalDate endDate) {
+
+        List<LessonEntity> lessons = lessonRepository.findAll();
+
+        for (LessonEntity lesson: lessons) {
+            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+                lessonRepository.deleteById(lesson.getId());
+            }
+        }
+
+    }
+
     public LessonDto updateLesson(UUID id, CreateLessonDto updatedLessonDto) {
 
         LessonEntity lesson = lessonRepository.findById(id).orElse(null);
@@ -198,8 +192,7 @@ public class LessonService {
         lesson.setTeacher(teacherRepository.findById(updatedLessonDto.getTeacherId()).orElse(null));
         lesson.setClassroom(classroomRepository.findById(updatedLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(updatedLessonDto.getTimeslotId()).orElse(null));
-        lesson.setWeek(dayRepository.findById(updatedLessonDto.getDayId()).get().getWeek());
-        lesson.setDay(dayRepository.findById(updatedLessonDto.getDayId()).orElse(null));
+        lesson.setDate(updatedLessonDto.getDate());
         lesson.setLessonType(LessonType.valueOf(updatedLessonDto.getLessonType()));
 
         lessonRepository.save(lesson);
