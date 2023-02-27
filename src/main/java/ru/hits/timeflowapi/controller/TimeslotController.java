@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.WeekDto;
-import ru.hits.timeflowapi.service.WeekService;
+import ru.hits.timeflowapi.model.dto.TimeslotDto;
+import ru.hits.timeflowapi.service.TimeslotService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/week")
+@RequestMapping("/api/v1/timeslot")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Неделя.")
-public class WeekController {
+@Tag(name = "Таймслот.")
+public class TimeslotController {
 
-    private final WeekService weekService;
+    private final TimeslotService timeslotService;
 
-    @Operation(summary = "Получить список недель.")
+    @Operation(summary = "Получить список таймслотов.")
     @GetMapping
-    public ResponseEntity<List<WeekDto>> getWeeks() {
-        return new ResponseEntity<>(weekService.getAllWeeksDtos(), HttpStatus.OK);
+    public ResponseEntity<List<TimeslotDto>> getTimeslots() {
+        return new ResponseEntity<>(timeslotService.getTimeslots(), HttpStatus.OK);
     }
 
 }

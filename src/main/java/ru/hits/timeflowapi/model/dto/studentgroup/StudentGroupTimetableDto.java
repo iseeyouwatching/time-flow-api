@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +13,6 @@ import java.util.UUID;
 public class StudentGroupTimetableDto {
 
     private StudentGroupBasicDto studentGroup;
-
-    private UUID weekId;
 
     private List<LessonDto> lessons;
 

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -28,8 +29,8 @@ public class CreateLessonDto {
     @NotNull(message = "Timeslot ID is required")
     private UUID timeslotId;
 
-    @NotNull(message = "Day ID is required")
-    private UUID dayId;
+    @NotNull(message = "Date is required")
+    private LocalDate date;
 
     @NotNull(message = "Lesson type is required")
     @Pattern(regexp = "LECTURE|SEMINAR|PRACTICAL_LESSON|LABORATORY_LESSON|EXAM", message = "Incorrect value. Possible: LECTURE, SEMINAR, PRACTICAL_LESSON, LABORATORY_LESSON, EXAM")
