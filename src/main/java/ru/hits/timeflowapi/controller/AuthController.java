@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
+import ru.hits.timeflowapi.model.dto.signin.SignInDto;
+import ru.hits.timeflowapi.model.dto.signin.TokenDto;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -53,7 +52,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Пользователь с таким email уже существует.")
     })
     @PostMapping("user/sign-up")
-    public ResponseEntity<UserDto> userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDto) {
+    public ResponseEntity<TokenDto> userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDto) {
         return new ResponseEntity<>(authService.userSignUp(userSignUpDto), HttpStatus.OK);
     }
 
@@ -82,7 +81,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Пользователь с таким email уже существует.")
     })
     @PostMapping("student/sign-up")
-    public ResponseEntity<StudentDto> studentSignUp(@Valid @RequestBody StudentSignUpDto studentSignUpDto) {
+    public ResponseEntity<TokenDto> studentSignUp(@Valid @RequestBody StudentSignUpDto studentSignUpDto) {
         return new ResponseEntity<>(authService.studentSignUp(studentSignUpDto), HttpStatus.OK);
     }
 
@@ -110,7 +109,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Пользователь с таким email уже существует.")
     })
     @PostMapping("employee/sign-up")
-    public ResponseEntity<EmployeeDto> employeeSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
+    public ResponseEntity<TokenDto> employeeSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
         return new ResponseEntity<>(authService.employeeSignUp(employeeSignUpDto), HttpStatus.OK);
     }
 
@@ -138,8 +137,13 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Пользователь с таким email уже существует.")
     })
     @PostMapping("employee/schedule-maker/sign-up")
-    public ResponseEntity<EmployeeDto> schedulerMakerSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
+    public ResponseEntity<TokenDto> schedulerMakerSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
         return new ResponseEntity<>(authService.scheduleMakerSignUp(employeeSignUpDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v1/sign-in")
+    public ResponseEntity<TokenDto> signIn(@RequestBody SignInDto signInDto) {
+        return new ResponseEntity<>(authService.signIn(signInDto), HttpStatus.OK);
     }
 
 }
