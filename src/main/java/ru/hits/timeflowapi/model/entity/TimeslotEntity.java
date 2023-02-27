@@ -24,16 +24,14 @@ public class TimeslotEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @Column(name = "sequence_number", unique = true)
+    @Column(name = "sequence_number")
     private int sequenceNumber;
 
     @Column(name = "begin_time")
-    @Temporal(TemporalType.TIME)
-    private Date beginTime;
+    private String beginTime;
 
     @Column(name = "end_time")
-    @Temporal(TemporalType.TIME)
-    private Date endTime;
+    private String endTime;
 
     @OneToMany(mappedBy = "timeslot")
     private List<LessonEntity> lessons;

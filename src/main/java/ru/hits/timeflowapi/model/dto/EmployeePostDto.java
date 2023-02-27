@@ -9,14 +9,12 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherDto {
+public class EmployeePostDto {
 
     private UUID id;
 
-    private String name;
+    private String postRole;
 
-    private String surname;
-
-    private String patronymic;
+    private String postName;
 
 }
