@@ -1,17 +1,14 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.signin.SignInDto;
 import ru.hits.timeflowapi.model.dto.signin.TokenDto;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -31,6 +28,7 @@ import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
+import ru.hits.timeflowapi.security.JWTUtil;
 
 import java.util.Date;
 
@@ -56,7 +54,7 @@ public class AuthService {
      * @param userSignUpDTO информация для регистрации внешнего пользователя.
      * @return сохраненная информация о внешнем пользователе.
      */
-    public UserDto userSignUp(UserSignUpDto userSignUpDTO) {
+    public TokenDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmailService.checkEmail(userSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
