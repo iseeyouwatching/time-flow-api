@@ -1,5 +1,6 @@
 package ru.hits.timeflowapi.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.hits.timeflowapi.model.entity.*;
@@ -10,10 +11,10 @@ import java.util.UUID;
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
-    List<LessonEntity> findByStudentGroupAndWeek(StudentGroupEntity studentGroup, WeekEntity week);
+    List<LessonEntity> findByStudentGroup(StudentGroupEntity studentGroup, Sort date);
 
-    List<LessonEntity> findByTeacherAndWeek(TeacherEntity teacher, WeekEntity week);
+    List<LessonEntity> findByTeacher(TeacherEntity teacher, Sort date);
 
-    List<LessonEntity> findByClassroomAndWeek(ClassroomEntity classroom, WeekEntity week);
+    List<LessonEntity> findByClassroom(ClassroomEntity classroom, Sort date);
 
 }
