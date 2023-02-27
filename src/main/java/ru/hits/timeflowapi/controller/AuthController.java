@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Регистрация сотрудника с должностью \"Составитель расписаний\".")
-    @PostMapping("/sign-up/schedule-maker/")
+    @PostMapping("/sign-up/schedule-maker")
     public ResponseEntity<TokenDto> schedulerMakerSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
         return new ResponseEntity<>(authService.scheduleMakerSignUp(employeeSignUpDto), HttpStatus.OK);
     }

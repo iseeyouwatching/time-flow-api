@@ -45,25 +45,41 @@ public class ConfirmRequestController {
     }
 
     @GetMapping("/student/{id}")
-    @Operation(summary = "Получить информацию о заявке по ID.", tags = {"Заявки студентов."})
+    @Operation(
+            summary = "Получить информацию о заявке по ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки студентов."}
+    )
     public StudentRequestConfirmDto getStudentRequestById(@PathVariable UUID id) {
         return confirmRequestService.getStudentRequestById(id);
     }
 
     @PostMapping("/student/{id}/accept")
-    @Operation(summary = "Одобрить заявку.", tags = {"Заявки студентов."})
+    @Operation(
+            summary = "Одобрить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки студентов."}
+    )
     public StudentDto acceptStudentRequest(@PathVariable UUID id) {
         return confirmRequestService.confirmStudentRequest(id);
     }
 
     @PostMapping("/student/{id}/reject")
-    @Operation(summary = "Отклонить заявку.", tags = {"Заявки студентов."})
+    @Operation(
+            summary = "Отклонить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки студентов."}
+    )
     public StudentDto rejectStudentRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectStudentRequest(id);
     }
 
     @GetMapping("/employee")
-    @Operation(summary = "Получить заявки сотрудников.", tags = {"Заявки сотрудников."})
+    @Operation(
+            summary = "Получить заявки сотрудников.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки сотрудников."}
+    )
     public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -79,27 +95,43 @@ public class ConfirmRequestController {
     }
 
     @GetMapping("/employee/{id}")
-    @Operation(summary = "Получить информацию о заявке по ID.", tags = {"Заявки сотрудников."})
+    @Operation(
+            summary = "Получить информацию о заявке по ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки сотрудников."}
+    )
     public EmployeeRequestConfirmDto getEmployeeRequestById(@PathVariable UUID id) {
         return confirmRequestService.getEmployeeRequestById(id);
     }
 
     @PostMapping("/employee/{id}/accept")
-    @Operation(summary = "Одобрить заявку.", tags = {"Заявки сотрудников."})
+    @Operation(
+            summary = "Одобрить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки сотрудников."}
+    )
     public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
                                              @RequestParam List<UUID> postIds) {
         return confirmRequestService.confirmEmployeeRequest(id, postIds);
     }
 
     @PostMapping("/employee/{id}/reject")
-    @Operation(summary = "Отклонить заявку.", tags = {"Заявки сотрудников."})
+    @Operation(
+            summary = "Отклонить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки сотрудников."}
+    )
     public EmployeeDto rejectEmployeeRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectEmployeeRequest(id);
     }
 
 
     @GetMapping("/employee/schedule-maker")
-    @Operation(summary = "Получить заявки составителей расписаний.", tags = {"Заявки составителей расписаний."})
+    @Operation(
+            summary = "Получить заявки составителей расписаний.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки составителей расписаний."}
+    )
     public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -115,19 +147,31 @@ public class ConfirmRequestController {
     }
 
     @GetMapping("/employee/schedule-maker/{id}")
-    @Operation(summary = "Получить информацию о заявке по ID.", tags = {"Заявки составителей расписаний."})
+    @Operation(
+            summary = "Получить информацию о заявке по ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки составителей расписаний."}
+    )
     public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
         return confirmRequestService.getScheduleMakerRequestById(id);
     }
 
     @PostMapping("/employee/schedule-maker/{id}/accept")
-    @Operation(summary = "Одобрить заявку.", tags = {"Заявки составителей расписаний."})
+    @Operation(
+            summary = "Одобрить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки составителей расписаний."}
+    )
     public EmployeeDto acceptScheduleMakerRequest(@PathVariable UUID id) {
         return confirmRequestService.confirmScheduleMakerRequest(id);
     }
 
     @PostMapping("/employee/schedule-maker/{id}/reject")
-    @Operation(summary = "Отклонить заявку.", tags = {"Заявки составителей расписаний."})
+    @Operation(
+            summary = "Отклонить заявку.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки составителей расписаний."}
+    )
     public EmployeeDto rejectScheduleMakerRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectScheduleMakerRequest(id);
     }

@@ -1,5 +1,7 @@
 package ru.hits.timeflowapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -28,12 +30,20 @@ public class UserInfoController {
         return UUID.fromString(authentication.getName());
     }
 
+    @Operation(
+            summary = "Получить информацию о пользователе.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping
     UserDto getUserInfo() {
         UUID id = extractId();
         return userInfoService.getUserInfo(id);
     }
 
+    @Operation(
+            summary = "Изменить почту пользователя.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PutMapping("/email")
     UserDto updateEmail(@Valid @RequestBody EditEmailDto editEmailDto) {
         checkEmailService.checkEmail(editEmailDto.getEmail());
@@ -42,6 +52,10 @@ public class UserInfoController {
         return userInfoService.updateEmail(id, editEmailDto);
     }
 
+    @Operation(
+            summary = "Изменить пароль пользователя.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PutMapping("/password")
     UserDto updatePassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
         UUID id = extractId();
