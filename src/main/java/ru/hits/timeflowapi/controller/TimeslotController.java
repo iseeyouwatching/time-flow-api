@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/timeslot")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Таймслот.")
+@Tag(name = "Таймслот")
 public class TimeslotController {
 
     private final TimeslotService timeslotService;

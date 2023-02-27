@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/classroom")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Аудитория.")
+@Tag(name = "Аудитория")
 public class ClassroomController {
 
     private final ClassroomService classroomService;

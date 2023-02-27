@@ -28,7 +28,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить заявки студентов.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки студентов."}
+            tags = {"Заявки студентов"}
     )
     public Page<StudentRequestConfirmDto> getStudentRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -48,7 +48,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки студентов."}
+            tags = {"Заявки студентов"}
     )
     public StudentRequestConfirmDto getStudentRequestById(@PathVariable UUID id) {
         return confirmRequestService.getStudentRequestById(id);
@@ -58,7 +58,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки студентов."}
+            tags = {"Заявки студентов"}
     )
     public StudentDto acceptStudentRequest(@PathVariable UUID id) {
         return confirmRequestService.confirmStudentRequest(id);
@@ -68,7 +68,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки студентов."}
+            tags = {"Заявки студентов"}
     )
     public StudentDto rejectStudentRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectStudentRequest(id);
@@ -78,7 +78,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить заявки сотрудников.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки сотрудников."}
+            tags = {"Заявки сотрудников"}
     )
     public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -98,7 +98,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки сотрудников."}
+            tags = {"Заявки сотрудников"}
     )
     public EmployeeRequestConfirmDto getEmployeeRequestById(@PathVariable UUID id) {
         return confirmRequestService.getEmployeeRequestById(id);
@@ -108,7 +108,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки сотрудников."}
+            tags = {"Заявки сотрудников"}
     )
     public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
                                              @RequestParam List<UUID> postIds) {
@@ -119,7 +119,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки сотрудников."}
+            tags = {"Заявки сотрудников"}
     )
     public EmployeeDto rejectEmployeeRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectEmployeeRequest(id);
@@ -130,7 +130,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить заявки составителей расписаний.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки составителей расписаний."}
+            tags = {"Заявки составителей расписаний"}
     )
     public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -150,7 +150,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки составителей расписаний."}
+            tags = {"Заявки составителей расписаний"}
     )
     public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
         return confirmRequestService.getScheduleMakerRequestById(id);
@@ -160,7 +160,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки составителей расписаний."}
+            tags = {"Заявки составителей расписаний"}
     )
     public EmployeeDto acceptScheduleMakerRequest(@PathVariable UUID id) {
         return confirmRequestService.confirmScheduleMakerRequest(id);
@@ -170,7 +170,7 @@ public class ConfirmRequestController {
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
-            tags = {"Заявки составителей расписаний."}
+            tags = {"Заявки составителей расписаний"}
     )
     public EmployeeDto rejectScheduleMakerRequest(@PathVariable UUID id) {
         return confirmRequestService.rejectScheduleMakerRequest(id);

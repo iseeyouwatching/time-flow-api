@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/group")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Группа студентов.")
+@Tag(name = "Группа студентов")
 public class GroupInfoController {
 
     private final StudentGroupInfoService studentGroupInfoService;

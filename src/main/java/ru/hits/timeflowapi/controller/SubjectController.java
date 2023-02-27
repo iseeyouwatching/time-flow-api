@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/subject")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Предмет.")
+@Tag(name = "Предмет")
 public class SubjectController {
 
     private final SubjectService subjectService;
