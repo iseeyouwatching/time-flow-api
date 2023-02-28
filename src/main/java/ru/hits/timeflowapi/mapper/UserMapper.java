@@ -36,32 +36,19 @@ public class UserMapper {
 
     public StudentDto studentDetailsToStudentDto(StudentDetailsEntity studentDetails) {
         return new StudentDto(
-                studentDetails.getUser().getId(),
-                studentDetails.getUser().getEmail(),
-                studentDetails.getUser().getRole(),
-                studentDetails.getUser().getName(),
-                studentDetails.getUser().getSurname(),
-                studentDetails.getUser().getPatronymic(),
-                studentDetails.getUser().getAccountStatus(),
-                studentDetails.getUser().getSex(),
+                userToUserDto(studentDetails.getUser()),
                 studentDetails.getStudentNumber(),
                 new StudentGroupBasicDto(
                         studentDetails.getGroup().getId(),
                         studentDetails.getGroup().getNumber()
                 )
         );
+
     }
 
     public EmployeeDto employeeDetailsToEmployeeDto(EmployeeDetailsEntity employeeDetails) {
         return new EmployeeDto(
-                employeeDetails.getUser().getId(),
-                employeeDetails.getUser().getEmail(),
-                employeeDetails.getUser().getRole(),
-                employeeDetails.getUser().getName(),
-                employeeDetails.getUser().getSurname(),
-                employeeDetails.getUser().getPatronymic(),
-                employeeDetails.getUser().getAccountStatus(),
-                employeeDetails.getUser().getSex(),
+                userToUserDto(employeeDetails.getUser()),
                 employeeDetails.getContractNumber(),
                 postMapper.employeePostListToDtoList(employeeDetails.getPosts())
         );

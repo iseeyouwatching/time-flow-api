@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.user.EditEmailDto;
-import ru.hits.timeflowapi.model.dto.user.EditPasswordDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
+import ru.hits.timeflowapi.model.dto.user.*;
+import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.UserInfoService;
 
@@ -17,7 +16,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/account")
 @RequiredArgsConstructor
 @Tag(name = "Личный кабинет")
 public class UserInfoController {
@@ -31,13 +30,43 @@ public class UserInfoController {
     }
 
     @Operation(
-            summary = "Получить информацию о пользователе.",
+            summary = "Получить роль пользователя.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @GetMapping
+    @GetMapping("/role")
+    Role getUserRole() {
+        UUID id = extractId();
+        return userInfoService.getUserRole(id);
+    }
+
+    @Operation(
+            summary = "Получить общую информацию о пользователе.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping("/user")
     UserDto getUserInfo() {
         UUID id = extractId();
         return userInfoService.getUserInfo(id);
+    }
+
+    @Operation(
+            summary = "Получить подробную информацию о студенте.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping("/student")
+    StudentDto getStudentInfo() {
+        UUID id = extractId();
+        return userInfoService.getStudentDetailsInfo(id);
+    }
+
+    @Operation(
+            summary = "Получить подробную информацию о сотруднике.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping("/employee")
+    EmployeeDto getEmployeeInfo() {
+        UUID id = extractId();
+        return userInfoService.getEmployeeDetailsInfo(id);
     }
 
     @Operation(
