@@ -3,7 +3,6 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.BadRequestException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.user.*;
@@ -63,13 +62,9 @@ public class UserInfoService {
     public UserDto updateEmail(UUID id, EditEmailDto editEmailDto) {
         UserEntity user = getUserById(id);
 
-        if (editEmailDto.getEmail().length() != 0) {
-            user.setEmail(editEmailDto.getEmail());
-            user = userRepository.save(user);
-            return userMapper.userToUserDto(user);
-        } else {
-            throw new BadRequestException("Email не может быть null.");
-        }
+        user.setEmail(editEmailDto.getEmail());
+        user = userRepository.save(user);
+        return userMapper.userToUserDto(user);
     }
 
     private UserEntity getUserById(UUID id) {

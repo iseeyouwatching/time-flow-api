@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.user.*;
 import ru.hits.timeflowapi.model.enumeration.Role;
-import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.UserInfoService;
+import ru.hits.timeflowapi.service.helpingservices.CheckEmailService;
 
 import javax.validation.Valid;
 import java.util.UUID;

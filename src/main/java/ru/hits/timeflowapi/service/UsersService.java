@@ -16,15 +16,16 @@ import ru.hits.timeflowapi.model.entity.UserEntity;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
+import ru.hits.timeflowapi.service.helpingservices.CheckPaginationInfoService;
 
 @Service
 @RequiredArgsConstructor
 public class UsersService {
     private final UserRepository userRepository;
+    private final CheckPaginationInfoService checkPaginationInfoService;
     private final StudentDetailsRepository studentDetailsRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final UserMapper userMapper;
-
     private static final String property = "name";
 
 
@@ -32,6 +33,7 @@ public class UsersService {
                                   int pageSize,
                                   Sort.Direction direction) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+        checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<UserEntity> users = userRepository.findAll(pageable);
 
@@ -42,6 +44,7 @@ public class UsersService {
                                         int pageSize,
                                         Sort.Direction direction) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+        checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<StudentDetailsEntity> students = studentDetailsRepository.findAll(pageable);
 
@@ -52,6 +55,7 @@ public class UsersService {
                                           int pageSize,
                                           Sort.Direction direction) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+        checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<EmployeeDetailsEntity> employees = employeeDetailsRepository.findAll(pageable);
 
