@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto.requestconfirm;
+package ru.hits.timeflowapi.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class EmployeeRequestConfirmDto {
+public class EmployeeRequestDto {
 
     private UUID id;
 
