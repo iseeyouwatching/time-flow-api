@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.util;
+package ru.hits.timeflowapi.controller;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.EmailAlreadyUsedException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.ApiError;

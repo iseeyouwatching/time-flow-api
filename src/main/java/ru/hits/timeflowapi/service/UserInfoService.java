@@ -9,6 +9,7 @@ import ru.hits.timeflowapi.model.dto.user.*;
 import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 import ru.hits.timeflowapi.model.entity.UserEntity;
+import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
@@ -29,6 +30,12 @@ public class UserInfoService {
         UserEntity user = getUserById(id);
 
         return userMapper.userToUserDto(user);
+    }
+
+    public Role getUserRole(UUID id) {
+        UserEntity user = getUserById(id);
+
+        return userMapper.userToUserDto(user).getRole();
     }
 
     public StudentDto getStudentDetailsInfo(UUID id) {

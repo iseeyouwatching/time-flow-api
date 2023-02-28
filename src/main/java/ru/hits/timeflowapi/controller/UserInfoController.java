@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.user.*;
+import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.UserInfoService;
 
@@ -26,6 +27,16 @@ public class UserInfoController {
     private UUID extractId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return UUID.fromString(authentication.getName());
+    }
+
+    @Operation(
+            summary = "Получить роль пользователя.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping("/role")
+    Role getUserRole() {
+        UUID id = extractId();
+        return userInfoService.getUserRole(id);
     }
 
     @Operation(
