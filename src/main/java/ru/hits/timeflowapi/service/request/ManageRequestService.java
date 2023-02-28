@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.service;
+package ru.hits.timeflowapi.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,7 @@ import ru.hits.timeflowapi.model.enumeration.AccountStatus;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestRepository;
+import ru.hits.timeflowapi.service.EmployeePostService;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ConfirmRequestService {
+public class ManageRequestService {
 
     private static final String SORT_PROPERTY = "creationDate";
     private final UserMapper userMapper;
