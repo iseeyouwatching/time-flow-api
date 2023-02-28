@@ -19,36 +19,36 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Регистрация.")
+@Tag(name = "Регистрация")
 public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "Регистрация внешнего пользователя.")
+    @Operation(summary = "Регистрация внешнего пользователя")
     @PostMapping("/sign-up/user")
     public ResponseEntity<TokenDto> userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDto) {
         return new ResponseEntity<>(authService.userSignUp(userSignUpDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Регистрация студента.")
+    @Operation(summary = "Регистрация студента")
     @PostMapping("/sign-up/student")
     public ResponseEntity<TokenDto> studentSignUp(@Valid @RequestBody StudentSignUpDto studentSignUpDto) {
         return new ResponseEntity<>(authService.studentSignUp(studentSignUpDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Регистрация сотрудника.")
+    @Operation(summary = "Регистрация сотрудника")
     @PostMapping("/sign-up/employee")
     public ResponseEntity<TokenDto> employeeSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
         return new ResponseEntity<>(authService.employeeSignUp(employeeSignUpDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Регистрация сотрудника с должностью \"Составитель расписаний\".")
+    @Operation(summary = "Регистрация сотрудника с должностью \"Составитель расписаний\"")
     @PostMapping("/sign-up/schedule-maker")
     public ResponseEntity<TokenDto> schedulerMakerSignUp(@Valid @RequestBody EmployeeSignUpDto employeeSignUpDto) {
         return new ResponseEntity<>(authService.scheduleMakerSignUp(employeeSignUpDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Аутентификация пользователя.")
+    @Operation(summary = "Аутентификация пользователя")
     @PostMapping("/sign-in")
     public ResponseEntity<TokenDto> signIn(@Valid @RequestBody SignInDto signInDto) {
         return new ResponseEntity<>(authService.signIn(signInDto), HttpStatus.OK);

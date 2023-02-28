@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/lesson")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Пара.")
+@Tag(name = "Пара")
 
 public class LessonController {
 
