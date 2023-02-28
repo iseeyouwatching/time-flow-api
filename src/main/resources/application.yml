@@ -12,8 +12,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
 token:
-  jwt-secret-key: secret_key
-  access-token-lifetime: 15
+  access.secret-key: secret_key
+  access.lifetime: 15
+  refresh.secret-key: secret_key
+  refresh.lifetime: 15
   issuer: time-flow-api
 credentials:
   admin:

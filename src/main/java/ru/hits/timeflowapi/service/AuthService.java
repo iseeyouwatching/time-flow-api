@@ -28,7 +28,7 @@ import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
-import ru.hits.timeflowapi.security.JWTUtil;
+import ru.hits.timeflowapi.security.JWTService;
 
 import java.util.Date;
 
@@ -45,7 +45,7 @@ public class AuthService {
     private final StudentRequestConfirmRepository studentRequestConfirmRepository;
     private final UserMapper userMapper;
     private final CheckEmailService checkEmailService;
-    private final JWTUtil jwtUtil;
+    private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -66,7 +66,7 @@ public class AuthService {
         user = userRepository.save(user);
 
         return new TokenDto(
-                jwtUtil.generateToken(user.getId()),
+                jwtService.generateAccessToken(user.getId()),
                 null
         );
     }
@@ -118,7 +118,7 @@ public class AuthService {
         studentRequestConfirmRepository.save(studentRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(user.getId()),
+                jwtService.generateAccessToken(user.getId()),
                 null
         );
     }
@@ -146,7 +146,7 @@ public class AuthService {
         employeeRequestConfirmRepository.save(employeeRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(employeeDetails.getUser().getId()),
+                jwtService.generateAccessToken(employeeDetails.getUser().getId()),
                 null
         );
     }
@@ -175,7 +175,7 @@ public class AuthService {
         scheduleMakerRequestConfirmRepository.save(scheduleMakerRequestConfirm);
 
         return new TokenDto(
-                jwtUtil.generateToken(employeeDetails.getUser().getId()),
+                jwtService.generateAccessToken(employeeDetails.getUser().getId()),
                 null
         );
     }
@@ -214,7 +214,7 @@ public class AuthService {
                 });
 
         if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
-            String token = jwtUtil.generateToken(user.getId());
+            String token = jwtService.generateAccessToken(user.getId());
 
             return new TokenDto(token, null);
 

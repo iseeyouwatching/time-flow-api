@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.security.JWTUtil;
+import ru.hits.timeflowapi.security.JWTService;
 import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 
 import javax.servlet.FilterChain;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
 
-    private final JWTUtil jwtUtil;
+    private final JWTService jwtService;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -39,7 +39,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 throw new UnauthorizedException("Не авторизован");
             } else {
                 try {
-                    UUID id = jwtUtil.verifyTokenAndGetId(jwt);
+                    UUID id = jwtService.verifyAccessTokenAndGetId(jwt);
                     UserDetails userDetails = userDetailsService.loadUserByUsername(id.toString());
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
