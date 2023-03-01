@@ -71,18 +71,18 @@ public class JWTService {
     public TokenDto updateRefreshToken(String refreshToken) throws UnauthorizedException {
         UUID id = verifyAndExtractId(refreshToken, refreshSecret);
 
-        return generateRefreshToken(id);
+        return generateTokens(id);
     }
 
     /**
-     * Метод для генерации {@code refresh} токена.
+     * Метод для генерации пары {@code refresh} {@code access} токена.
      *
      * @param userID {@code id} пользователя.
      * @return пара {@code access} и {@code refresh} токенов.
      * @throws UnauthorizedException возникает, если токен подделан, или пользователь
      *                               не найден по {@code ID} из полезной нагрузки токена.
      */
-    private TokenDto generateRefreshToken(UUID userID) throws UnauthorizedException {
+    public TokenDto generateTokens(UUID userID) throws UnauthorizedException {
         UserEntity user = userRepository.findById(userID).orElseThrow(() -> {
             throw new UnauthorizedException("Не авторизован.");
         });
