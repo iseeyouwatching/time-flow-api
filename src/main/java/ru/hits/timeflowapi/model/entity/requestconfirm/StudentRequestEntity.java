@@ -2,7 +2,7 @@ package ru.hits.timeflowapi.model.entity.requestconfirm;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,8 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "employee_request_confirm")
-public class EmployeeRequestConfirmEntity {
+@Table(name = "student_request_confirm")
+public class StudentRequestEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -26,7 +26,7 @@ public class EmployeeRequestConfirmEntity {
     private UUID id;
 
     @OneToOne
-    private EmployeeDetailsEntity employeeDetails;
+    private StudentDetailsEntity studentDetails;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
