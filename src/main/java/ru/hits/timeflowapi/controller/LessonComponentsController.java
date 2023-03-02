@@ -17,7 +17,7 @@ import ru.hits.timeflowapi.service.LessonComponentsService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/component")
+@RequestMapping("/api/v1")
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Составляющие пары")
@@ -26,31 +26,31 @@ public class LessonComponentsController {
     private final LessonComponentsService lessonComponentsService;
 
     @Operation(summary = "Получить список предметов.")
-    @GetMapping("/subjects")
+    @GetMapping("/subject")
     public List<SubjectDto> getSubjects() {
         return lessonComponentsService.getSubjects();
     }
 
     @Operation(summary = "Получить список групп студентов.")
-    @GetMapping("/groups")
+    @GetMapping("/group")
     public List<StudentGroupBasicDto> getGroups() {
         return lessonComponentsService.getGroups();
     }
 
     @Operation(summary = "Получить список таймслотов.")
-    @GetMapping("/timeslots")
+    @GetMapping("/timeslot")
     public List<TimeslotDto> getTimeslots() {
         return lessonComponentsService.getTimeslots();
     }
 
     @Operation(summary = "Получить список аудиторий.")
-    @GetMapping("/classrooms")
+    @GetMapping("/classroom")
     public List<ClassroomDto> getClassrooms() {
         return lessonComponentsService.getClassrooms();
     }
 
     @Operation(summary = "Получить список преподавателей.")
-    @GetMapping("/teachers")
+    @GetMapping("/teacher")
     public List<TeacherDto> getTeachers() {
         return lessonComponentsService.getTeachers();
     }
