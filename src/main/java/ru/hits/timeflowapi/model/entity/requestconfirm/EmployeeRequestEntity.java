@@ -14,8 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Table(name = "scheduler_maker_request_confirm")
-public class ScheduleMakerRequestConfirmEntity {
+@Table(name = "employee_request_confirm")
+public class EmployeeRequestEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
