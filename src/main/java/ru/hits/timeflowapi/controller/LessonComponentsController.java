@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Составляющие пары")
+@Tag(name = "Различная информация")
 public class LessonComponentsController {
 
     private final LessonComponentsService lessonComponentsService;
