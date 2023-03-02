@@ -51,4 +51,6 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     private EmployeeDetailsEntity employee;
 
+    private String refreshToken;
+
 }
