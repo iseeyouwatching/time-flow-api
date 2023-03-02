@@ -24,25 +24,26 @@ public class AvailableСomponentsController {
 
     @Operation(summary = "Получить список доступных таймслотов.")
     @GetMapping("timeslot/{groupId}")
-    public List<TimeslotDto> getAvailableTimeslots(@PathVariable("groupId") UUID groupId,
-                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
+    public List<TimeslotDto> getAvailableTimeslots
+            (@PathVariable("groupId") UUID groupId,
+             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+             @RequestParam("date") LocalDate date) {
         return availableComponentsService.getAvailableTimeslots(groupId, date);
     }
 
     @Operation(summary = "Получить список доступных аудиторий.")
-    @GetMapping("classroom/{groupId}/{timeslotId}")
-    public List<ClassroomDto> getAvailableClassrooms(@PathVariable("groupId") UUID groupId,
-                                                     @PathVariable("timeslotId") UUID timeslotId,
-                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
-        return availableComponentsService.getAvailableClassrooms(groupId, timeslotId, date);
+    @GetMapping("classroom/{timeslotId}")
+    public List<ClassroomDto> getAvailableClassrooms(@PathVariable("timeslotId") UUID timeslotId, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @RequestParam("date") LocalDate date) {
+        return availableComponentsService.getAvailableClassrooms(timeslotId, date);
     }
 
     @Operation(summary = "Получить список доступных преподавателей.")
-    @GetMapping("teacher/{groupId}/{timeslotId}")
-    public List<TeacherDto> getAvailableTeachers(@PathVariable("groupId") UUID groupId,
-                                                 @PathVariable("timeslotId") UUID timeslotId,
-                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
-        return availableComponentsService.getAvailableTeachers(groupId, timeslotId, date);
+    @GetMapping("teacher/{timeslotId}")
+    public List<TeacherDto> getAvailableTeachers(@RequestBody @PathVariable("timeslotId") UUID timeslotId,
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                 @RequestParam("date") LocalDate date) {
+        return availableComponentsService.getAvailableTeachers(timeslotId, date);
     }
 
 }
