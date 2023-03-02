@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.signin.SignInDto;
-import ru.hits.timeflowapi.model.dto.signin.TokenDto;
+import ru.hits.timeflowapi.model.dto.signin.TokensDto;
 import ru.hits.timeflowapi.model.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
@@ -15,9 +15,10 @@ public class SignInService {
 
     private final JWTService jwtService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public TokenDto signIn(SignInDto signInDto) {
+    public TokensDto signIn(SignInDto signInDto) {
         UserEntity user = userRepository
                 .findByEmailAndPassword(signInDto.getEmail(), signInDto.getPassword())
                 .orElseThrow(() -> {

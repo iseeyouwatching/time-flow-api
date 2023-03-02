@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.mapper.UserMapper;
-import ru.hits.timeflowapi.model.dto.signin.TokenDto;
+import ru.hits.timeflowapi.model.dto.signin.TokensDto;
 import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
 import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
@@ -41,7 +41,7 @@ public class SignUpService {
      * @param userSignUpDTO информация для регистрации внешнего пользователя.
      * @return пара {@code access} и {@code refresh} токенов.
      */
-    public TokenDto userSignUp(UserSignUpDto userSignUpDTO) {
+    public TokensDto userSignUp(UserSignUpDto userSignUpDTO) {
         checkEmailService.checkEmail(userSignUpDTO.getEmail());
 
         UserEntity user = userMapper.basicSignUpDetailsToUser(
@@ -60,7 +60,7 @@ public class SignUpService {
      * @param studentSignUpDto dto с информации о студенте.
      * @return пара {@code access} и {@code refresh} токенов.
      */
-    public TokenDto studentSignUp(StudentSignUpDto studentSignUpDto) {
+    public TokensDto studentSignUp(StudentSignUpDto studentSignUpDto) {
         checkEmailService.checkEmail(studentSignUpDto.getEmail());
 
         if (studentDetailsRepository.existsByStudentNumber(studentSignUpDto.getStudentNumber())) {
@@ -97,7 +97,7 @@ public class SignUpService {
      * @param employeeSignUpDto dto с информацией о сотруднике.
      * @return пара {@code access} и {@code refresh} токенов.
      */
-    public TokenDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
+    public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
         checkEmailService.checkEmail(employeeSignUpDto.getEmail());
 
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
@@ -116,7 +116,7 @@ public class SignUpService {
      * @param employeeSignUpDto dto с информацией о сотруднике.
      * @return пара {@code access} и {@code refresh} токенов.
      */
-    public TokenDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
+    public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
         checkEmailService.checkEmail(employeeSignUpDto.getEmail());
 
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
