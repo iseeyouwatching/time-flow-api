@@ -21,7 +21,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/lesson")
-@CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Пара")
 

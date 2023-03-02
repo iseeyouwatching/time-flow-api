@@ -12,6 +12,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
   mandatory-file-encoding: UTF-8
+  mvc:
+    dispatch-options-request: true
 token:
   access.secret-key: access_secret_key
   access.lifetime_min: 15
