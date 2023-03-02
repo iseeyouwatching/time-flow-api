@@ -32,7 +32,7 @@ public class LessonComponentsController {
     }
 
     @Operation(summary = "Получить список групп студентов.")
-    @GetMapping("student")
+    @GetMapping("group")
     public List<StudentGroupBasicDto> getGroups() {
         return lessonComponentsService.getGroups();
     }

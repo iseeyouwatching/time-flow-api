@@ -3,7 +3,6 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
@@ -18,7 +17,7 @@ import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
-import ru.hits.timeflowapi.util.CheckAddLessonMethod;
+import ru.hits.timeflowapi.util.CheckClassroomAndTeacherAndTimeslotAccessibility;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class LessonService {
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
 
-    private final CheckAddLessonMethod checkAddLessonMethod;
+    private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
 
@@ -147,7 +146,7 @@ public class LessonService {
 
         LessonEntity lesson = new LessonEntity();
 
-        checkAddLessonMethod.checkTeacherIsFree(createLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(createLessonDto);
 
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
@@ -192,6 +191,8 @@ public class LessonService {
         if (lesson == null) {
             throw new NotFoundException("Пары с таким ID " + id + " не существует");
         }
+
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(updatedLessonDto);
 
         lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(updatedLessonDto.getSubjectId()).orElse(null));
