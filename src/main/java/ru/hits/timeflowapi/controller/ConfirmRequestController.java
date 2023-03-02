@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
-import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.request.EmployeeRequestDto;
+import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.service.ConfirmRequestService;
+import ru.hits.timeflowapi.service.request.ManageRequestService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConfirmRequestController {
 
-    private final ConfirmRequestService confirmRequestService;
+    private final ManageRequestService manageRequestService;
 
     @GetMapping("/student")
     @Operation(
@@ -30,13 +30,13 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки студентов"}
     )
-    public Page<StudentRequestConfirmDto> getStudentRequests(
+    public Page<StudentRequestDto> getStudentRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getStudentRequestsPage(
+        return manageRequestService.getStudentRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
@@ -50,8 +50,8 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки студентов"}
     )
-    public StudentRequestConfirmDto getStudentRequestById(@PathVariable UUID id) {
-        return confirmRequestService.getStudentRequestById(id);
+    public StudentRequestDto getStudentRequestById(@PathVariable UUID id) {
+        return manageRequestService.getStudentRequestById(id);
     }
 
     @PostMapping("/student/{id}/accept")
@@ -61,7 +61,7 @@ public class ConfirmRequestController {
             tags = {"Заявки студентов"}
     )
     public StudentDto acceptStudentRequest(@PathVariable UUID id) {
-        return confirmRequestService.confirmStudentRequest(id);
+        return manageRequestService.confirmStudentRequest(id);
     }
 
     @PostMapping("/student/{id}/reject")
@@ -71,7 +71,7 @@ public class ConfirmRequestController {
             tags = {"Заявки студентов"}
     )
     public StudentDto rejectStudentRequest(@PathVariable UUID id) {
-        return confirmRequestService.rejectStudentRequest(id);
+        return manageRequestService.rejectStudentRequest(id);
     }
 
     @GetMapping("/employee")
@@ -80,13 +80,13 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки сотрудников"}
     )
-    public Page<EmployeeRequestConfirmDto> getEmployeeRequests(
+    public Page<EmployeeRequestDto> getEmployeeRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getEmployeeRequestsPage(
+        return manageRequestService.getEmployeeRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
@@ -100,8 +100,8 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки сотрудников"}
     )
-    public EmployeeRequestConfirmDto getEmployeeRequestById(@PathVariable UUID id) {
-        return confirmRequestService.getEmployeeRequestById(id);
+    public EmployeeRequestDto getEmployeeRequestById(@PathVariable UUID id) {
+        return manageRequestService.getEmployeeRequestById(id);
     }
 
     @PostMapping("/employee/{id}/accept")
@@ -112,7 +112,7 @@ public class ConfirmRequestController {
     )
     public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
                                              @RequestParam List<UUID> postIds) {
-        return confirmRequestService.confirmEmployeeRequest(id, postIds);
+        return manageRequestService.confirmEmployeeRequest(id, postIds);
     }
 
     @PostMapping("/employee/{id}/reject")
@@ -122,7 +122,7 @@ public class ConfirmRequestController {
             tags = {"Заявки сотрудников"}
     )
     public EmployeeDto rejectEmployeeRequest(@PathVariable UUID id) {
-        return confirmRequestService.rejectEmployeeRequest(id);
+        return manageRequestService.rejectEmployeeRequest(id);
     }
 
 
@@ -132,13 +132,13 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки составителей расписаний"}
     )
-    public Page<EmployeeRequestConfirmDto> getScheduleMakerRequests(
+    public Page<EmployeeRequestDto> getScheduleMakerRequests(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) Optional<Boolean> isClosed
     ) {
-        return confirmRequestService.getScheduleMakerRequestsPage(
+        return manageRequestService.getScheduleMakerRequestsPage(
                 pageNumber,
                 pageSize,
                 sortDirection,
@@ -152,8 +152,8 @@ public class ConfirmRequestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             tags = {"Заявки составителей расписаний"}
     )
-    public EmployeeRequestConfirmDto getScheduleMakerRequestById(@PathVariable UUID id) {
-        return confirmRequestService.getScheduleMakerRequestById(id);
+    public EmployeeRequestDto getScheduleMakerRequestById(@PathVariable UUID id) {
+        return manageRequestService.getScheduleMakerRequestById(id);
     }
 
     @PostMapping("/employee/schedule-maker/{id}/accept")
@@ -163,7 +163,7 @@ public class ConfirmRequestController {
             tags = {"Заявки составителей расписаний"}
     )
     public EmployeeDto acceptScheduleMakerRequest(@PathVariable UUID id) {
-        return confirmRequestService.confirmScheduleMakerRequest(id);
+        return manageRequestService.confirmScheduleMakerRequest(id);
     }
 
     @PostMapping("/employee/schedule-maker/{id}/reject")
@@ -173,6 +173,6 @@ public class ConfirmRequestController {
             tags = {"Заявки составителей расписаний"}
     )
     public EmployeeDto rejectScheduleMakerRequest(@PathVariable UUID id) {
-        return confirmRequestService.rejectScheduleMakerRequest(id);
+        return manageRequestService.rejectScheduleMakerRequest(id);
     }
 }

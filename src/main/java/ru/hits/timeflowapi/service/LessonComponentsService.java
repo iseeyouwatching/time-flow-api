@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
@@ -12,6 +13,7 @@ import ru.hits.timeflowapi.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,14 @@ public class LessonComponentsService {
         }
 
         return studentGroupBasicDtos;
+    }
+
+    public StudentGroupEntity getGroupEntityById(UUID id) {
+        return studentGroupRepository
+                .findById(id)
+                .orElseThrow(() -> {
+                    throw new NotFoundException("Группа с таким ID не найдена");
+                });
     }
 
     public List<TimeslotDto> getTimeslots() {

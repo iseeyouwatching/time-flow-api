@@ -4,13 +4,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestConfirmEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
 
 import java.util.UUID;
 
 @Repository
-public interface EmployeeRequestConfirmRepository extends JpaRepository<EmployeeRequestConfirmEntity, UUID> {
+public interface EmployeeRequestRepository extends JpaRepository<EmployeeRequestEntity, UUID> {
 
-    Page<EmployeeRequestConfirmEntity> findAllByIsClosed(Pageable pageable, boolean isClosed);
+    Page<EmployeeRequestEntity> findAllByIsClosed(Pageable pageable, boolean isClosed);
 
 }

@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.service;
+package ru.hits.timeflowapi.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,18 +10,19 @@ import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.RequestMapper;
 import ru.hits.timeflowapi.mapper.UserMapper;
-import ru.hits.timeflowapi.model.dto.requestconfirm.EmployeeRequestConfirmDto;
-import ru.hits.timeflowapi.model.dto.requestconfirm.StudentRequestConfirmDto;
+import ru.hits.timeflowapi.model.dto.request.EmployeeRequestDto;
+import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestConfirmEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestConfirmEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestConfirmEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestEntity;
+import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestEntity;
 import ru.hits.timeflowapi.model.enumeration.AccountStatus;
-import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestConfirmRepository;
-import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestConfirmRepository;
-import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestConfirmRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestRepository;
+import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestRepository;
+import ru.hits.timeflowapi.service.EmployeePostService;
 
 import java.util.Date;
 import java.util.List;
@@ -30,99 +31,99 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ConfirmRequestService {
+public class ManageRequestService {
 
     private static final String SORT_PROPERTY = "creationDate";
     private final UserMapper userMapper;
     private final RequestMapper requestMapper;
-    private final StudentRequestConfirmRepository studentRequestConfirmRepository;
-    private final EmployeeRequestConfirmRepository employeeRequestConfirmRepository;
-    private final ScheduleMakerRequestConfirmRepository scheduleMakerRequestConfirmRepository;
+    private final StudentRequestRepository studentRequestRepository;
+    private final EmployeeRequestRepository employeeRequestRepository;
+    private final ScheduleMakerRequestRepository scheduleMakerRequestRepository;
     private final EmployeePostService employeePostService;
 
-    public Page<StudentRequestConfirmDto> getStudentRequestsPage(int pageNumber,
+    public Page<StudentRequestDto> getStudentRequestsPage(int pageNumber,
+                                                          int pageSize,
+                                                          Sort.Direction direction,
+                                                          Optional<Boolean> isClosed
+    ) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
+
+        Page<StudentRequestEntity> students;
+
+        if (isClosed.isPresent()) {
+            students = studentRequestRepository
+                    .findAllByIsClosed(
+                            pageable,
+                            isClosed.get());
+        } else {
+            students = studentRequestRepository.findAll(pageable);
+        }
+
+        return students.map(requestMapper::studentRequestToDto);
+    }
+
+    public Page<EmployeeRequestDto> getScheduleMakerRequestsPage(int pageNumber,
                                                                  int pageSize,
                                                                  Sort.Direction direction,
                                                                  Optional<Boolean> isClosed
     ) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
 
-        Page<StudentRequestConfirmEntity> students;
+        Page<ScheduleMakerRequestEntity> scheduleMakers;
 
         if (isClosed.isPresent()) {
-            students = studentRequestConfirmRepository
+            scheduleMakers = scheduleMakerRequestRepository
                     .findAllByIsClosed(
                             pageable,
                             isClosed.get());
         } else {
-            students = studentRequestConfirmRepository.findAll(pageable);
+            scheduleMakers = scheduleMakerRequestRepository.findAll(pageable);
         }
 
-        return students.map(requestMapper::studentRequestConfirmToDto);
+        return scheduleMakers.map(requestMapper::employeeRequestToDto);
     }
 
-    public Page<EmployeeRequestConfirmDto> getScheduleMakerRequestsPage(int pageNumber,
-                                                                        int pageSize,
-                                                                        Sort.Direction direction,
-                                                                        Optional<Boolean> isClosed
+    public Page<EmployeeRequestDto> getEmployeeRequestsPage(int pageNumber,
+                                                            int pageSize,
+                                                            Sort.Direction direction,
+                                                            Optional<Boolean> isClosed
     ) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
 
-        Page<ScheduleMakerRequestConfirmEntity> scheduleMakers;
+        Page<EmployeeRequestEntity> employees;
 
         if (isClosed.isPresent()) {
-            scheduleMakers = scheduleMakerRequestConfirmRepository
+            employees = employeeRequestRepository
                     .findAllByIsClosed(
                             pageable,
                             isClosed.get());
         } else {
-            scheduleMakers = scheduleMakerRequestConfirmRepository.findAll(pageable);
+            employees = employeeRequestRepository.findAll(pageable);
         }
 
-        return scheduleMakers.map(requestMapper::employeeRequestConfirmToDto);
+        return employees.map(requestMapper::employeeRequestToDto);
     }
 
-    public Page<EmployeeRequestConfirmDto> getEmployeeRequestsPage(int pageNumber,
-                                                                   int pageSize,
-                                                                   Sort.Direction direction,
-                                                                   Optional<Boolean> isClosed
-    ) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, SORT_PROPERTY);
+    public StudentRequestDto getStudentRequestById(UUID requestId) {
+        StudentRequestEntity request = getStudentRequest(requestId);
 
-        Page<EmployeeRequestConfirmEntity> employees;
-
-        if (isClosed.isPresent()) {
-            employees = employeeRequestConfirmRepository
-                    .findAllByIsClosed(
-                            pageable,
-                            isClosed.get());
-        } else {
-            employees = employeeRequestConfirmRepository.findAll(pageable);
-        }
-
-        return employees.map(requestMapper::employeeRequestConfirmToDto);
+        return requestMapper.studentRequestToDto(request);
     }
 
-    public StudentRequestConfirmDto getStudentRequestById(UUID requestId) {
-        StudentRequestConfirmEntity request = getStudentRequest(requestId);
+    public EmployeeRequestDto getEmployeeRequestById(UUID requestId) {
+        EmployeeRequestEntity request = getEmployeeRequest(requestId);
 
-        return requestMapper.studentRequestConfirmToDto(request);
+        return requestMapper.employeeRequestToDto(request);
     }
 
-    public EmployeeRequestConfirmDto getEmployeeRequestById(UUID requestId) {
-        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
+    public EmployeeRequestDto getScheduleMakerRequestById(UUID id) {
+        ScheduleMakerRequestEntity request = getScheduleMakerRequest(id);
 
-        return requestMapper.employeeRequestConfirmToDto(request);
-    }
-
-    public EmployeeRequestConfirmDto getScheduleMakerRequestById(UUID id) {
-        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(id);
-
-        return requestMapper.employeeRequestConfirmToDto(request);
+        return requestMapper.employeeRequestToDto(request);
     }
 
     public StudentDto confirmStudentRequest(UUID requestId) {
-        StudentRequestConfirmEntity request = getStudentRequest(requestId);
+        StudentRequestEntity request = getStudentRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -130,13 +131,13 @@ public class ConfirmRequestService {
         request.setClosed(true);
         request.setClosedDate(new Date());
 
-        request = studentRequestConfirmRepository.save(request);
+        request = studentRequestRepository.save(request);
 
         return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
     }
 
     public EmployeeDto confirmEmployeeRequest(UUID requestId, List<UUID> postIds) {
-        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
+        EmployeeRequestEntity request = getEmployeeRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -151,13 +152,13 @@ public class ConfirmRequestService {
 
         request.getEmployeeDetails().setPosts(employeePostEntities);
 
-        request = employeeRequestConfirmRepository.save(request);
+        request = employeeRequestRepository.save(request);
 
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
 
     public EmployeeDto confirmScheduleMakerRequest(UUID requestId) {
-        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(requestId);
+        ScheduleMakerRequestEntity request = getScheduleMakerRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -169,13 +170,13 @@ public class ConfirmRequestService {
                 .getEmployeeDetails()
                 .setPosts(List.of(employeePostService.getPostEntityByPostRole("ROLE_SCHEDULE_MAKER")));
 
-        request = scheduleMakerRequestConfirmRepository.save(request);
+        request = scheduleMakerRequestRepository.save(request);
 
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
 
     public StudentDto rejectStudentRequest(UUID requestId) {
-        StudentRequestConfirmEntity request = getStudentRequest(requestId);
+        StudentRequestEntity request = getStudentRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -183,13 +184,13 @@ public class ConfirmRequestService {
         request.setClosed(true);
         request.setClosedDate(new Date());
 
-        request = studentRequestConfirmRepository.save(request);
+        request = studentRequestRepository.save(request);
 
         return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
     }
 
     public EmployeeDto rejectEmployeeRequest(UUID requestId) {
-        EmployeeRequestConfirmEntity request = getEmployeeRequest(requestId);
+        EmployeeRequestEntity request = getEmployeeRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -197,13 +198,13 @@ public class ConfirmRequestService {
         request.setClosed(true);
         request.setClosedDate(new Date());
 
-        request = employeeRequestConfirmRepository.save(request);
+        request = employeeRequestRepository.save(request);
 
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
 
     public EmployeeDto rejectScheduleMakerRequest(UUID requestId) {
-        ScheduleMakerRequestConfirmEntity request = getScheduleMakerRequest(requestId);
+        ScheduleMakerRequestEntity request = getScheduleMakerRequest(requestId);
 
         checkRequestStatus(request.isClosed());
 
@@ -211,7 +212,7 @@ public class ConfirmRequestService {
         request.setClosed(true);
         request.setClosedDate(new Date());
 
-        request = scheduleMakerRequestConfirmRepository.save(request);
+        request = scheduleMakerRequestRepository.save(request);
 
         return userMapper.employeeDetailsToEmployeeDto(request.getEmployeeDetails());
     }
@@ -222,24 +223,24 @@ public class ConfirmRequestService {
         }
     }
 
-    private StudentRequestConfirmEntity getStudentRequest(UUID requestId) {
-        return studentRequestConfirmRepository
+    private StudentRequestEntity getStudentRequest(UUID requestId) {
+        return studentRequestRepository
                 .findById(requestId)
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка студента не найдена, id = '" + requestId + "'.");
                 });
     }
 
-    private ScheduleMakerRequestConfirmEntity getScheduleMakerRequest(UUID requestId) {
-        return scheduleMakerRequestConfirmRepository
+    private ScheduleMakerRequestEntity getScheduleMakerRequest(UUID requestId) {
+        return scheduleMakerRequestRepository
                 .findById(requestId)
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка составителя расписаний не найдена, id = '" + requestId + "'.");
                 });
     }
 
-    private EmployeeRequestConfirmEntity getEmployeeRequest(UUID requestId) {
-        return employeeRequestConfirmRepository
+    private EmployeeRequestEntity getEmployeeRequest(UUID requestId) {
+        return employeeRequestRepository
                 .findById(requestId)
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка сотрудникам не найдена, id = '" + requestId + "'.");
