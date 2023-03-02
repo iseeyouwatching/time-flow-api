@@ -13,10 +13,13 @@ import ru.hits.timeflowapi.model.dto.user.UserDto;
 import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 import ru.hits.timeflowapi.model.entity.UserEntity;
+import ru.hits.timeflowapi.model.enumeration.Role;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.service.helpingservices.CheckPaginationInfoService;
+
+import static ru.hits.timeflowapi.model.enumeration.Role.ROLE_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +29,9 @@ public class UsersService {
     private final StudentDetailsRepository studentDetailsRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final UserMapper userMapper;
-    private static final String property = "name";
+    private static final String property = "Name";
+
+    private static Role role = ROLE_USER;
 
 
     public Page<UserDto> getUsers(int pageNumber,
@@ -35,7 +40,7 @@ public class UsersService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
         checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
-        Page<UserEntity> users = userRepository.findAll(pageable);
+        Page<UserEntity> users = userRepository.findAllByRole(pageable, role);
 
         return users.map(userMapper::userToUserDto);
     }

@@ -18,8 +18,8 @@ import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
-import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.LessonComponentsService;
+import ru.hits.timeflowapi.service.helpingservices.CheckEmailService;
 import ru.hits.timeflowapi.service.request.CreateRequestService;
 
 @Service

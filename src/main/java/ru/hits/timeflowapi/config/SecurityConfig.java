@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/request/**").hasRole("ADMIN")
                 .antMatchers("/api/v1/account/**").authenticated()
                 .antMatchers("/api/v1/sign-out").authenticated()
+                .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
