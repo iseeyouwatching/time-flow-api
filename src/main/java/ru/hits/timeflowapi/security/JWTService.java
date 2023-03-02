@@ -29,10 +29,10 @@ public class JWTService {
     @Value("${token.refresh.secret-key}")
     private String refreshSecret;
 
-    @Value("${token.access.lifetime}")
+    @Value("${token.access.lifetime-min}")
     private Integer accessLifeTime;
 
-    @Value("${token.refresh.lifetime}")
+    @Value("${token.refresh.lifetime-min}")
     private Integer refreshLifeTime;
 
     @Value("${token.issuer}")
