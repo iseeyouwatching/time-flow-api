@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.signin.SignInDto;
@@ -20,7 +21,9 @@ public class SignInService {
 
     public TokensDto signIn(SignInDto signInDto) {
         UserEntity user = userRepository
-                .findByEmailAndPassword(signInDto.getEmail(), signInDto.getPassword())
+                .findByEmailAndPassword(
+                        signInDto.getEmail(),
+                        passwordEncoder.encode(signInDto.getPassword()))
                 .orElseThrow(() -> {
                     throw new UnauthorizedException("Некорректная почта и/или пароль.");
                 });
