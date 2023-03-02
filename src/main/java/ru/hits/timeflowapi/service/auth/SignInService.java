@@ -21,12 +21,14 @@ public class SignInService {
 
     public TokensDto signIn(SignInDto signInDto) {
         UserEntity user = userRepository
-                .findByEmailAndPassword(
-                        signInDto.getEmail(),
-                        passwordEncoder.encode(signInDto.getPassword()))
+                .findByEmail(signInDto.getEmail())
                 .orElseThrow(() -> {
                     throw new UnauthorizedException("Некорректная почта и/или пароль.");
                 });
+
+        if (!passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
+            throw new UnauthorizedException("Некорректная почта и/или пароль.");
+        }
 
         return jwtService.generateTokens(user.getId());
     }
