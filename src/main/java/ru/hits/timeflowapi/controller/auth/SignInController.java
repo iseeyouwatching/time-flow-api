@@ -16,7 +16,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "Аутентификация")
+@Tag(name = "Логин, логаут, работа с токенами")
 public class SignInController {
 
     private final SignInService signInService;
@@ -30,7 +30,7 @@ public class SignInController {
 
     @Operation(summary = "Обновление пары токенов.")
     @PostMapping("/refresh-tokens")
-    TokensDto updateTokens(@RequestBody RefreshTokenDto refreshTokenDto) {
+    TokensDto updateTokens(@Valid @RequestBody RefreshTokenDto refreshTokenDto) {
         return jwtService.updateTokens(refreshTokenDto.getRefreshToken());
     }
 

@@ -31,5 +31,4 @@ public class SignInService {
         return jwtService.generateTokens(user.getId());
     }
 
-
 }
