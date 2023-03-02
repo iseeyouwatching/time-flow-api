@@ -3,6 +3,7 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
@@ -17,6 +18,7 @@ import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.util.CheckAddLessonMethod;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class LessonService {
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
+
+    private final CheckAddLessonMethod checkAddLessonMethod;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
 
@@ -142,6 +146,8 @@ public class LessonService {
     public LessonDto addLesson(CreateLessonDto createLessonDto) {
 
         LessonEntity lesson = new LessonEntity();
+
+        checkAddLessonMethod.checkTeacherIsFree(createLessonDto);
 
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));

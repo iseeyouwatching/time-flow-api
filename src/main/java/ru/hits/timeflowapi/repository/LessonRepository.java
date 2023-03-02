@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.hits.timeflowapi.model.entity.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,5 +17,7 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
     List<LessonEntity> findByTeacher(TeacherEntity teacher, Sort date);
 
     List<LessonEntity> findByClassroom(ClassroomEntity classroom, Sort date);
+
+    LessonEntity findByTimeslotAndTeacherAndDate(TimeslotEntity timeslot, TeacherEntity teacher, LocalDate date);
 
 }
