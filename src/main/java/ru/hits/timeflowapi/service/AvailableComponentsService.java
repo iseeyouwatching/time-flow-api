@@ -12,8 +12,10 @@ import ru.hits.timeflowapi.repository.ClassroomRepository;
 import ru.hits.timeflowapi.repository.TeacherRepository;
 import ru.hits.timeflowapi.repository.TimeslotRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class AvailableComponentsService {
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
 
-    public List<TimeslotDto> getAvailableTimeslots() {
+    public List<TimeslotDto> getAvailableTimeslots(UUID groupId, LocalDate date) {
 
         List<TimeslotEntity> timeslots = timeslotRepository.findAll();
 
@@ -35,7 +37,7 @@ public class AvailableComponentsService {
         return timeslotDtos;
     }
 
-    public List<ClassroomDto> getAvailableClassrooms() {
+    public List<ClassroomDto> getAvailableClassrooms(UUID groupId, UUID timeslotId, LocalDate date) {
 
         List<ClassroomEntity> classrooms = classroomRepository.findAll();
 
@@ -48,7 +50,7 @@ public class AvailableComponentsService {
         return classroomDtos;
     }
 
-    public List<TeacherDto> getAvailableTeachers() {
+    public List<TeacherDto> getAvailableTeachers(UUID groupId, UUID timeslotId, LocalDate date) {
 
         List<TeacherEntity> teachers = teacherRepository.findAll();
 

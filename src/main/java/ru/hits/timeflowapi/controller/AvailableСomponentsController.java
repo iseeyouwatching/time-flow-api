@@ -3,16 +3,16 @@ package ru.hits.timeflowapi.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.service.AvailableComponentsService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/available/")
@@ -23,21 +23,26 @@ public class AvailableСomponentsController {
     private final AvailableComponentsService availableComponentsService;
 
     @Operation(summary = "Получить список доступных таймслотов.")
-    @GetMapping("timeslot")
-    public List<TimeslotDto> getTimeslots() {
-        return availableComponentsService.getAvailableTimeslots();
+    @GetMapping("timeslot/{groupId}")
+    public List<TimeslotDto> getAvailableTimeslots(@PathVariable("groupId") UUID groupId,
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
+        return availableComponentsService.getAvailableTimeslots(groupId, date);
     }
 
     @Operation(summary = "Получить список доступных аудиторий.")
-    @GetMapping("classroom")
-    public List<ClassroomDto> getClassrooms() {
-        return availableComponentsService.getAvailableClassrooms();
+    @GetMapping("classroom/{groupId}/{timeslotId}")
+    public List<ClassroomDto> getAvailableClassrooms(@PathVariable("groupId") UUID groupId,
+                                                     @PathVariable("timeslotId") UUID timeslotId,
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
+        return availableComponentsService.getAvailableClassrooms(groupId, timeslotId, date);
     }
 
     @Operation(summary = "Получить список доступных преподавателей.")
-    @GetMapping("teacher")
-    public List<TeacherDto> getTeachers() {
-        return availableComponentsService.getAvailableTeachers();
+    @GetMapping("teacher/{groupId}/{timeslotId}")
+    public List<TeacherDto> getAvailableTeachers(@PathVariable("groupId") UUID groupId,
+                                                 @PathVariable("timeslotId") UUID timeslotId,
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("date") LocalDate date) {
+        return availableComponentsService.getAvailableTeachers(groupId, timeslotId, date);
     }
 
 }
