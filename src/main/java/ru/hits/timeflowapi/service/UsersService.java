@@ -29,15 +29,15 @@ public class UsersService {
     private final StudentDetailsRepository studentDetailsRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final UserMapper userMapper;
-    private static final String property = "Name";
-
+    private static final String property = "UserName";
+    private static final String propertyForUserRole = "Name";
     private static Role role = ROLE_USER;
 
 
     public Page<UserDto> getUsers(int pageNumber,
                                   int pageSize,
                                   Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, propertyForUserRole);
         checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<UserEntity> users = userRepository.findAllByRole(pageable, role);

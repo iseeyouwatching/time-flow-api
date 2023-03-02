@@ -14,14 +14,14 @@ import ru.hits.timeflowapi.model.dto.user.UserDto;
 import ru.hits.timeflowapi.service.UsersService;
 
 @RestController
-@RequestMapping("/api/v1/admin/")
+@RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 @Tag(name = "Админ")
 public class UsersController {
 
     private final UsersService usersService;
 
-    @GetMapping("users")
+    @GetMapping("/users")
     Page<UserDto> getUsers(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -33,7 +33,7 @@ public class UsersController {
                 sortDirection);
     }
 
-    @GetMapping("students")
+    @GetMapping("/students")
     Page<StudentDto> getStudents(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -45,7 +45,7 @@ public class UsersController {
                 sortDirection);
     }
 
-    @GetMapping("employees")
+    @GetMapping("/employees")
     Page<EmployeeDto> getEmployees(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
