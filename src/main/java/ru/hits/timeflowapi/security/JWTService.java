@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.signin.TokenDto;
+import ru.hits.timeflowapi.model.dto.signin.TokensDto;
 import ru.hits.timeflowapi.model.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 
@@ -38,6 +38,8 @@ public class JWTService {
     @Value("${token.issuer}")
     private String issuer;
 
+    private static final String UNAUTHORIZED_MESSAGE = "Не авторизован.";
+
     /**
      * Метод для генерации {@code access} токена.
      *
@@ -61,15 +63,19 @@ public class JWTService {
     }
 
     /**
-     * Метод для обновления {@code refresh} токена.
+     * Метод для обновления пары токенов.
      *
      * @param refreshToken {@code refresh} токен.
      * @return пара {@code access} и {@code refresh} токенов.
      * @throws UnauthorizedException возникает, если токен подделан, или пользователь
      *                               не найден по {@code ID} из полезной нагрузки токена.
      */
-    public TokenDto updateRefreshToken(String refreshToken) throws UnauthorizedException {
+    public TokensDto updateTokens(String refreshToken) throws UnauthorizedException {
         UUID id = verifyAndExtractId(refreshToken, refreshSecret);
+
+        if (!userRepository.existsByIdAndRefreshToken(id, refreshToken)) {
+            throw new UnauthorizedException("Недействительный refresh токен.");
+        }
 
         return generateTokens(id);
     }
@@ -82,9 +88,9 @@ public class JWTService {
      * @throws UnauthorizedException возникает, если токен подделан, или пользователь
      *                               не найден по {@code ID} из полезной нагрузки токена.
      */
-    public TokenDto generateTokens(UUID userID) throws UnauthorizedException {
+    public TokensDto generateTokens(UUID userID) throws UnauthorizedException {
         UserEntity user = userRepository.findById(userID).orElseThrow(() -> {
-            throw new UnauthorizedException("Не авторизован.");
+            throw new UnauthorizedException(UNAUTHORIZED_MESSAGE);
         });
 
         String newRefreshToken = generateToken(userID, refreshSecret, refreshLifeTime);
@@ -92,9 +98,10 @@ public class JWTService {
         user.setRefreshToken(newRefreshToken);
         user = userRepository.save(user);
 
-        return new TokenDto(
+        return new TokensDto(
                 generateAccessToken(userID),
-                user.getRefreshToken()
+                user.getRefreshToken(),
+                Date.from(ZonedDateTime.now().plusMinutes(accessLifeTime).toInstant())
         );
     }
 
@@ -129,7 +136,7 @@ public class JWTService {
      */
     private UUID verifyAndExtractId(String token, String secret) throws UnauthorizedException {
         if (token == null || token.isBlank()) {
-            throw new UnauthorizedException("Не авторизован.");
+            throw new UnauthorizedException(UNAUTHORIZED_MESSAGE);
         }
 
         try {
@@ -144,7 +151,7 @@ public class JWTService {
                     .getClaim("id")
                     .asString());
         } catch (JWTVerificationException exception) {
-            throw new UnauthorizedException("Не авторизован.");
+            throw new UnauthorizedException(UNAUTHORIZED_MESSAGE);
         }
     }
 
