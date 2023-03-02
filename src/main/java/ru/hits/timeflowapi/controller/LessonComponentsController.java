@@ -17,7 +17,7 @@ import ru.hits.timeflowapi.service.LessonComponentsService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/lesson/")
+@RequestMapping("/api/v1/lessonComponent/")
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Составляющие пары")
