@@ -80,7 +80,7 @@ public class LessonController {
     }
 
     @Operation(summary = "Обновить данные пары.")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody @Valid CreateLessonDto updatedLessonDto) {
         return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);
     }
