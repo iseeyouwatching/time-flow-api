@@ -128,6 +128,10 @@ public class JWTService {
      * @throws UnauthorizedException возникает, если токен был подделан.
      */
     private UUID verifyAndExtractId(String token, String secret) throws UnauthorizedException {
+        if (token == null || token.isBlank()) {
+            throw new UnauthorizedException("Не авторизован.");
+        }
+
         try {
             JWTVerifier verifier = JWT
                     .require(Algorithm.HMAC256(secret))
