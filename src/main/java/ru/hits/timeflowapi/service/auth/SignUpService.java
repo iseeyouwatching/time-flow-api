@@ -92,10 +92,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
-            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
-        }
-
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveEmployeeRequest(employeeDetails);
 
@@ -109,10 +105,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
-            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
-        }
-
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveScheduleMakerRequest(employeeDetails);
 

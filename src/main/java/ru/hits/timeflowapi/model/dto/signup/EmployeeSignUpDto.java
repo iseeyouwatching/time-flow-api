@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.annotation.UniqueContractNumberValidation;
 import ru.hits.timeflowapi.annotation.UniqueEmailValidation;
 import ru.hits.timeflowapi.model.enumeration.Sex;
 
@@ -45,6 +46,7 @@ public class EmployeeSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Номер трудового договора", example = "0000-23/01")
     @Pattern(regexp = "\\d{4}-\\d{2}/((0\\d)|(1[1-2]))", message = "Некорректный формат номера трудового договора.")
+    @UniqueContractNumberValidation
     private String contractNumber;
 
 }
