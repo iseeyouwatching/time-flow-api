@@ -1,4 +1,6 @@
-package ru.hits.timeflowapi.annotation;
+package ru.hits.timeflowapi.util.validation.annotation;
+
+import ru.hits.timeflowapi.util.validation.validator.UniqueStudentNumberValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

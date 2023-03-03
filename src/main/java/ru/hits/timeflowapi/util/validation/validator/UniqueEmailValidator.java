@@ -1,8 +1,9 @@
-package ru.hits.timeflowapi.annotation;
+package ru.hits.timeflowapi.util.validation.validator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.hits.timeflowapi.repository.UserRepository;
+import ru.hits.timeflowapi.util.validation.annotation.UniqueEmailValidation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

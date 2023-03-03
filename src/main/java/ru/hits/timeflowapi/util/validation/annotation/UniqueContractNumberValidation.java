@@ -1,4 +1,6 @@
-package ru.hits.timeflowapi.annotation;
+package ru.hits.timeflowapi.util.validation.annotation;
+
+import ru.hits.timeflowapi.util.validation.validator.UniqueContractNumberValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,15 +13,15 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * Аннотация для проверки существования студенческой группы по её {@code id}.
+ * Аннотация для добавления проверки трудового договора на уникальность в БД.
  */
 @Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = ExistStudentGroupValidator.class)
-public @interface ExistStudentGroupValidation {
+@Constraint(validatedBy = UniqueContractNumberValidator.class)
+public @interface UniqueContractNumberValidation {
 
-    String message() default "Студенческой группы с таким ID не существует.";
+    String message() default "Номер трудового договора занят.";
 
     Class<?>[] groups() default {};
 
