@@ -17,6 +17,9 @@ import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.service.util.CheckClassroomAndTeacherAndTimeslotAccessibility;
+import ru.hits.timeflowapi.service.util.CheckCreateLessonDtoValidity;
+import ru.hits.timeflowapi.service.util.VerificationOfDates;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,21 +36,25 @@ public class LessonService {
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
+    private final CheckCreateLessonDtoValidity checkCreateLessonDtoValidity;
+    private final VerificationOfDates verificationOfDates;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
 
-        StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId).orElse(null);
+        verificationOfDates.checkDates(startDate, endDate);
 
-        if (studentGroup == null) {
-            throw new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует");
-        }
+        StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId)
+                .orElseThrow(() ->
+                        new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует"));
 
         List<LessonEntity> lessons = lessonRepository.findByStudentGroup(studentGroup, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+            if (lesson.getDate().isAfter(startDate.minusDays(1))
+                    && lesson.getDate().isBefore(endDate.plusDays(1))) {
                 lessonDtos.add(new LessonDto(
                         lesson.getId(),
                         new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -67,18 +74,19 @@ public class LessonService {
 
     public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, LocalDate startDate, LocalDate endDate) {
 
-        TeacherEntity teacher = teacherRepository.findById(teacherId).orElse(null);
+        verificationOfDates.checkDates(startDate, endDate);
 
-        if (teacher == null) {
-            throw new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует");
-        }
+        TeacherEntity teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() ->
+                        new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует"));
 
         List<LessonEntity> lessons = lessonRepository.findByTeacher(teacher, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+            if (lesson.getDate().isAfter(startDate.minusDays(1))
+                    && lesson.getDate().isBefore(endDate.plusDays(1))) {
                 lessonDtos.add(new LessonDto(
                         lesson.getId(),
                         new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -98,18 +106,19 @@ public class LessonService {
 
     public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, LocalDate startDate, LocalDate endDate) {
 
-        ClassroomEntity classroom = classroomRepository.findById(classroomId).orElse(null);
+        verificationOfDates.checkDates(startDate, endDate);
 
-        if (classroom == null) {
-            throw new NotFoundException("Аудитории с таким ID " + classroomId + " не существует");
-        }
+        ClassroomEntity classroom = classroomRepository.findById(classroomId)
+                .orElseThrow(() ->
+                        new NotFoundException("Аудитории с таким ID " + classroomId + " не существует"));
 
         List<LessonEntity> lessons = lessonRepository.findByClassroom(classroom, Sort.by("date"));
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
         for (LessonEntity lesson: lessons) {
-            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+            if (lesson.getDate().isAfter(startDate.minusDays(1))
+                    && lesson.getDate().isBefore(endDate.plusDays(1))) {
                 lessonDtos.add(new LessonDto(
                         lesson.getId(),
                         new StudentGroupBasicDto(lesson.getStudentGroup()),
@@ -143,6 +152,9 @@ public class LessonService {
 
         LessonEntity lesson = new LessonEntity();
 
+        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(createLessonDto);
+
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
@@ -172,7 +184,8 @@ public class LessonService {
         List<LessonEntity> lessons = lessonRepository.findAll();
 
         for (LessonEntity lesson: lessons) {
-            if (lesson.getDate().isAfter(startDate.minusDays(1)) && lesson.getDate().isBefore(endDate.plusDays(1))) {
+            if (lesson.getDate().isAfter(startDate.minusDays(1))
+                    && lesson.getDate().isBefore(endDate.plusDays(1))) {
                 lessonRepository.deleteById(lesson.getId());
             }
         }
@@ -181,11 +194,11 @@ public class LessonService {
 
     public LessonDto updateLesson(UUID id, CreateLessonDto updatedLessonDto) {
 
-        LessonEntity lesson = lessonRepository.findById(id).orElse(null);
+        LessonEntity lesson = lessonRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
-        if (lesson == null) {
-            throw new NotFoundException("Пары с таким ID " + id + " не существует");
-        }
+        checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(updatedLessonDto);
 
         lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(updatedLessonDto.getSubjectId()).orElse(null));
