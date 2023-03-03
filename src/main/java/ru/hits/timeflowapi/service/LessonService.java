@@ -19,6 +19,7 @@ import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
 import ru.hits.timeflowapi.service.util.CheckClassroomAndTeacherAndTimeslotAccessibility;
 import ru.hits.timeflowapi.service.util.CheckCreateLessonDtoValidity;
+import ru.hits.timeflowapi.service.util.VerificationOfDates;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,8 +38,11 @@ public class LessonService {
     private final StudentGroupRepository studentGroupRepository;
     private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
     private final CheckCreateLessonDtoValidity checkCreateLessonDtoValidity;
+    private final VerificationOfDates verificationOfDates;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
+
+        verificationOfDates.checkDates(startDate, endDate);
 
         StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId)
                 .orElseThrow(() ->
@@ -70,6 +74,8 @@ public class LessonService {
 
     public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, LocalDate startDate, LocalDate endDate) {
 
+        verificationOfDates.checkDates(startDate, endDate);
+
         TeacherEntity teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() ->
                         new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует"));
@@ -99,6 +105,8 @@ public class LessonService {
     }
 
     public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, LocalDate startDate, LocalDate endDate) {
+
+        verificationOfDates.checkDates(startDate, endDate);
 
         ClassroomEntity classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() ->
