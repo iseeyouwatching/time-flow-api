@@ -42,15 +42,13 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto userSignUp(UserSignUpDto userSignUpDTO) {
-        checkEmailService.checkEmail(userSignUpDTO.getEmail());
-
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
                 Role.ROLE_USER,
                 AccountStatus.ACTIVATE
         );
-        user = userRepository.save(user);
 
+        user = userRepository.save(user);
         return jwtService.generateTokens(user.getId());
     }
 

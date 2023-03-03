@@ -18,7 +18,9 @@ import javax.validation.constraints.Size;
 @Data
 public class UserSignUpDto implements BasicSignUpUserDetails {
 
-    @Schema(description = "Почта", example = "string@string.string")
+    @Schema(description = "Почта", example = "example_email@gmail.com")
+    @NotEmpty(message = "Почта не может быть пустой.")
+    @UniqueEmailValidation
     @Email(message = "Некорректный формат почты.")
     private String email;
 
