@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.annotation.ExistStudentGroupValidation;
 import ru.hits.timeflowapi.annotation.UniqueEmailValidation;
 import ru.hits.timeflowapi.annotation.UniqueStudentNumberValidation;
 import ru.hits.timeflowapi.model.enumeration.Sex;
@@ -51,6 +52,7 @@ public class StudentSignUpDto implements BasicSignUpUserDetails {
     private String studentNumber;
 
     @Schema(description = "ID группы, в которой состоит студент")
+    @ExistStudentGroupValidation
     private UUID groupId;
 
 }
