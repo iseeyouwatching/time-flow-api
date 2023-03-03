@@ -17,13 +17,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/request")
+@RequestMapping("/api/v1/requests")
 @RequiredArgsConstructor
 public class ConfirmRequestController {
 
     private final ManageRequestService manageRequestService;
 
-    @GetMapping("/student")
+    @GetMapping("/students")
     @Operation(
             summary = "Получить заявки студентов.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -73,7 +73,7 @@ public class ConfirmRequestController {
         return manageRequestService.rejectStudentRequest(id);
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/employees")
     @Operation(
             summary = "Получить заявки сотрудников.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -125,7 +125,7 @@ public class ConfirmRequestController {
     }
 
 
-    @GetMapping("/employee/schedule-maker")
+    @GetMapping("/employees/schedule-makers")
     @Operation(
             summary = "Получить заявки составителей расписаний.",
             security = @SecurityRequirement(name = "bearerAuth"),

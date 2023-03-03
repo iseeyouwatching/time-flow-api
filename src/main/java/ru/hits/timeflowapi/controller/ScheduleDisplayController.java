@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/lesson")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Отображение расписания")
 
@@ -26,7 +26,7 @@ public class ScheduleDisplayController {
     private final LessonService lessonService;
 
     @Operation(summary = "Получить пары, которые проходят у группы на неделе.")
-    @GetMapping("/group/{groupId}")
+    @GetMapping("/lessons/group/{groupId}")
     public ResponseEntity<StudentGroupTimetableDto> getWeekLessonsByGroupId(@PathVariable("groupId") UUID groupId,
                                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("startDate") LocalDate startDate,
                                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
@@ -34,7 +34,7 @@ public class ScheduleDisplayController {
     }
 
     @Operation(summary = "Получить пары, которые проходят у преподавателя на неделе.")
-    @GetMapping("/teacher/{teacherId}")
+    @GetMapping("/lessons/teacher/{teacherId}")
     public ResponseEntity<TeacherTimetableDto> getWeekLessonsByTeacherId(@PathVariable("teacherId") UUID teacherId,
                                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("startDate") LocalDate startDate,
                                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
@@ -42,14 +42,15 @@ public class ScheduleDisplayController {
     }
 
     @Operation(summary = "Получить пары, которые проходят в аудитории на неделе.")
-    @GetMapping("/classroom/{classroomId}")
+    @GetMapping("/lessons/classroom/{classroomId}")
     public ResponseEntity<ClassroomTimetableDto> getWeekLessonsByClassroomId(@PathVariable("classroomId") UUID classroomId,
                                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("startDate") LocalDate startDate,
                                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
         return new ResponseEntity<>(lessonService.getWeekLessonsByClassroomId(classroomId, startDate, endDate), HttpStatus.OK);
     }
+
     @Operation(summary = "Получить описание пары.")
-    @GetMapping("/{id}")
+    @GetMapping("/lesson/{id}")
     public ResponseEntity<LessonDto> getLessonById(@PathVariable("id") UUID id) {
         return new ResponseEntity<>(lessonService.getLessonById(id), HttpStatus.OK);
     }
