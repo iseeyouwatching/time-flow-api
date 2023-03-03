@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto.user.signup;
+package ru.hits.timeflowapi.model.dto.signup;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

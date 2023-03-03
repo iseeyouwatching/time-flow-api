@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto.user.signup;
+package ru.hits.timeflowapi.model.dto.signup;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,13 @@ import ru.hits.timeflowapi.model.enumeration.Sex;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
-@Schema(description = "Информация о пользователе")
+@Schema(description = "Информация о студенте")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserSignUpDto implements BasicSignUpUserDetails {
+public class StudentSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Почта", example = "string@string.string")
     @Email(message = "Некорректный формат почты.")
@@ -38,5 +39,12 @@ public class UserSignUpDto implements BasicSignUpUserDetails {
     @Schema(description = "Пароль", example = "Qwerty123")
     @Size(min = 8, max = 32, message = "Длина пароля должна быть от 8 до 32 символов.")
     private String password;
+
+    @Schema(description = "Номер студенческого билета", example = "123456")
+    @Size(min = 6, max = 6, message = "Длина номера студенческого билета должна быть 6 символов.")
+    private String studentNumber;
+
+    @Schema(description = "ID группы, в которой состоит студент")
+    private UUID groupId;
 
 }
