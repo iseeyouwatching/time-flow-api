@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.model.entity.LessonEntity;
 import ru.hits.timeflowapi.repository.*;
-
-import java.util.Optional;
 
 /**
  * Сервис, предназначенный для проверки доступности
@@ -23,31 +22,41 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     private final StudentGroupRepository studentGroupRepository;
 
     public void checkTeacherIsFree(CreateLessonDto createLessonDto) {
-        Optional.ofNullable(lessonRepository.findByTimeslotAndTeacherAndDate(
+        LessonEntity lesson = lessonRepository.findByTimeslotAndTeacherAndDate(
                 timeslotRepository.findById(createLessonDto.getTimeslotId()),
                 teacherRepository.findById(createLessonDto.getTeacherId()),
-                createLessonDto.getDate()))
-                .orElseThrow(() -> new ConflictException(
-                                "Преподаватель с ID " + createLessonDto.getTeacherId() + " в это время занят"));
+                createLessonDto.getDate());
+
+        if (lesson != null) {
+            throw new ConflictException(
+                    "Преподаватель с ID " + createLessonDto.getTeacherId() + " в это время занят");
+        }
     }
 
     public void checkClassroomIsFree(CreateLessonDto createLessonDto) {
-        Optional.ofNullable(lessonRepository.findByTimeslotAndClassroomAndDate(
+        LessonEntity lesson = lessonRepository.findByTimeslotAndClassroomAndDate(
                 timeslotRepository.findById(createLessonDto.getTimeslotId()),
                 classroomRepository.findById(createLessonDto.getClassroomId()),
-                createLessonDto.getDate()))
-                .orElseThrow(() -> new ConflictException(
-                        "Аудитория с ID " + createLessonDto.getClassroomId() + " в это время занята"));
+                createLessonDto.getDate());
+
+        if (lesson != null) {
+            throw new ConflictException(
+                    "Аудитория с ID " + createLessonDto.getClassroomId() + " в это время занята");
+        }
     }
 
     public void checkTimeslotIsFree(CreateLessonDto createLessonDto) {
-        Optional.ofNullable(lessonRepository.findByTimeslotAndStudentGroupAndDate(
+        LessonEntity lesson = lessonRepository.findByTimeslotAndStudentGroupAndDate(
                 timeslotRepository.findById(createLessonDto.getTimeslotId()),
                 studentGroupRepository.findById(createLessonDto.getStudentGroupId()),
-                createLessonDto.getDate())).orElseThrow(() -> new ConflictException(
-                        "Таймслот с ID " + createLessonDto.getClassroomId() + " на дату "
-                                + createLessonDto.getDate() + " занят у группы с ID "
-                                + createLessonDto.getStudentGroupId()));
+                createLessonDto.getDate());
+
+        if (lesson != null) {
+            throw new ConflictException(
+                    "Таймслот с ID " + createLessonDto.getClassroomId() + " на дату "
+                            + createLessonDto.getDate() + " занят у группы с ID "
+                            + createLessonDto.getStudentGroupId());
+        }
     }
 
     public void checkAccessibility(CreateLessonDto createLessonDto) {
