@@ -29,26 +29,26 @@ public class UsersService {
     private final StudentDetailsRepository studentDetailsRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final UserMapper userMapper;
-    private static final String property = "UserName";
-    private static final String propertyForUserRole = "Name";
-    private static Role role = ROLE_USER;
+    private static final String PROPERTY = "UserName";
+    private static final String PROPERTY_FOR_USER_ROLE = "Name";
+    private static final Role ROLE = ROLE_USER;
 
 
-    public Page<UserDto> getUsers(int pageNumber,
-                                  int pageSize,
-                                  Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, propertyForUserRole);
+    public Page<UserDto> getUsersPage(int pageNumber,
+                                      int pageSize,
+                                      Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, PROPERTY_FOR_USER_ROLE);
         checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
-        Page<UserEntity> users = userRepository.findAllByRole(pageable, role);
+        Page<UserEntity> users = userRepository.findAllByRole(pageable, ROLE);
 
         return users.map(userMapper::userToUserDto);
     }
 
-    public Page<StudentDto> getStudents(int pageNumber,
-                                        int pageSize,
-                                        Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+    public Page<StudentDto> getStudentsPage(int pageNumber,
+                                            int pageSize,
+                                            Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, PROPERTY);
         checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<StudentDetailsEntity> students = studentDetailsRepository.findAll(pageable);
@@ -56,10 +56,10 @@ public class UsersService {
         return students.map(userMapper::studentDetailsToStudentDto);
     }
 
-    public Page<EmployeeDto> getEmployees(int pageNumber,
-                                          int pageSize,
-                                          Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, property);
+    public Page<EmployeeDto> getEmployeesPage(int pageNumber,
+                                              int pageSize,
+                                              Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, direction, PROPERTY);
         checkPaginationInfoService.checkPagination(pageNumber, pageSize, direction);
 
         Page<EmployeeDetailsEntity> employees = employeeDetailsRepository.findAll(pageable);
