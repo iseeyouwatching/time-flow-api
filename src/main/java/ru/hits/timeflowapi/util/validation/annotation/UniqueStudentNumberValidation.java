@@ -13,7 +13,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * Аннотация для проверки на уникальность номера студенческого билета.
+ * Валидирующая аннотация. Она нужна для проверки на уникальность
+ * номера студенческого билета студента.
  */
 @Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

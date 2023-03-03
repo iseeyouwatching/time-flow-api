@@ -13,7 +13,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * Аннотация для проверки существования студенческой группы по её {@code id}.
+ * Валидирующая аннотация. Она нужна для проверки существования
+ * студенческой группы по её {@code id}.
  */
 @Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

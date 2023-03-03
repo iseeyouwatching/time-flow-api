@@ -10,7 +10,8 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.UUID;
 
 /**
- * Логика проверки существования студенческой группы по её {@code id} для {@link ExistStudentGroupValidation}.
+ * Логика для проверки ограничения {@link ExistStudentGroupValidation}.
+ * С проверяемым объектом типа {@link UUID}.
  */
 @Component
 @RequiredArgsConstructor
@@ -18,8 +19,16 @@ public class ExistStudentGroupValidator implements ConstraintValidator<ExistStud
 
     private final StudentGroupRepository studentGroupRepository;
 
+    /**
+     * Метод для проверки существования студенческой группы с заданным {@code id}.
+     *
+     * @param id      {@code id} студенческой группы.
+     * @param context контекст, в котором вычисляется ограничение.
+     * @return если студенческая группа с заданным {@code id} существует, то {@code true}, иначе {@code false}.
+     */
     @Override
     public boolean isValid(UUID id, ConstraintValidatorContext context) {
         return studentGroupRepository.existsById(id);
     }
+
 }

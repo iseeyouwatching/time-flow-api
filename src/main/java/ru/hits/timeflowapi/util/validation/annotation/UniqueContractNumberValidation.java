@@ -13,7 +13,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * Аннотация для добавления проверки трудового договора на уникальность в БД.
+ * Валидирующая аннотация. Она нужна для проверки на уникальность
+ * номера трудового договора сотрудника.
  */
 @Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

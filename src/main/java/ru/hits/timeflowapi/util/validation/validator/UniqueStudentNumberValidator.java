@@ -9,7 +9,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Логика по проверки на уникальность номера студенческого билета для аннотации {@link UniqueStudentNumberValidation}
+ * Логика для проверки ограничения {@link UniqueStudentNumberValidation}.
+ * С проверяемым объектом типа {@link String}.
  */
 @Component
 @RequiredArgsConstructor
@@ -17,9 +18,18 @@ public class UniqueStudentNumberValidator implements ConstraintValidator<UniqueS
 
     private final StudentDetailsRepository studentDetailsRepository;
 
+    /**
+     * Метод для проверки на уникальность номер студенческого билета.
+     *
+     * @param studentNumber номер студенческого билета.
+     * @param context       контекст, в котором вычисляется ограничение.
+     * @return если в БД уже есть пользователь с номером студенческого билета {@code studentNumber},
+     * то {@code false}, иначе {@code true}.
+     */
     @Override
     public boolean isValid(String studentNumber, ConstraintValidatorContext context) {
         return !studentDetailsRepository.existsByStudentNumber(studentNumber);
     }
+
 }
 
