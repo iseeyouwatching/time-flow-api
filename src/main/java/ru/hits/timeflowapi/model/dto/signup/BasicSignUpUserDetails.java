@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.model.dto.user.signup;
+package ru.hits.timeflowapi.model.dto.signup;
 
 import ru.hits.timeflowapi.model.enumeration.Sex;
 

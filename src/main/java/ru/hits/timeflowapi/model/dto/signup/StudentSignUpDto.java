@@ -1,22 +1,29 @@
-package ru.hits.timeflowapi.model.dto.user.signup;
+package ru.hits.timeflowapi.model.dto.signup;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.enumeration.Sex;
+import ru.hits.timeflowapi.util.validation.annotation.ExistStudentGroupValidation;
+import ru.hits.timeflowapi.util.validation.annotation.UniqueEmailValidation;
+import ru.hits.timeflowapi.util.validation.annotation.UniqueStudentNumberValidation;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
-@Schema(description = "Информация о сотруднике")
+@Schema(description = "Информация о студенте")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class EmployeeSignUpDto implements BasicSignUpUserDetails {
+public class StudentSignUpDto implements BasicSignUpUserDetails {
 
-    @Schema(description = "Почта", example = "string@string.string")
+    @Schema(description = "Почта", example = "example_email@gmail.com")
+    @NotEmpty(message = "Почта не может быть пустой.")
+    @UniqueEmailValidation
     @Email(message = "Некорректный формат почты.")
     private String email;
 
@@ -39,8 +46,13 @@ public class EmployeeSignUpDto implements BasicSignUpUserDetails {
     @Size(min = 8, max = 32, message = "Длина пароля должна быть от 8 до 32 символов.")
     private String password;
 
-    @Schema(description = "Номер трудового договора", example = "0000-23/01")
-    @Pattern(regexp = "\\d{4}-\\d{2}/((0\\d)|(1[1-2]))", message = "Некорректный формат номера трудового договора.")
-    private String contractNumber;
+    @Schema(description = "Номер студенческого билета", example = "123456")
+    @Size(min = 6, max = 6, message = "Длина номера студенческого билета должна быть 6 символов.")
+    @UniqueStudentNumberValidation
+    private String studentNumber;
+
+    @Schema(description = "ID группы, в которой состоит студент")
+    @ExistStudentGroupValidation
+    private UUID groupId;
 
 }

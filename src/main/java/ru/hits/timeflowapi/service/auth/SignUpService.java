@@ -2,12 +2,11 @@ package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.signin.TokensDto;
-import ru.hits.timeflowapi.model.dto.user.signup.EmployeeSignUpDto;
-import ru.hits.timeflowapi.model.dto.user.signup.StudentSignUpDto;
-import ru.hits.timeflowapi.model.dto.user.signup.UserSignUpDto;
+import ru.hits.timeflowapi.model.dto.signup.EmployeeSignUpDto;
+import ru.hits.timeflowapi.model.dto.signup.StudentSignUpDto;
+import ru.hits.timeflowapi.model.dto.signup.UserSignUpDto;
 import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
@@ -28,7 +27,6 @@ public class SignUpService {
 
     private final JWTService jwtService;
     private final UserMapper userMapper;
-    private final CheckEmailService checkEmailService;
     private final LessonComponentsService lessonComponentsService;
     private final UserRepository userRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
@@ -42,15 +40,13 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto userSignUp(UserSignUpDto userSignUpDTO) {
-        checkEmailService.checkEmail(userSignUpDTO.getEmail());
-
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
                 Role.ROLE_USER,
                 AccountStatus.ACTIVATE
         );
-        user = userRepository.save(user);
 
+        user = userRepository.save(user);
         return jwtService.generateTokens(user.getId());
     }
 
@@ -61,12 +57,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto studentSignUp(StudentSignUpDto studentSignUpDto) {
-        checkEmailService.checkEmail(studentSignUpDto.getEmail());
-
-        if (studentDetailsRepository.existsByStudentNumber(studentSignUpDto.getStudentNumber())) {
-            throw new ConflictException("Пользователь с таким номером студенческого билета уже существует.");
-        }
-
         StudentGroupEntity studentGroupEntity
                 = lessonComponentsService.getGroupEntityById(studentSignUpDto.getGroupId());
 
@@ -98,12 +88,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        checkEmailService.checkEmail(employeeSignUpDto.getEmail());
-
-        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
-            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
-        }
-
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveEmployeeRequest(employeeDetails);
 
@@ -117,12 +101,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        checkEmailService.checkEmail(employeeSignUpDto.getEmail());
-
-        if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
-            throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
-        }
-
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveScheduleMakerRequest(employeeDetails);
 

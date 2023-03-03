@@ -66,7 +66,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleUnauthorizedException(BadRequestException exception,
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
                                                                 WebRequest request
     ) {
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
