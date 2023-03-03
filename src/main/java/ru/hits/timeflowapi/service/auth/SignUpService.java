@@ -2,7 +2,6 @@ package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.model.dto.signin.TokensDto;
 import ru.hits.timeflowapi.model.dto.signup.EmployeeSignUpDto;
@@ -57,10 +56,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto studentSignUp(StudentSignUpDto studentSignUpDto) {
-        if (studentDetailsRepository.existsByStudentNumber(studentSignUpDto.getStudentNumber())) {
-            throw new ConflictException("Пользователь с таким номером студенческого билета уже существует.");
-        }
-
         StudentGroupEntity studentGroupEntity
                 = lessonComponentsService.getGroupEntityById(studentSignUpDto.getGroupId());
 

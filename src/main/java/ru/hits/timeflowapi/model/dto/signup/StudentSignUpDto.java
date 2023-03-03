@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.annotation.UniqueEmailValidation;
+import ru.hits.timeflowapi.annotation.UniqueStudentNumberValidation;
 import ru.hits.timeflowapi.model.enumeration.Sex;
 
 import javax.validation.constraints.Email;
@@ -46,6 +47,7 @@ public class StudentSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Номер студенческого билета", example = "123456")
     @Size(min = 6, max = 6, message = "Длина номера студенческого билета должна быть 6 символов.")
+    @UniqueStudentNumberValidation
     private String studentNumber;
 
     @Schema(description = "ID группы, в которой состоит студент")
