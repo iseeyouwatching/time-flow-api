@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hits.timeflowapi.annotation.UniqueEmailValidation;
 import ru.hits.timeflowapi.model.enumeration.Sex;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
@@ -17,7 +19,9 @@ import java.util.UUID;
 @Data
 public class StudentSignUpDto implements BasicSignUpUserDetails {
 
-    @Schema(description = "Почта", example = "string@string.string")
+    @Schema(description = "Почта", example = "example_email@gmail.com")
+    @NotEmpty(message = "Почта не может быть пустой.")
+    @UniqueEmailValidation
     @Email(message = "Некорректный формат почты.")
     private String email;
 

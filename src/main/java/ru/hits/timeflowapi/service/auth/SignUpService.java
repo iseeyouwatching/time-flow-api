@@ -18,7 +18,6 @@ import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
-import ru.hits.timeflowapi.service.CheckEmailService;
 import ru.hits.timeflowapi.service.LessonComponentsService;
 import ru.hits.timeflowapi.service.request.CreateRequestService;
 
@@ -28,7 +27,6 @@ public class SignUpService {
 
     private final JWTService jwtService;
     private final UserMapper userMapper;
-    private final CheckEmailService checkEmailService;
     private final LessonComponentsService lessonComponentsService;
     private final UserRepository userRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
@@ -59,8 +57,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto studentSignUp(StudentSignUpDto studentSignUpDto) {
-        checkEmailService.checkEmail(studentSignUpDto.getEmail());
-
         if (studentDetailsRepository.existsByStudentNumber(studentSignUpDto.getStudentNumber())) {
             throw new ConflictException("Пользователь с таким номером студенческого билета уже существует.");
         }
@@ -96,8 +92,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        checkEmailService.checkEmail(employeeSignUpDto.getEmail());
-
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
@@ -115,8 +109,6 @@ public class SignUpService {
      * @return пара {@code access} и {@code refresh} токенов.
      */
     public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
-        checkEmailService.checkEmail(employeeSignUpDto.getEmail());
-
         if (employeeDetailsRepository.existsByContractNumber(employeeSignUpDto.getContractNumber())) {
             throw new ConflictException("Пользователь с таким номером трудового договора уже существует");
         }
