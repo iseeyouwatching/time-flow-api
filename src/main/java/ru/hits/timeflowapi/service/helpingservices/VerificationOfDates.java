@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.service.util;
+package ru.hits.timeflowapi.service.helpingservices;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

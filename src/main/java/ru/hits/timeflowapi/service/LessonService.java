@@ -17,9 +17,9 @@ import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
-import ru.hits.timeflowapi.service.util.CheckClassroomAndTeacherAndTimeslotAccessibility;
-import ru.hits.timeflowapi.service.util.CheckCreateLessonDtoValidity;
-import ru.hits.timeflowapi.service.util.VerificationOfDates;
+import ru.hits.timeflowapi.service.helpingservices.CheckClassroomAndTeacherAndTimeslotAccessibility;
+import ru.hits.timeflowapi.service.helpingservices.CheckCreateLessonDtoValidity;
+import ru.hits.timeflowapi.service.helpingservices.VerificationOfDates;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
