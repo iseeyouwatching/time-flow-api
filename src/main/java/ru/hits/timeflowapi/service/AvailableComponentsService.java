@@ -22,19 +22,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сервис для получения спика доступных
+ * составляющих пары.
+ */
 @Service
 @RequiredArgsConstructor
 public class AvailableComponentsService {
     private final TeacherRepository teacherRepository;
     private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
-
     private final LessonRepository lessonRepository;
     private final TeacherMapper teacherMapper;
     private final ClassroomMapper classroomMapper;
     private final TimeslotMapper timeslotMapper;
 
-
+    /**
+     * Метод для получения информации о доступных таймслотах
+     * для конкретной учебной группы в определенный день
+     *
+     * @param groupId id учебной группы
+     * @param date    дата в формате LocalDate
+     */
     public List<TimeslotDto> getAvailableTimeslots(UUID groupId, LocalDate date) {
 
         List<TimeslotEntity> timeslots = timeslotRepository.findAll();
@@ -52,6 +61,13 @@ public class AvailableComponentsService {
         return timeslotMapper.timeslotListToDtoList(timeslots);
     }
 
+    /**
+     * Метод для получения информации о доступных аудиториях
+     * для конкретного таймслота в определенный день
+     *
+     * @param timeslotId id таймслота
+     * @param date       дата в формате LocalDate
+     */
     public List<ClassroomDto> getAvailableClassrooms(UUID timeslotId, LocalDate date) {
 
         List<ClassroomEntity> classrooms = classroomRepository.findAll();
@@ -69,6 +85,13 @@ public class AvailableComponentsService {
         return classroomMapper.classroomListToDtoList(classrooms);
     }
 
+    /**
+     * Метод для получения информации о доступных преподавателях
+     * для конкретного таймслота в определенный день
+     *
+     * @param timeslotId id таймслота
+     * @param date       дата в формате LocalDate
+     */
     public List<TeacherDto> getAvailableTeachers(UUID timeslotId, LocalDate date) {
 
         List<TeacherEntity> teachers = teacherRepository.findAll();
@@ -85,4 +108,5 @@ public class AvailableComponentsService {
 
         return teacherMapper.teacherListToDtoList(teachers);
     }
+
 }

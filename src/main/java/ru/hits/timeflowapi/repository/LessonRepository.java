@@ -15,8 +15,6 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
     List<LessonEntity> findByStudentGroup(StudentGroupEntity studentGroup, Sort date);
 
-    List<LessonEntity> findByStudentGroupId(UUID GroupId, Sort date);
-
     List<LessonEntity> findByTeacher(TeacherEntity teacher, Sort date);
 
     List<LessonEntity> findByClassroom(ClassroomEntity classroom, Sort date);
