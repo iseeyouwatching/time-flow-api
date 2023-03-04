@@ -19,7 +19,7 @@ import ru.hits.timeflowapi.service.UsersService;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Админ")
-public class UsersController {
+public class UserDetailsController {
 
     private final UsersService usersService;
 
