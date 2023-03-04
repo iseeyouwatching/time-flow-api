@@ -11,6 +11,13 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TimeslotMapper {
+
+    /**
+     * Метод для преобразования обьекта класса
+     * TimeslotEntity в обьект класса TimeslotDto
+     *
+     * @param entityList список TimeslotEntity
+     */
     public List<TimeslotDto> timeslotListToDtoList(List<TimeslotEntity> entityList) {
         List<TimeslotDto> dtoList = new ArrayList<>();
 

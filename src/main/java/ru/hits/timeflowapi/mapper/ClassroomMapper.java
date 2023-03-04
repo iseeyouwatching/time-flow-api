@@ -11,6 +11,13 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ClassroomMapper {
+
+    /**
+     * Метод для преобразования обьекта класса
+     * ClassroomEntity в обьект класса ClassroomDto
+     *
+     * @param entityList список ClassroomEntity
+     */
     public List<ClassroomDto> classroomListToDtoList(List<ClassroomEntity> entityList) {
         List<ClassroomDto> dtoList = new ArrayList<>();
 
