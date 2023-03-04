@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/available/")
+@RequestMapping("/api/v1")
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Доступные компоненты пары")
@@ -23,7 +23,7 @@ public class AvailableСomponentsController {
     private final AvailableComponentsService availableComponentsService;
 
     @Operation(summary = "Получить список доступных таймслотов.")
-    @GetMapping("timeslot/{groupId}")
+    @GetMapping("/available-timeslots/{groupId}")
     public List<TimeslotDto> getAvailableTimeslots
             (@PathVariable("groupId") UUID groupId,
              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -32,14 +32,14 @@ public class AvailableСomponentsController {
     }
 
     @Operation(summary = "Получить список доступных аудиторий.")
-    @GetMapping("classroom/{timeslotId}")
+    @GetMapping("/available-classrooms/{timeslotId}")
     public List<ClassroomDto> getAvailableClassrooms(@PathVariable("timeslotId") UUID timeslotId, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @RequestParam("date") LocalDate date) {
         return availableComponentsService.getAvailableClassrooms(timeslotId, date);
     }
 
     @Operation(summary = "Получить список доступных преподавателей.")
-    @GetMapping("teacher/{timeslotId}")
+    @GetMapping("/available-teachers/{timeslotId}")
     public List<TeacherDto> getAvailableTeachers(@RequestBody @PathVariable("timeslotId") UUID timeslotId,
                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                  @RequestParam("date") LocalDate date) {
