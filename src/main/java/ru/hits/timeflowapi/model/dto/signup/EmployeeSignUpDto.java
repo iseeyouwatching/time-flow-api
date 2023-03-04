@@ -8,10 +8,7 @@ import ru.hits.timeflowapi.model.enumeration.Sex;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueContractNumberValidation;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueEmailValidation;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Schema(description = "Информация о сотруднике")
 @NoArgsConstructor
@@ -26,25 +23,36 @@ public class EmployeeSignUpDto implements BasicSignUpUserDetails {
     private String email;
 
     @Schema(description = "Имя", example = "Иван")
-    @Pattern(regexp = "[А-Я][а-я]*", message = "Имя должно быть написано на кириллице и с заглавной буквы.")
+    @NotBlank(message = "Имя не может быть пустым.")
+    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
+            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
+            message = "Имя должно быть написано на кириллице и с заглавной буквы.")
     private String name;
 
     @Schema(description = "Фамилия", example = "Иванов")
-    @Pattern(regexp = "[А-Я][а-я]*", message = "Фамилия должна быть написана на кириллице и с заглавной буквы.")
+    @NotBlank(message = "Фамилия не может быть пустой.")
+    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
+            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
+            message = "Фамилия должна быть написана на кириллице и с заглавной буквы.")
     private String surname;
 
     @Schema(description = "Отчество", example = "Иванович")
-    @Pattern(regexp = "[А-Я][а-я]*", message = "Отчество должно быть написано на кириллице и с заглавной буквы.")
+    @NotBlank(message = "Отчество не может быть пустым.")
+    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
+            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
+            message = "Отчество должно быть написано на кириллице и с заглавной буквы.")
     private String patronymic;
 
     @Schema(description = "Пол", example = "MALE")
     private Sex sex;
 
     @Schema(description = "Пароль", example = "Qwerty123")
+    @NotBlank(message = "Пароль не может быть пустым.")
     @Size(min = 8, max = 32, message = "Длина пароля должна быть от 8 до 32 символов.")
     private String password;
 
     @Schema(description = "Номер трудового договора", example = "0000-23/01")
+    @NotBlank(message = "Номер трудового договора не может быть пустым.")
     @Pattern(regexp = "\\d{4}-\\d{2}/((0\\d)|(1[1-2]))", message = "Некорректный формат номера трудового договора.")
     @UniqueContractNumberValidation
     private String contractNumber;
