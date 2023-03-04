@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +23,9 @@ import java.util.UUID;
 public class AvailableСomponentsController {
     private final AvailableComponentsService availableComponentsService;
 
-    @Operation(summary = "Получить список доступных таймслотов.")
+    @Operation(summary = "Получить список доступных таймслотов.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/available-timeslots/{groupId}")
     public List<TimeslotDto> getAvailableTimeslots
             (@PathVariable("groupId") UUID groupId,
@@ -31,14 +34,18 @@ public class AvailableСomponentsController {
         return availableComponentsService.getAvailableTimeslots(groupId, date);
     }
 
-    @Operation(summary = "Получить список доступных аудиторий.")
+    @Operation(summary = "Получить список доступных аудиторий.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/available-classrooms/{timeslotId}")
     public List<ClassroomDto> getAvailableClassrooms(@PathVariable("timeslotId") UUID timeslotId, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @RequestParam("date") LocalDate date) {
         return availableComponentsService.getAvailableClassrooms(timeslotId, date);
     }
 
-    @Operation(summary = "Получить список доступных преподавателей.")
+    @Operation(summary = "Получить список доступных преподавателей.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/available-teachers/{timeslotId}")
     public List<TeacherDto> getAvailableTeachers(@RequestBody @PathVariable("timeslotId") UUID timeslotId,
                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
