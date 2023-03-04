@@ -17,13 +17,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/requests")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ConfirmRequestController {
 
     private final ManageRequestService manageRequestService;
 
-    @GetMapping("/students")
+    @GetMapping("/student-requests")
     @Operation(
             summary = "Получить заявки студентов.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -43,7 +43,7 @@ public class ConfirmRequestController {
         );
     }
 
-    @GetMapping("/student/{id}")
+    @GetMapping("/student-requests/{id}")
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -53,7 +53,7 @@ public class ConfirmRequestController {
         return manageRequestService.getStudentRequestById(id);
     }
 
-    @PostMapping("/student/{id}/accept")
+    @PostMapping("/student-requests/{id}/accept")
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -63,7 +63,7 @@ public class ConfirmRequestController {
         return manageRequestService.confirmStudentRequest(id);
     }
 
-    @PostMapping("/student/{id}/reject")
+    @PostMapping("/student-requests/{id}/reject")
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -73,7 +73,7 @@ public class ConfirmRequestController {
         return manageRequestService.rejectStudentRequest(id);
     }
 
-    @GetMapping("/employees")
+    @GetMapping("/employee-requests")
     @Operation(
             summary = "Получить заявки сотрудников.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -93,7 +93,7 @@ public class ConfirmRequestController {
         );
     }
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("employee-requests/{id}")
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -103,7 +103,7 @@ public class ConfirmRequestController {
         return manageRequestService.getEmployeeRequestById(id);
     }
 
-    @PostMapping("/employee/{id}/accept")
+    @PostMapping("/employee-requests/{id}/accept")
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -114,7 +114,7 @@ public class ConfirmRequestController {
         return manageRequestService.confirmEmployeeRequest(id, postIds);
     }
 
-    @PostMapping("/employee/{id}/reject")
+    @PostMapping("/employee-requests/{id}/reject")
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -125,7 +125,7 @@ public class ConfirmRequestController {
     }
 
 
-    @GetMapping("/employees/schedule-makers")
+    @GetMapping("schedule-maker-requests")
     @Operation(
             summary = "Получить заявки составителей расписаний.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -145,7 +145,7 @@ public class ConfirmRequestController {
         );
     }
 
-    @GetMapping("/employee/schedule-maker/{id}")
+    @GetMapping("schedule-maker-requests/{id}")
     @Operation(
             summary = "Получить информацию о заявке по ID.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -155,7 +155,7 @@ public class ConfirmRequestController {
         return manageRequestService.getScheduleMakerRequestById(id);
     }
 
-    @PostMapping("/employee/schedule-maker/{id}/accept")
+    @PostMapping("schedule-maker-requests/{id}/accept")
     @Operation(
             summary = "Одобрить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
@@ -165,7 +165,7 @@ public class ConfirmRequestController {
         return manageRequestService.confirmScheduleMakerRequest(id);
     }
 
-    @PostMapping("/employee/schedule-maker/{id}/reject")
+    @PostMapping("schedule-maker-requests/{id}/reject")
     @Operation(
             summary = "Отклонить заявку.",
             security = @SecurityRequirement(name = "bearerAuth"),
