@@ -20,9 +20,9 @@ public class VerificationOfDates {
     /**
      * Метод для проверки того, образуют стартовая и конечная даты учебную неделю или нет.
      *
-     * @param startDate стартовая дата учебной недели
-     * @param endDate   конечная дата учебной недели
-     * @throws BadRequestException исключение, которое выбрасывается, если даты не образуют учебную неделю
+     * @param startDate стартовая дата учебной недели.
+     * @param endDate   конечная дата учебной недели.
+     * @throws BadRequestException исключение, которое выбрасывается, если даты не образуют учебную неделю.
      */
     private void checkDateDifference(LocalDate startDate, LocalDate endDate) {
         if (ChronoUnit.DAYS.between(startDate, endDate) != 5) {
@@ -33,9 +33,9 @@ public class VerificationOfDates {
     /**
      * Метод для проверки корректности стартовой и конечной даты.
      *
-     * @param startDate стартовая дата учебной недели
-     * @param endDate   конечная дата учебной недели
-     * @throws BadRequestException исключение, которое выбрасывается, если введены некорректные даты
+     * @param startDate стартовая дата учебной недели.
+     * @param endDate   конечная дата учебной недели.
+     * @throws BadRequestException исключение, которое выбрасывается, если введены некорректные даты.
      */
     private void checkDatesCorrectness(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
@@ -52,8 +52,8 @@ public class VerificationOfDates {
     /**
      * Обобщающий метод для проверки стартовой и конечной даты.
      *
-     * @param startDate стартовая дата учебной недели
-     * @param endDate   конечная дата учебной недели
+     * @param startDate стартовая дата учебной недели.
+     * @param endDate   конечная дата учебной недели.
      */
     public void checkDates(LocalDate startDate, LocalDate endDate) {
         checkDatesCorrectness(startDate, endDate);

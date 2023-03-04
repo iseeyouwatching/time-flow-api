@@ -2,7 +2,6 @@ package ru.hits.timeflowapi.service.helpingservices;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.BadRequestException;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
 import ru.hits.timeflowapi.model.entity.LessonEntity;
@@ -28,10 +27,10 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     /**
      * Метод для проверки того, свободен преподаватель или нет.
      *
-     * @param timeslotId уникальный идентификатор таймслота
-     * @param teacherId  уникальный идентификатор преподавателя
-     * @param date       дата
-     * @throws ConflictException исключение, которое выбрасывается, если преподаватель занят
+     * @param timeslotId уникальный идентификатор таймслота.
+     * @param teacherId  уникальный идентификатор преподавателя.
+     * @param date       дата.
+     * @throws ConflictException исключение, которое выбрасывается, если преподаватель занят.
      */
     public void checkTeacherIsFree(UUID timeslotId, UUID teacherId, LocalDate date) {
         LessonEntity lesson = lessonRepository.findByTimeslotAndTeacherAndDate(
@@ -48,10 +47,10 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     /**
      * Метод для проверки того, свободна аудитория или нет.
      *
-     * @param timeslotId  уникальный идентификатор таймслота
-     * @param classroomId уникальный идентификатор аудитории
-     * @param date        дата
-     * @throws ConflictException исключение, которое выбрасывается, если аудитория занята
+     * @param timeslotId  уникальный идентификатор таймслота.
+     * @param classroomId уникальный идентификатор аудитории.
+     * @param date        дата.
+     * @throws ConflictException исключение, которое выбрасывается, если аудитория занята.
      */
     public void checkClassroomIsFree(UUID timeslotId, UUID classroomId, LocalDate date) {
         LessonEntity lesson = lessonRepository.findByTimeslotAndClassroomAndDate(
@@ -68,10 +67,10 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     /**
      * Метод для проверки того, свободен таймслот у группы на конкретную дату или нет.
      *
-     * @param timeslotId     уникальный идентификатор таймслота
-     * @param studentGroupId уникальный идентификатор группы студентов
-     * @param date           дата
-     * @throws ConflictException исключение, которое выбрасывается, если таймслот в эту дату у группы занят
+     * @param timeslotId     уникальный идентификатор таймслота.
+     * @param studentGroupId уникальный идентификатор группы студентов.
+     * @param date           дата.
+     * @throws ConflictException исключение, которое выбрасывается, если таймслот в эту дату у группы занят.
      */
     public void checkTimeslotIsFree(UUID timeslotId, UUID studentGroupId, LocalDate date) {
         LessonEntity lesson = lessonRepository.findByTimeslotAndStudentGroupAndDate(
@@ -90,7 +89,7 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     /**
      * Обобщающий метод для проверки доступности преподавателя, аудитории и таймслота.
      *
-     * @param createLessonDto данные, которые необходимы для создания/обновления пары
+     * @param createLessonDto данные, которые необходимы для создания/обновления пары.
      */
     public void checkAccessibility(CreateLessonDto createLessonDto) {
         checkTeacherIsFree(createLessonDto.getTimeslotId(), createLessonDto.getTeacherId(),
