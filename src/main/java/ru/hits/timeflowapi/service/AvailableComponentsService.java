@@ -1,7 +1,6 @@
 package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.mapper.ClassroomMapper;
 import ru.hits.timeflowapi.mapper.TeacherMapper;
@@ -39,17 +38,13 @@ public class AvailableComponentsService {
     public List<TimeslotDto> getAvailableTimeslots(UUID groupId, LocalDate date) {
 
         List<TimeslotEntity> timeslots = timeslotRepository.findAll();
-        List<LessonEntity> lessons;
+        LessonEntity lesson;
         List<TimeslotEntity> found = new ArrayList<>();
 
         for (TimeslotEntity timeslot : timeslots) {
-            lessons = lessonRepository.findByStudentGroupId(groupId, Sort.by("date"));
-            for (LessonEntity lesson : lessons) {
-                if (lesson.getDate().equals(date)) {
-                    if (lesson.getTimeslot().getId().equals(timeslot.getId())) {
-                        found.add(timeslot);
-                    }
-                }
+            lesson = lessonRepository.findByTimeslotAndStudentGroupIdAndDate(timeslot, groupId, date);
+            if (lesson != null) {
+                found.add(timeslot);
             }
         }
         timeslots.removeAll(found);
@@ -60,17 +55,13 @@ public class AvailableComponentsService {
     public List<ClassroomDto> getAvailableClassrooms(UUID timeslotId, LocalDate date) {
 
         List<ClassroomEntity> classrooms = classroomRepository.findAll();
-        List<LessonEntity> lessons;
-
+        LessonEntity lesson;
         List<ClassroomEntity> found = new ArrayList<>();
 
-
         for (ClassroomEntity classroom : classrooms) {
-            lessons = lessonRepository.findByClassroom(classroom, Sort.by("date"));
-            for (LessonEntity lesson : lessons) {
-                if (lesson.getDate().equals(date) && lesson.getTimeslot().getId().equals(timeslotId)) {
-                    found.add(classroom);
-                }
+            lesson = lessonRepository.findByTimeslotIdAndClassroomAndDate(timeslotId, classroom, date);
+            if (lesson != null) {
+                found.add(classroom);
             }
         }
         classrooms.removeAll(found);
@@ -81,15 +72,13 @@ public class AvailableComponentsService {
     public List<TeacherDto> getAvailableTeachers(UUID timeslotId, LocalDate date) {
 
         List<TeacherEntity> teachers = teacherRepository.findAll();
-        List<LessonEntity> lessons;
+        LessonEntity lesson;
         List<TeacherEntity> found = new ArrayList<>();
 
         for (TeacherEntity teacher : teachers) {
-            lessons = lessonRepository.findByTeacher(teacher, Sort.by("date"));
-            for (LessonEntity lesson : lessons) {
-                if (lesson.getDate().equals(date) && lesson.getTimeslot().getId().equals(timeslotId)) {
-                    found.add(teacher);
-                }
+            lesson = lessonRepository.findByTimeslotIdAndTeacherAndDate(timeslotId, teacher, date);
+            if (lesson != null) {
+                found.add(teacher);
             }
         }
         teachers.removeAll(found);
