@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/account")
 @RequiredArgsConstructor
 @Tag(name = "Личный кабинет")
-public class UserInfoController {
+public class UserAccountController {
 
     private final UserInfoService userInfoService;
     private final CheckEmailService checkEmailService;

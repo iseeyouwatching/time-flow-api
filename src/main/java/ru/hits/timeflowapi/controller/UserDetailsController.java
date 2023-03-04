@@ -1,5 +1,7 @@
 package ru.hits.timeflowapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,11 +19,15 @@ import ru.hits.timeflowapi.service.UsersService;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Админ")
-public class UsersController {
+public class UserDetailsController {
 
     private final UsersService usersService;
 
     @GetMapping("/users")
+    @Operation(
+            summary = "Получить всех внешних пользователей.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     Page<UserDto> getUsers(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -35,6 +41,10 @@ public class UsersController {
     }
 
     @GetMapping("/students")
+    @Operation(
+            summary = "Получить всех студентов.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     Page<StudentDto> getStudents(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -48,6 +58,10 @@ public class UsersController {
     }
 
     @GetMapping("/employees")
+    @Operation(
+            summary = "Получить всех сотрудников.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     Page<EmployeeDto> getEmployees(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize,

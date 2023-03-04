@@ -1,6 +1,7 @@
 package ru.hits.timeflowapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/lesson")
+@RequestMapping("/api/v1/lessons")
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Составление расписания")
@@ -25,20 +26,27 @@ public class SchedulingController {
 
     private final LessonService lessonService;
 
-    @Operation(summary = "Добавить пару.")
+    @Operation(
+            summary = "Добавить пару.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PostMapping
     public ResponseEntity<LessonDto> addLesson(@RequestBody @Valid CreateLessonDto createLessonDto) {
         return new ResponseEntity<>(lessonService.addLesson(createLessonDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить пару.")
+    @Operation(summary = "Удалить пару.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseBodyMessage> deleteLesson(@PathVariable("id") UUID id) {
         lessonService.deleteLesson(id);
         return new ResponseEntity<>(new ResponseBodyMessage("Пара с ID " + id + " была успешно удалена"), HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить все пары на неделе.")
+    @Operation(summary = "Удалить все пары на неделе.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @DeleteMapping
     public ResponseEntity<ResponseBodyMessage> deleteAllLessonsByWeek(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("startDate") LocalDate startDate,
                                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
@@ -46,7 +54,9 @@ public class SchedulingController {
         return new ResponseEntity<>(new ResponseBodyMessage("Пары, которые проходят с " + startDate + " по" + endDate + " успешно удалены"), HttpStatus.OK);
     }
 
-    @Operation(summary = "Обновить данные пары.")
+    @Operation(summary = "Обновить данные пары.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PutMapping("/{id}")
     public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody @Valid CreateLessonDto updatedLessonDto) {
         return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);

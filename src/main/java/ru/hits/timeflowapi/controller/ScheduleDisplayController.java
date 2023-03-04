@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/lesson")
+@RequestMapping("/api/v1/lessons")
 @RequiredArgsConstructor
 @Tag(name = "Отображение расписания")
 
@@ -48,6 +48,7 @@ public class ScheduleDisplayController {
                                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
         return new ResponseEntity<>(lessonService.getWeekLessonsByClassroomId(classroomId, startDate, endDate), HttpStatus.OK);
     }
+
     @Operation(summary = "Получить описание пары.")
     @GetMapping("/{id}")
     public ResponseEntity<LessonDto> getLessonById(@PathVariable("id") UUID id) {
