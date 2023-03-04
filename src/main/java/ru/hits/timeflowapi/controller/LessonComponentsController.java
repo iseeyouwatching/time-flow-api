@@ -24,31 +24,31 @@ public class LessonComponentsController {
     private final LessonComponentsService lessonComponentsService;
 
     @Operation(summary = "Получить список предметов.")
-    @GetMapping("/subject")
+    @GetMapping("/subjects")
     public List<SubjectDto> getSubjects() {
         return lessonComponentsService.getSubjects();
     }
 
     @Operation(summary = "Получить список групп студентов.")
-    @GetMapping("/group")
+    @GetMapping("/groups")
     public List<StudentGroupBasicDto> getGroups() {
         return lessonComponentsService.getGroups();
     }
 
     @Operation(summary = "Получить список таймслотов.")
-    @GetMapping("/timeslot")
+    @GetMapping("/timeslots")
     public List<TimeslotDto> getTimeslots() {
         return lessonComponentsService.getTimeslots();
     }
 
     @Operation(summary = "Получить список аудиторий.")
-    @GetMapping("/classroom")
+    @GetMapping("/classrooms")
     public List<ClassroomDto> getClassrooms() {
         return lessonComponentsService.getClassrooms();
     }
 
     @Operation(summary = "Получить список преподавателей.")
-    @GetMapping("/teacher")
+    @GetMapping("/teachers")
     public List<TeacherDto> getTeachers() {
         return lessonComponentsService.getTeachers();
     }
