@@ -31,7 +31,6 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
      * @param timeslotId уникальный идентификатор таймслота
      * @param teacherId  уникальный идентификатор преподавателя
      * @param date       дата
-     *
      * @throws ConflictException исключение, которое выбрасывается, если преподаватель занят
      */
     public void checkTeacherIsFree(UUID timeslotId, UUID teacherId, LocalDate date) {
@@ -52,7 +51,6 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
      * @param timeslotId  уникальный идентификатор таймслота
      * @param classroomId уникальный идентификатор аудитории
      * @param date        дата
-     *
      * @throws ConflictException исключение, которое выбрасывается, если аудитория занята
      */
     public void checkClassroomIsFree(UUID timeslotId, UUID classroomId, LocalDate date) {
@@ -73,7 +71,6 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
      * @param timeslotId     уникальный идентификатор таймслота
      * @param studentGroupId уникальный идентификатор группы студентов
      * @param date           дата
-     *
      * @throws ConflictException исключение, которое выбрасывается, если таймслот в эту дату у группы занят
      */
     public void checkTimeslotIsFree(UUID timeslotId, UUID studentGroupId, LocalDate date) {
@@ -90,6 +87,11 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
         }
     }
 
+    /**
+     * Обобщающий метод для проверки доступности преподавателя, аудитории и таймслота.
+     *
+     * @param createLessonDto данные, которые необходимы для создания/обновления пары
+     */
     public void checkAccessibility(CreateLessonDto createLessonDto) {
         checkTeacherIsFree(createLessonDto.getTimeslotId(), createLessonDto.getTeacherId(),
                 createLessonDto.getDate());
