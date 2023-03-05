@@ -114,6 +114,18 @@ public class ConfirmRequestController {
         return manageRequestService.confirmEmployeeRequest(id, postIds);
     }
 
+    @PostMapping("/employee-teacher-requests/{id}/accept")
+    @Operation(
+            summary = "Одобрить заявку преподавателю.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            tags = {"Заявки сотрудников"}
+    )
+    public EmployeeDto acceptEmployeeTeacherRequest(@PathVariable UUID id,
+                                                    @PathVariable UUID teacherId,
+                                                    @RequestParam List<UUID> postIds) {
+        return manageRequestService.confirmEmployeeTeacherRequest(id, teacherId, postIds);
+    }
+
     @PostMapping("/employee-requests/{id}/reject")
     @Operation(
             summary = "Отклонить заявку.",
