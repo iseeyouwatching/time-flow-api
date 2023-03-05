@@ -12,4 +12,8 @@ public interface EmployeePostRepository extends JpaRepository<EmployeePostEntity
 
     Optional<EmployeePostEntity> findByPostRole(String postRole);
 
+    boolean existsByPostName(String postName);
+
+    boolean existsByPostRole(String postRole);
+
 }
