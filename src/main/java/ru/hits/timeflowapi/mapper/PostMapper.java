@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostMapper {
 
-    EmployeePostDto employeePostToDto(EmployeePostEntity entity) {
+    public EmployeePostDto employeePostToDto(EmployeePostEntity entity) {
         return new EmployeePostDto(
                 entity.getId(),
                 entity.getPostRole(),
@@ -20,7 +20,7 @@ public class PostMapper {
         );
     }
 
-    List<EmployeePostDto> employeePostListToDtoList(List<EmployeePostEntity> entityList) {
+    public List<EmployeePostDto> employeePostListToDtoList(List<EmployeePostEntity> entityList) {
         List<EmployeePostDto> dtoList = new ArrayList<>();
 
 
