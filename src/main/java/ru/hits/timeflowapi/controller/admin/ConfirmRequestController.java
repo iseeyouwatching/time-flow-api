@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.controller;
+package ru.hits.timeflowapi.controller.admin;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

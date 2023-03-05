@@ -21,8 +21,14 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
     LessonEntity findByTimeslotAndTeacherAndDate(Optional<TimeslotEntity> timeslot, Optional<TeacherEntity> teacher, LocalDate date);
 
+    LessonEntity findByTimeslotIdAndTeacherAndDate(UUID timeslotId, TeacherEntity teacher, LocalDate date);
+
     LessonEntity findByTimeslotAndClassroomAndDate(Optional<TimeslotEntity> timeslot, Optional<ClassroomEntity> classroom, LocalDate date);
 
+    LessonEntity findByTimeslotIdAndClassroomAndDate(UUID timeslotId, ClassroomEntity classroom, LocalDate date);
+
     LessonEntity findByTimeslotAndStudentGroupAndDate(Optional<TimeslotEntity> timeslot, Optional<StudentGroupEntity> studentGroup, LocalDate date);
+
+    LessonEntity findByTimeslotAndStudentGroupIdAndDate(TimeslotEntity timeslot, UUID studentGroupId, LocalDate date);
 
 }
