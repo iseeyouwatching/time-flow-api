@@ -9,6 +9,7 @@ import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.model.dto.lesson.CreateLessonForAFewWeeksDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
@@ -153,7 +154,13 @@ public class LessonService {
         LessonEntity lesson = new LessonEntity();
 
         checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
-        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(createLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                createLessonDto.getTimeslotId(),
+                createLessonDto.getTeacherId(),
+                createLessonDto.getClassroomId(),
+                createLessonDto.getStudentGroupId(),
+                createLessonDto.getDate()
+        );
 
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
@@ -166,6 +173,42 @@ public class LessonService {
         lessonRepository.save(lesson);
 
         return new LessonDto(lesson);
+
+    }
+
+    public List<LessonDto> addLessonForAFewWeeks(CreateLessonForAFewWeeksDto createLessonForAFewWeeksDto) {
+
+        CreateLessonDto createLessonDto = new CreateLessonDto(createLessonForAFewWeeksDto);
+
+        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
+
+        List<LessonDto> lessonDtos = new ArrayList<>();
+
+        for (long i = 0; i < createLessonForAFewWeeksDto.getNumberOfWeeks(); i++) {
+            checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                    createLessonDto.getTimeslotId(),
+                    createLessonDto.getTeacherId(),
+                    createLessonDto.getClassroomId(),
+                    createLessonDto.getStudentGroupId(),
+                    createLessonDto.getDate().plusDays(i*7)
+            );
+
+            LessonEntity lesson = new LessonEntity();
+
+            lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
+            lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
+            lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
+            lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
+            lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
+            lesson.setDate(createLessonDto.getDate().plusDays(i*7));
+            lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
+
+            lessonRepository.save(lesson);
+
+            lessonDtos.add(new LessonDto(lesson));
+        }
+
+        return lessonDtos;
 
     }
 
@@ -198,7 +241,13 @@ public class LessonService {
                 .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
         checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
-        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(updatedLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                updatedLessonDto.getTimeslotId(),
+                updatedLessonDto.getTeacherId(),
+                updatedLessonDto.getClassroomId(),
+                updatedLessonDto.getStudentGroupId(),
+                updatedLessonDto.getDate()
+        );
 
         lesson.setStudentGroup(studentGroupRepository.findById(updatedLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(updatedLessonDto.getSubjectId()).orElse(null));

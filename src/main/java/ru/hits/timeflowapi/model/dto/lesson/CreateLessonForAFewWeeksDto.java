@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateLessonDto {
+public class CreateLessonForAFewWeeksDto {
 
     @NotNull(message = "Уникальный идентификатор группы студентов обязателен.")
     private UUID studentGroupId;
@@ -37,15 +38,8 @@ public class CreateLessonDto {
             message = "Некорректное значение. Возможные: LECTURE, SEMINAR, PRACTICAL_LESSON, LABORATORY_LESSON, EXAM")
     private String lessonType;
 
-    public CreateLessonDto(CreateLessonForAFewWeeksDto createLessonForAFewWeeksDto) {
-        this.studentGroupId = createLessonForAFewWeeksDto.getStudentGroupId();
-        this.subjectId = createLessonForAFewWeeksDto.getSubjectId();
-        this.teacherId = createLessonForAFewWeeksDto.getTeacherId();
-        this.classroomId = createLessonForAFewWeeksDto.getClassroomId();
-        this.timeslotId = createLessonForAFewWeeksDto.getTimeslotId();
-        this.date = createLessonForAFewWeeksDto.getDate();
-        this.lessonType = createLessonForAFewWeeksDto.getLessonType();
-    }
-
+    @NotNull(message = "Количество недель обязательно.")
+    @Min(value = 2, message = "Количество недель должно быть больше 2.")
+    private int numberOfWeeks;
 
 }
