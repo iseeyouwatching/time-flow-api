@@ -1,6 +1,5 @@
 package ru.hits.timeflowapi.repository;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.hits.timeflowapi.model.entity.*;
@@ -13,11 +12,13 @@ import java.util.UUID;
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
-    List<LessonEntity> findByStudentGroup(StudentGroupEntity studentGroup, Sort date);
+    List<LessonEntity> findByStudentGroupAndDateIsBetweenOrderByDate(StudentGroupEntity studentGroupId, LocalDate startDate, LocalDate endDate);
 
-    List<LessonEntity> findByTeacher(TeacherEntity teacher, Sort date);
+    List<LessonEntity> findByTeacherAndDateIsBetweenOrderByDate(TeacherEntity teacher, LocalDate startDate, LocalDate endDate);
 
-    List<LessonEntity> findByClassroom(ClassroomEntity classroom, Sort date);
+    List<LessonEntity> findByClassroomAndDateIsBetweenOrderByDate(ClassroomEntity classroom, LocalDate startDate, LocalDate endDate);
+
+    void deleteByDateIsBetween(LocalDate startDate, LocalDate endDate);
 
     LessonEntity findByTimeslotAndTeacherAndDate(Optional<TimeslotEntity> timeslot, Optional<TeacherEntity> teacher, LocalDate date);
 
