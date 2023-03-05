@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.util;
+package ru.hits.timeflowapi.util.constants;
 
 import lombok.experimental.UtilityClass;
 
