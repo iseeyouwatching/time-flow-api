@@ -8,10 +8,19 @@ import ru.hits.timeflowapi.model.entity.LessonEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс  маппер для преобразования объекта класса
+ * LessonEntity в объект класса LessonDto.
+ */
 @Component
 @RequiredArgsConstructor
 public class LessonMapper {
-
+    /**
+     * Метод для преобразования объекта класса
+     * LessonEntity в объект класса LessonDto.
+     *
+     * @param entityList список LessonEntity
+     */
     List<LessonDto> lessonListToDtoList(List<LessonEntity> entityList) {
         List<LessonDto> dtoList = new ArrayList<>();
 

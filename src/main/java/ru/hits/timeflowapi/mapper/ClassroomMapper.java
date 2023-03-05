@@ -8,13 +8,17 @@ import ru.hits.timeflowapi.model.entity.ClassroomEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс  маппер для преобразования объекта класса
+ * ClassroomEntity в объект класса ClassroomDto.
+ */
 @Component
 @RequiredArgsConstructor
 public class ClassroomMapper {
 
     /**
-     * Метод для преобразования обьекта класса
-     * ClassroomEntity в обьект класса ClassroomDto
+     * Метод для преобразования объекта класса
+     * ClassroomEntity в объект класса ClassroomDto.
      *
      * @param entityList список ClassroomEntity
      */

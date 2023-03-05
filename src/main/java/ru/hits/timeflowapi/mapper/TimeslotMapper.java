@@ -8,13 +8,17 @@ import ru.hits.timeflowapi.model.entity.TimeslotEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс  маппер для преобразования объекта класса
+ * TimeslotEntity в объект класса TimeslotDto.
+ */
 @Component
 @RequiredArgsConstructor
 public class TimeslotMapper {
 
     /**
-     * Метод для преобразования обьекта класса
-     * TimeslotEntity в обьект класса TimeslotDto
+     * Метод для преобразования объекта класса
+     * TimeslotEntity в объект класса TimeslotDto.
      *
      * @param entityList список TimeslotEntity
      */
