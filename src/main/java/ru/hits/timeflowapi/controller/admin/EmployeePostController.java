@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.EmployeePostDto;
+import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
 import ru.hits.timeflowapi.service.EmployeePostService;
 
 import java.util.List;

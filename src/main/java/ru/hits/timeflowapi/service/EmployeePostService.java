@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.PostMapper;
-import ru.hits.timeflowapi.model.dto.EmployeePostDto;
+import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
 import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
 import ru.hits.timeflowapi.repository.EmployeePostRepository;
 
