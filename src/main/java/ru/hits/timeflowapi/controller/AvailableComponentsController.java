@@ -20,36 +20,43 @@ import java.util.UUID;
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Доступные компоненты пары")
-public class AvailableСomponentsController {
+public class AvailableComponentsController {
     private final AvailableComponentsService availableComponentsService;
 
-    @Operation(summary = "Получить список доступных таймслотов.",
+    @Operation(
+            summary = "Получить список доступных таймслотов.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/available-timeslots/{groupId}")
-    public List<TimeslotDto> getAvailableTimeslots
-            (@PathVariable("groupId") UUID groupId,
-             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-             @RequestParam("date") LocalDate date) {
+    public List<TimeslotDto> getAvailableTimeslots(
+            @RequestBody @PathVariable("groupId") UUID groupId,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam("date") LocalDate date
+    ) {
         return availableComponentsService.getAvailableTimeslots(groupId, date);
     }
 
-    @Operation(summary = "Получить список доступных аудиторий.",
+    @Operation(
+            summary = "Получить список доступных аудиторий.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/available-classrooms/{timeslotId}")
-    public List<ClassroomDto> getAvailableClassrooms(@PathVariable("timeslotId") UUID timeslotId, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @RequestParam("date") LocalDate date) {
+    public List<ClassroomDto> getAvailableClassrooms(
+            @RequestBody @PathVariable("timeslotId") UUID timeslotId,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam("date") LocalDate date) {
         return availableComponentsService.getAvailableClassrooms(timeslotId, date);
     }
 
-    @Operation(summary = "Получить список доступных преподавателей.",
+    @Operation(
+            summary = "Получить список доступных преподавателей.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/available-teachers/{timeslotId}")
-    public List<TeacherDto> getAvailableTeachers(@RequestBody @PathVariable("timeslotId") UUID timeslotId,
-                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                 @RequestParam("date") LocalDate date) {
+    public List<TeacherDto> getAvailableTeachers(
+            @RequestBody @PathVariable("timeslotId") UUID timeslotId,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam("date") LocalDate date) {
         return availableComponentsService.getAvailableTeachers(timeslotId, date);
     }
 
