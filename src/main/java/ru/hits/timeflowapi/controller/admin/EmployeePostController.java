@@ -4,19 +4,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
+import ru.hits.timeflowapi.model.dto.employeepost.NewEmployeePostDto;
 import ru.hits.timeflowapi.service.EmployeePostService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
  * Контроллер для работы с должностями сотрудников.
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/employee-posts")
 @RequiredArgsConstructor
 @Tag(name = "Должности сотрудников")
 public class EmployeePostController {
@@ -32,9 +32,18 @@ public class EmployeePostController {
             summary = "Получить список должностей сотрудников.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @GetMapping("/employee-posts")
+    @GetMapping
     public List<EmployeePostDto> getEmployeePosts() {
         return employeePostService.getEmployeePosts();
+    }
+
+    @Operation(
+            summary = "Добавить новую должность.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PostMapping
+    public EmployeePostDto addEmployeePost(@Valid @RequestBody NewEmployeePostDto newEmployeePostDto) {
+        return employeePostService.addEmployeePost(newEmployeePostDto);
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.PostMapper;
 import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
+import ru.hits.timeflowapi.model.dto.employeepost.NewEmployeePostDto;
 import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
 import ru.hits.timeflowapi.repository.EmployeePostRepository;
 
@@ -62,6 +63,17 @@ public class EmployeePostService {
                 .findAll(Sort.by("postName")).stream()
                 .map(postMapper::employeePostToDto)
                 .toList();
+    }
+
+    /**
+     * Метод для добавления должности в БД.
+     *
+     * @param newEmployeePostDto dto с данными новой должности.
+     * @return dto, сохраненной должности.
+     */
+    public EmployeePostDto addEmployeePost(NewEmployeePostDto newEmployeePostDto) {
+        EmployeePostEntity employeePost = postMapper.newEmployeePostDtoToEntity(newEmployeePostDto);
+        return postMapper.employeePostToDto(employeePostRepository.save(employeePost));
     }
 
 }
