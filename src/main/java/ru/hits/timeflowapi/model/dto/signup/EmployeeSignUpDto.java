@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.enumeration.Sex;
+import ru.hits.timeflowapi.util.RegexConstant;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueContractNumberValidation;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueEmailValidation;
 
@@ -24,23 +25,20 @@ public class EmployeeSignUpDto implements BasicSignUpUserDetails {
 
     @Schema(description = "Имя", example = "Иван")
     @NotBlank(message = "Имя не может быть пустым.")
-    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
-            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
-            message = "Имя должно быть написано на кириллице и с заглавной буквы.")
+    @Pattern(regexp = RegexConstant.FULL_NAME_REGEX,
+            message = "Недопустимый формат имени.")
     private String name;
 
     @Schema(description = "Фамилия", example = "Иванов")
     @NotBlank(message = "Фамилия не может быть пустой.")
-    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
-            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
-            message = "Фамилия должна быть написана на кириллице и с заглавной буквы.")
+    @Pattern(regexp = RegexConstant.FULL_NAME_REGEX,
+            message = "Недопустимый формат фамилии.")
     private String surname;
 
     @Schema(description = "Отчество", example = "Иванович")
     @NotBlank(message = "Отчество не может быть пустым.")
-    @Pattern(regexp = "^[А-ЯЁ\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\" +
-            "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$",
-            message = "Отчество должно быть написано на кириллице и с заглавной буквы.")
+    @Pattern(regexp = RegexConstant.FULL_NAME_REGEX,
+            message = "Недопустимый формат отчества.")
     private String patronymic;
 
     @Schema(description = "Пол", example = "MALE")
