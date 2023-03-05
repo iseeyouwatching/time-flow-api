@@ -134,6 +134,7 @@ public class LessonService {
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
         lesson.setDate(createLessonDto.getDate());
         lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
+        lessonRepository.save(lesson);
         return lesson;
     }
 }
