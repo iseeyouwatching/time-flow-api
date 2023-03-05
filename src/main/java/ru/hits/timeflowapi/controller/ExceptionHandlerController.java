@@ -34,8 +34,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      * @param headers   заголовки, которые будут записаны в ответ.
      * @param status    выбранный статус ответа.
      * @param request   текущий запрос.
-     * @return {@link Map}, где ключ - название поля невалидного тела запроса.
-     * А значение - {@code user-friendly} сообщение об ошибке.
+     * @return {@link Map}, где ключ - название поля невалидного тела запроса,
+     * а значение - {@code user-friendly} сообщение об ошибке.
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
