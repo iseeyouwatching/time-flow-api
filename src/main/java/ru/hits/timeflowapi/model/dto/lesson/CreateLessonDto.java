@@ -1,8 +1,7 @@
 package ru.hits.timeflowapi.model.dto.lesson;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ru.hits.timeflowapi.model.enumeration.LessonType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -12,6 +11,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class CreateLessonDto {
 
     @NotNull(message = "Уникальный идентификатор группы студентов обязателен.")
@@ -33,19 +34,6 @@ public class CreateLessonDto {
     private LocalDate date;
 
     @NotNull(message = "Тип пары обязателен.")
-    @Pattern(regexp = "LECTURE|SEMINAR|PRACTICAL_LESSON|LABORATORY_LESSON|EXAM",
-            message = "Некорректное значение. Возможные: LECTURE, SEMINAR, PRACTICAL_LESSON, LABORATORY_LESSON, EXAM")
-    private String lessonType;
-
-    public CreateLessonDto(CreateLessonForAFewWeeksDto createLessonForAFewWeeksDto) {
-        this.studentGroupId = createLessonForAFewWeeksDto.getStudentGroupId();
-        this.subjectId = createLessonForAFewWeeksDto.getSubjectId();
-        this.teacherId = createLessonForAFewWeeksDto.getTeacherId();
-        this.classroomId = createLessonForAFewWeeksDto.getClassroomId();
-        this.timeslotId = createLessonForAFewWeeksDto.getTimeslotId();
-        this.date = createLessonForAFewWeeksDto.getDate();
-        this.lessonType = createLessonForAFewWeeksDto.getLessonType();
-    }
-
+    private LessonType lessonType;
 
 }

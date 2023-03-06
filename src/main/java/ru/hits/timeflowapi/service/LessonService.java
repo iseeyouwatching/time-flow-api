@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.mapper.CreateLessonForAFewWeeksDtoMapper;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
@@ -16,7 +17,6 @@ import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.model.entity.*;
-import ru.hits.timeflowapi.model.enumeration.LessonType;
 import ru.hits.timeflowapi.repository.*;
 import ru.hits.timeflowapi.service.helpingservices.CheckClassroomAndTeacherAndTimeslotAccessibility;
 import ru.hits.timeflowapi.service.helpingservices.CheckCreateLessonDtoValidity;
@@ -40,6 +40,7 @@ public class LessonService {
     private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
     private final CheckCreateLessonDtoValidity checkCreateLessonDtoValidity;
     private final VerificationOfDates verificationOfDates;
+    private final CreateLessonForAFewWeeksDtoMapper createLessonForAFewWeeksDtoMapper;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
 
@@ -168,7 +169,7 @@ public class LessonService {
         lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
         lesson.setDate(createLessonDto.getDate());
-        lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
+        lesson.setLessonType(createLessonDto.getLessonType());
 
         lessonRepository.save(lesson);
 
@@ -178,7 +179,8 @@ public class LessonService {
 
     public List<LessonDto> addLessonForAFewWeeks(CreateLessonForAFewWeeksDto createLessonForAFewWeeksDto) {
 
-        CreateLessonDto createLessonDto = new CreateLessonDto(createLessonForAFewWeeksDto);
+        CreateLessonDto createLessonDto = createLessonForAFewWeeksDtoMapper.
+                createLessonForAFewWeeksDtoToCreateLessonDto(createLessonForAFewWeeksDto);
 
         checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
 
@@ -201,7 +203,7 @@ public class LessonService {
             lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
             lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
             lesson.setDate(createLessonDto.getDate().plusDays(i*7));
-            lesson.setLessonType(LessonType.valueOf(createLessonDto.getLessonType()));
+            lesson.setLessonType(createLessonDto.getLessonType());
 
             lessonRepository.save(lesson);
 
@@ -255,7 +257,7 @@ public class LessonService {
         lesson.setClassroom(classroomRepository.findById(updatedLessonDto.getClassroomId()).orElse(null));
         lesson.setTimeslot(timeslotRepository.findById(updatedLessonDto.getTimeslotId()).orElse(null));
         lesson.setDate(updatedLessonDto.getDate());
-        lesson.setLessonType(LessonType.valueOf(updatedLessonDto.getLessonType()));
+        lesson.setLessonType(updatedLessonDto.getLessonType());
 
         lessonRepository.save(lesson);
 

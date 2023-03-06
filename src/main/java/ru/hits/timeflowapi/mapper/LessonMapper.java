@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс  маппер для преобразования объекта класса
+ * Класс маппер для преобразования объекта класса
  * LessonEntity в объект класса LessonDto.
  */
 @Component
