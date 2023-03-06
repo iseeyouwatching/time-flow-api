@@ -14,6 +14,7 @@ spring:
   mandatory-file-encoding: UTF-8
   mvc:
     dispatch-options-request: true
+secret-key: 1234567812345678
 token:
   access.secret-key: access_secret_key
   access.lifetime_min: 15
