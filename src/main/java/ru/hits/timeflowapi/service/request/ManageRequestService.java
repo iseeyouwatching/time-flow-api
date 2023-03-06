@@ -21,6 +21,7 @@ import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestEntity;
 import ru.hits.timeflowapi.model.enumeration.AccountStatus;
+import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.TeacherRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestRepository;
@@ -44,6 +45,7 @@ public class ManageRequestService {
     private final EmployeeRequestRepository employeeRequestRepository;
     private final ScheduleMakerRequestRepository scheduleMakerRequestRepository;
     private final EmployeePostService employeePostService;
+    private final EmployeeDetailsRepository employeeDetailsRepository;
 
     public Page<StudentRequestDto> getStudentRequestsPage(int pageNumber,
                                                           int pageSize,
@@ -258,12 +260,20 @@ public class ManageRequestService {
 
     private TeacherEntity getTeacher(UUID teacherId) {
 
+        TeacherEntity teacher;
+
         if (teacherId == null) {
             throw new BadRequestException("Введите id преподавателя");
+        }
+
+        teacher = teacherRepository.findById(teacherId).orElseThrow(() -> {
+            throw new BadRequestException("Преподаватель с таким id " + teacherId + " не найден.");
+        });
+
+        if (employeeDetailsRepository.findByTeacherId(teacherId).isPresent()) {
+            throw new ConflictException("Преподаватель с таким id " + teacherId + " уже закреплен за некоторым пользователем.");
         } else {
-            return teacherRepository.findById(teacherId).orElseThrow(() -> {
-                throw new BadRequestException("Преподаватель с таким id " + teacherId + "не найден.");
-            });
+            return teacher;
         }
     }
 
