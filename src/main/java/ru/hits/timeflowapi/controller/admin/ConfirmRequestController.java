@@ -1,5 +1,6 @@
 package ru.hits.timeflowapi.controller.admin;
 
+import com.sun.istack.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -111,7 +112,7 @@ public class ConfirmRequestController {
     )
     public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
                                              @RequestParam List<UUID> postIds,
-                                             @RequestParam UUID teacherId
+                                             @Nullable @RequestParam(required = false) UUID teacherId
     ) {
         return manageRequestService.confirmEmployeeRequest(id, postIds, teacherId);
     }

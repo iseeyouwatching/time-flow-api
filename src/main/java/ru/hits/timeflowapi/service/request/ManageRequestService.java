@@ -158,8 +158,7 @@ public class ManageRequestService {
         request.getEmployeeDetails().setPosts(employeePostEntities);
 
         if (checkTeacherRole(postIds)) {
-            request.getEmployeeDetails().setTeacher(getTeacher(request));
-
+            request.getEmployeeDetails().setTeacher(getTeacher(teacherId));
         }
 
         request = employeeRequestRepository.save(request);
@@ -257,17 +256,14 @@ public class ManageRequestService {
                 });
     }
 
-    private TeacherEntity getTeacher(EmployeeRequestEntity request) {
-
-        UUID teacherId = request.getEmployeeDetails().getTeacher().getId();
+    private TeacherEntity getTeacher(UUID teacherId) {
 
         if (teacherId == null) {
             throw new BadRequestException("Введите id преподавателя");
         } else {
-            TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow(() -> {
+            return teacherRepository.findById(teacherId).orElseThrow(() -> {
                 throw new BadRequestException("Преподаватель с таким id " + teacherId + "не найден.");
             });
-            return teacher;
         }
     }
 
