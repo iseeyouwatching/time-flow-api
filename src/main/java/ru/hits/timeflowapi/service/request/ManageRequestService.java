@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.BadRequestException;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.RequestMapper;
@@ -15,10 +16,13 @@ import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
 import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
 import ru.hits.timeflowapi.model.dto.user.StudentDto;
 import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
+import ru.hits.timeflowapi.model.entity.TeacherEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestEntity;
 import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestEntity;
 import ru.hits.timeflowapi.model.enumeration.AccountStatus;
+import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
+import ru.hits.timeflowapi.repository.TeacherRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestRepository;
@@ -37,9 +41,11 @@ public class ManageRequestService {
     private final UserMapper userMapper;
     private final RequestMapper requestMapper;
     private final StudentRequestRepository studentRequestRepository;
+    private final TeacherRepository teacherRepository;
     private final EmployeeRequestRepository employeeRequestRepository;
     private final ScheduleMakerRequestRepository scheduleMakerRequestRepository;
     private final EmployeePostService employeePostService;
+    private final EmployeeDetailsRepository employeeDetailsRepository;
 
     public Page<StudentRequestDto> getStudentRequestsPage(int pageNumber,
                                                           int pageSize,
@@ -136,7 +142,8 @@ public class ManageRequestService {
         return userMapper.studentDetailsToStudentDto(request.getStudentDetails());
     }
 
-    public EmployeeDto confirmEmployeeRequest(UUID requestId, List<UUID> postIds) {
+    public EmployeeDto confirmEmployeeRequest(UUID requestId, List<UUID> postIds, UUID teacherId) {
+
         EmployeeRequestEntity request = getEmployeeRequest(requestId);
 
         checkRequestStatus(request.isClosed());
@@ -151,6 +158,10 @@ public class ManageRequestService {
                 .toList();
 
         request.getEmployeeDetails().setPosts(employeePostEntities);
+
+        if (checkTeacherRole(postIds)) {
+            request.getEmployeeDetails().setTeacher(getTeacher(teacherId));
+        }
 
         request = employeeRequestRepository.save(request);
 
@@ -245,6 +256,49 @@ public class ManageRequestService {
                 .orElseThrow(() -> {
                     throw new NotFoundException("Заявка сотрудникам не найдена, id = '" + requestId + "'.");
                 });
+    }
+
+
+    /**
+     * Метод для обработки ошибок, связанных с добавлением
+     * сущности препода в EmployeeDetailsEntity.
+     *
+     * @param teacherId id препода, с которым необходимо связать пользователя.
+     * @return TeacherEntity, найденная по teacherId.
+     * @throws BadRequestException, если teacherId == null или некорректный.
+     * @throws ConflictException,   если препод уже закреплен за некоторым пользователем.
+     */
+    private TeacherEntity getTeacher(UUID teacherId) {
+
+        TeacherEntity teacher;
+
+        if (teacherId == null) {
+            throw new BadRequestException("Введите id преподавателя");
+        }
+
+        teacher = teacherRepository.findById(teacherId).orElseThrow(() -> {
+            throw new BadRequestException("Преподаватель с таким id " + teacherId + " не найден.");
+        });
+
+        if (employeeDetailsRepository.findByTeacherId(teacherId).isPresent()) {
+            throw new ConflictException("Преподаватель с таким id " + teacherId + " уже закреплен за некоторым пользователем.");
+        } else {
+            return teacher;
+        }
+    }
+
+    /**
+     * Метод для проверки на наличие в списке ролей
+     * роли преподавателя.
+     *
+     * @param postIds список id ролей.
+     * @return true, если в списке ролей, есть роль преподавателя,
+     * false, если в списке ролей нет роли преподавателя.
+     */
+    private boolean checkTeacherRole(List<UUID> postIds) {
+        EmployeePostEntity employeePostEntity = employeePostService.getPostEntityByPostRole("ROLE_TEACHER");
+
+        return postIds.contains(employeePostEntity.getId());
     }
 
 }

@@ -16,5 +16,4 @@ public class EmployeeDto {
     private String contractNumber;
 
     private List<EmployeePostDto> posts;
-
 }

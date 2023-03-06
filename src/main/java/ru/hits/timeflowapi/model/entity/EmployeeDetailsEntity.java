@@ -1,5 +1,6 @@
 package ru.hits.timeflowapi.model.entity;
 
+import com.sun.istack.Nullable;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -35,6 +36,11 @@ public class EmployeeDetailsEntity {
     @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
+
+    @OneToOne()
+    @Nullable
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private TeacherEntity teacher;
 
     private String contractNumber;
 

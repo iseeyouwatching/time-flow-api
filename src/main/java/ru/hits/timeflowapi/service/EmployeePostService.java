@@ -49,7 +49,7 @@ public class EmployeePostService {
         return employeePostRepository
                 .findByPostRole(postRole)
                 .orElseThrow(() -> {
-                    throw new NotFoundException("Должность составителя расписаний не найдена");
+                    throw new NotFoundException("Должность не найдена");
                 });
     }
 
