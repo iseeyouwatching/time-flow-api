@@ -29,8 +29,9 @@ public class CheckCreateLessonDtoValidity {
      * @throws BadRequestException исключение, которое выбрасывается, если группы студентов не существует.
      */
     public void checkStudentGroupIdValidity(UUID id) {
-        studentGroupRepository.findById(id).orElseThrow(() ->
-                new BadRequestException("Группы студентов с ID " + id + " не существует"));
+        if (!studentGroupRepository.existsById(id)) {
+            throw new BadRequestException("Группы студентов с ID " + id + " не существует");
+        }
     }
 
     /**
@@ -40,8 +41,9 @@ public class CheckCreateLessonDtoValidity {
      * @throws BadRequestException исключение, которое выбрасывается, если учебного предмета не существует.
      */
     public void checkSubjectIdValidity(UUID id) {
-        subjectRepository.findById(id).orElseThrow(() ->
-                new BadRequestException("Предмета с ID " + id + " не существует"));
+        if (!subjectRepository.existsById(id)) {
+            throw new BadRequestException("Предмета с ID " + id + " не существует");
+        }
     }
 
     /**
@@ -51,8 +53,9 @@ public class CheckCreateLessonDtoValidity {
      * @throws BadRequestException исключение, которое выбрасывается, если преподавателя не существует.
      */
     public void checkTeacherIdValidity(UUID id) {
-        teacherRepository.findById(id).orElseThrow(() ->
-                new BadRequestException("Преподавателя с ID " + id + " не существует"));
+        if (!teacherRepository.existsById(id)) {
+            throw new BadRequestException("Преподавателя с ID " + id + " не существует");
+        }
     }
 
     /**
@@ -62,8 +65,9 @@ public class CheckCreateLessonDtoValidity {
      * @throws BadRequestException исключение, которое выбрасывается, если аудитории не существует.
      */
     public void checkClassroomIdValidity(UUID id) {
-        classroomRepository.findById(id).orElseThrow(() ->
-                new BadRequestException("Аудитории с ID " + id + " не существует"));
+        if (!classroomRepository.existsById(id)) {
+            throw new BadRequestException("Аудитории с ID " + id + " не существует");
+        }
     }
 
     /**
@@ -73,8 +77,9 @@ public class CheckCreateLessonDtoValidity {
      * @throws BadRequestException исключение, которое выбрасывается, если таймслота не существует.
      */
     public void checkTimeslotIdValidity(UUID id) {
-        timeslotRepository.findById(id).orElseThrow(() ->
-                new BadRequestException("Таймслота с ID " + id + " не существует"));
+        if (!timeslotRepository.existsById(id)) {
+            throw new BadRequestException("Таймслота с ID " + id + " не существует");
+        }
     }
 
     /**
