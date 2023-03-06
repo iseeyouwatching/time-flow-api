@@ -1,5 +1,6 @@
 package ru.hits.timeflowapi.model.dto.lesson;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class LessonDto {
 
     private TimeslotDto timeslot;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     private LessonType lessonType;
