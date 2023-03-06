@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.hits.timeflowapi.exception.BadRequestException;
-import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.exception.UnauthorizedException;
+import ru.hits.timeflowapi.exception.*;
 import ru.hits.timeflowapi.model.dto.ApiError;
 
 import java.util.HashMap;
@@ -119,6 +116,21 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * Метод для отлавливания предвиденных внутренних исключений.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 500.
+     */
+    @ExceptionHandler(InternalException.class)
+    public ResponseEntity<ApiError> handleInternalException(InternalException exception,
+                                                            WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError("Внутрення ошибка сервера."), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
      * Метод для отлавливания всех непредвиденных исключений.
      *
      * @param exception исключение.
@@ -126,8 +138,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      * @return объект класса {@link ApiError} со статус кодом 500.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleInternalException(Exception exception,
-                                                            WebRequest request
+    public ResponseEntity<ApiError> handleUnexpectedInternalException(Exception exception,
+                                                                      WebRequest request
     ) {
         logError(request, exception);
         return new ResponseEntity<>(
