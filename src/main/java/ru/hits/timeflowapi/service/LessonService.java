@@ -122,6 +122,13 @@ public class LessonService {
         return new LessonDto(setLesson(lesson, updatedLessonDto));
     }
 
+    /**
+     * Метод для добавления новой пары в бд.
+     *
+     * @param lesson          LessonEntity, которую меняют/добавляют в бд.
+     * @param createLessonDto дто с данными о паре.
+     * @return LessonEntity, заполненная новыми данными.
+     */
     private LessonEntity setLesson(LessonEntity lesson, CreateLessonDto createLessonDto) {
 
         checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
