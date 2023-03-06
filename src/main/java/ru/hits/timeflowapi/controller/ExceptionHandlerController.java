@@ -16,7 +16,9 @@ import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.ApiError;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,7 +37,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      * @param status    выбранный статус ответа.
      * @param request   текущий запрос.
      * @return {@link Map}, где ключ - название поля невалидного тела запроса,
-     * а значение - {@code user-friendly} сообщение об ошибке.
+     * а значение - список {@code user-friendly} сообщений об ошибке.
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -46,14 +48,26 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     ) {
         logError(request, exception);
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
 
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+        exception
+                .getBindingResult()
+                .getAllErrors()
+                .forEach(error -> {
+                    String fieldName = ((FieldError) error).getField();
+                    String message = error.getDefaultMessage();
 
-            errors.put(fieldName, message);
-        });
+                    if (message != null) {
+                        if (errors.containsKey(fieldName)) {
+                            errors.get(fieldName).add(message);
+                        } else {
+                            List<String> newErrorList = new ArrayList<>();
+                            newErrorList.add(message);
+
+                            errors.put(fieldName, newErrorList);
+                        }
+                    }
+                });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
