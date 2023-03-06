@@ -24,9 +24,9 @@ public class EmployeePostService {
 
     public EmployeePostEntity getPostEntityByPostRole(String postRole) {
         return employeePostRepository
-                .findByPostRole("ROLE_SCHEDULE_MAKER")
+                .findByPostRole(postRole)
                 .orElseThrow(() -> {
-                    throw new NotFoundException("Должность составителя расписаний не найдена");
+                    throw new NotFoundException("Должность не найдена");
                 });
     }
 

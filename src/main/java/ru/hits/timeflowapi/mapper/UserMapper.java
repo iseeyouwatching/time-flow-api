@@ -50,7 +50,8 @@ public class UserMapper {
         return new EmployeeDto(
                 userToUserDto(employeeDetails.getUser()),
                 employeeDetails.getContractNumber(),
-                postMapper.employeePostListToDtoList(employeeDetails.getPosts())
+                postMapper.employeePostListToDtoList(employeeDetails.getPosts()),
+                employeeDetails.getTeacher().getId()
         );
     }
 
