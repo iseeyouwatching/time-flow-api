@@ -12,24 +12,38 @@ import java.util.UUID;
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
-    List<LessonEntity> findByStudentGroupAndDateIsBetweenOrderByDate(StudentGroupEntity studentGroupId, LocalDate startDate, LocalDate endDate);
+    List<LessonEntity> findByStudentGroupAndDateIsBetweenOrderByDate(
+            StudentGroupEntity studentGroupId, LocalDate startDate, LocalDate endDate
+    );
 
-    List<LessonEntity> findByTeacherAndDateIsBetweenOrderByDate(TeacherEntity teacher, LocalDate startDate, LocalDate endDate);
+    List<LessonEntity> findByTeacherAndDateIsBetweenOrderByDate(
+            TeacherEntity teacher, LocalDate startDate, LocalDate endDate
+    );
 
-    List<LessonEntity> findByClassroomAndDateIsBetweenOrderByDate(ClassroomEntity classroom, LocalDate startDate, LocalDate endDate);
+    List<LessonEntity> findByClassroomAndDateIsBetweenOrderByDate(
+            ClassroomEntity classroom, LocalDate startDate, LocalDate endDate
+    );
 
     void deleteByDateIsBetween(LocalDate startDate, LocalDate endDate);
 
-    LessonEntity findByTimeslotAndTeacherAndDate(Optional<TimeslotEntity> timeslot, Optional<TeacherEntity> teacher, LocalDate date);
+    LessonEntity findByTimeslotAndTeacherAndDate(
+            Optional<TimeslotEntity> timeslot, Optional<TeacherEntity> teacher, LocalDate date);
 
     LessonEntity findByTimeslotIdAndTeacherAndDate(UUID timeslotId, TeacherEntity teacher, LocalDate date);
 
-    LessonEntity findByTimeslotAndClassroomAndDate(Optional<TimeslotEntity> timeslot, Optional<ClassroomEntity> classroom, LocalDate date);
+    LessonEntity findByTimeslotAndClassroomAndDate(
+            Optional<TimeslotEntity> timeslot, Optional<ClassroomEntity> classroom, LocalDate date
+    );
 
-    LessonEntity findByTimeslotIdAndClassroomAndDate(UUID timeslotId, ClassroomEntity classroom, LocalDate date);
+    LessonEntity findByTimeslotIdAndClassroomAndDate(
+            UUID timeslotId, ClassroomEntity classroom, LocalDate date
+    );
 
-    LessonEntity findByTimeslotAndStudentGroupAndDate(Optional<TimeslotEntity> timeslot, Optional<StudentGroupEntity> studentGroup, LocalDate date);
+    LessonEntity findByTimeslotAndStudentGroupAndDate(
+            Optional<TimeslotEntity> timeslot, Optional<StudentGroupEntity> studentGroup, LocalDate date);
 
-    LessonEntity findByTimeslotAndStudentGroupIdAndDate(TimeslotEntity timeslot, UUID studentGroupId, LocalDate date);
+    LessonEntity findByTimeslotAndStudentGroupIdAndDate(
+            TimeslotEntity timeslot, UUID studentGroupId, LocalDate date
+    );
 
 }
