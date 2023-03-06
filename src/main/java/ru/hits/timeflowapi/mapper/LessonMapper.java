@@ -21,7 +21,7 @@ public class LessonMapper {
      *
      * @param entityList список LessonEntity
      */
-    List<LessonDto> lessonListToDtoList(List<LessonEntity> entityList) {
+    public List<LessonDto> lessonListToDtoList(List<LessonEntity> entityList) {
         List<LessonDto> dtoList = new ArrayList<>();
 
         if (entityList != null) {
