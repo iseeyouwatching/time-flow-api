@@ -3,7 +3,7 @@ package ru.hits.timeflowapi.model.dto.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.hits.timeflowapi.model.dto.EmployeePostDto;
+import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
 
 import java.util.List;
 
