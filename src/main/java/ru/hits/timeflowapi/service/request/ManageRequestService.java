@@ -258,6 +258,16 @@ public class ManageRequestService {
                 });
     }
 
+
+    /**
+     * Метод для обработки ошибок, связанных с добавлением
+     * сущности препода в EmployeeDetailsEntity.
+     *
+     * @param teacherId id препода, с которым необходимо связать пользователя.
+     * @return TeacherEntity, найденная по teacherId.
+     * @throws BadRequestException, если teacherId == null или некорректный.
+     * @throws ConflictException,   если препод уже закреплен за некоторым пользователем.
+     */
     private TeacherEntity getTeacher(UUID teacherId) {
 
         TeacherEntity teacher;
@@ -277,6 +287,14 @@ public class ManageRequestService {
         }
     }
 
+    /**
+     * Метод для проверки на наличие в списке ролей
+     * роли преподавателя.
+     *
+     * @param postIds список id ролей.
+     * @return true, если в списке ролей, есть роль преподавателя,
+     * false, если в списке ролей нет роли преподавателя.
+     */
     private boolean checkTeacherRole(List<UUID> postIds) {
         EmployeePostEntity employeePostEntity = employeePostService.getPostEntityByPostRole("ROLE_TEACHER");
 
