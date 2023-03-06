@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hits.timeflowapi.model.enumeration.Sex;
-import ru.hits.timeflowapi.util.RegexConstant;
+import ru.hits.timeflowapi.util.constants.RegexConstant;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueContractNumberValidation;
 import ru.hits.timeflowapi.util.validation.annotation.UniqueEmailValidation;
 

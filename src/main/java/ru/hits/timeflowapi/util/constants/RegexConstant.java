@@ -1,4 +1,4 @@
-package ru.hits.timeflowapi.util;
+package ru.hits.timeflowapi.util.constants;
 
 import lombok.experimental.UtilityClass;
 
@@ -14,5 +14,9 @@ public class RegexConstant {
     public static final String FULL_NAME_REGEX =
             "^[А-ЯЁ][\\p{IsCyrillic}IV]*[-'\\p{IsCyrillic}., IV]*\\"
                     + "(?[\\p{IsCyrillic}IV][-'\\p{IsCyrillic}., IV]*\\)?[-'\\p{IsCyrillic}., IV]*$";
+
+    public static final String POST_ROLE_REGEX = "ROLE_[A-Z]+";
+
+    public static final String POST_NAME_REGEX = "[А-ЯЁ][а-яё\\s]*";
 
 }

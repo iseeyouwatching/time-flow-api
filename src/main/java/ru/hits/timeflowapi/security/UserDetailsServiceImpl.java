@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
 import ru.hits.timeflowapi.model.entity.UserEntity;
@@ -35,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new UserDetailsImpl(user.get(), postRoles);
         }
 
-        throw new UsernameNotFoundException("Пользователь с такой почтой не найден");
+        throw new UnauthorizedException("Не авторизован.");
     }
 
     private List<String> getPostRoles(EmployeeDetailsEntity employeeDetails) {
