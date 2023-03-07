@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    show-sql: true
+    show-sql: false
   mandatory-file-encoding: UTF-8
   mvc:
     dispatch-options-request: true
@@ -20,6 +20,12 @@ token:
   refresh.secret-key: refresh_secret_key
   refresh.lifetime_min: 43200
   issuer: time-flow-api
+logging:
+  file:
+    path: ${PATH_LOG_FILE:./}
+    name: ${LOG_FILE_NAME:time-flow-api.log}
+  level:
+    root: info
 credentials:
   admin:
     email: admin

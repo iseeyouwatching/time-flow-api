@@ -1,5 +1,6 @@
 package ru.hits.timeflowapi.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,9 @@ import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.model.dto.ApiError;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,8 +26,19 @@ import java.util.Map;
  * которые идут на контроллер.
  */
 @ControllerAdvice
+@Slf4j
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
+    /**
+     * Метод для обработки исключений для невалидных тел запросов.
+     *
+     * @param exception исключение.
+     * @param headers   заголовки, которые будут записаны в ответ.
+     * @param status    выбранный статус ответа.
+     * @param request   текущий запрос.
+     * @return {@link Map}, где ключ - название поля невалидного тела запроса,
+     * а значение - список {@code user-friendly} сообщений об ошибке.
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException exception,
@@ -32,44 +46,119 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
             HttpStatus status,
             WebRequest request
     ) {
-        Map<String, String> errors = new HashMap<>();
+        logError(request, exception);
 
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+        Map<String, List<String>> errors = new HashMap<>();
 
-            errors.put(fieldName, message);
-        });
+        exception
+                .getBindingResult()
+                .getAllErrors()
+                .forEach(error -> {
+                    String fieldName = ((FieldError) error).getField();
+                    String message = error.getDefaultMessage();
+
+                    if (message != null) {
+                        if (errors.containsKey(fieldName)) {
+                            errors.get(fieldName).add(message);
+                        } else {
+                            List<String> newErrorList = new ArrayList<>();
+                            newErrorList.add(message);
+
+                            errors.put(fieldName, newErrorList);
+                        }
+                    }
+                });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Метод для отлавливания всех {@link NotFoundException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 404.
+     */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException exception,
                                                             WebRequest request
     ) {
+        logError(request, exception);
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Метод для отлавливания всех {@link ConflictException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 409.
+     */
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiError> handleConflictException(ConflictException exception,
                                                             WebRequest request
     ) {
+        logError(request, exception);
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
+    /**
+     * Метод для отлавливания всех {@link UnauthorizedException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 401.
+     */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
                                                                 WebRequest request
     ) {
+        logError(request, exception);
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
+    /**
+     * Метод для отлавливания всех {@link BadRequestException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 400.
+     */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
-                                                                WebRequest request
+                                                              WebRequest request
     ) {
+        logError(request, exception);
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для отлавливания всех непредвиденных исключений.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 500.
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleInternalException(Exception exception,
+                                                            WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(
+                new ApiError("Непредвиденная внутренняя ошибка сервера"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    /**
+     * Метод для логирования всех исключений, которые доходят до контроллера.
+     *
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @param exception исключение.
+     */
+    private void logError(WebRequest request, Exception exception) {
+        log.error("Возникла ошибка при запросе на URL: {}", request.getDescription(true));
+        log.error(exception.getMessage(), exception);
     }
 
 }

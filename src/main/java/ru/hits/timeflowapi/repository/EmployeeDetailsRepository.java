@@ -14,4 +14,6 @@ public interface EmployeeDetailsRepository extends JpaRepository<EmployeeDetails
 
     Optional<EmployeeDetailsEntity> findByUserId(UUID userId);
 
+    Optional<EmployeeDetailsEntity> findByTeacherId(UUID teacherId);
+
 }
