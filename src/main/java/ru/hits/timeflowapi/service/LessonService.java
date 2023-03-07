@@ -152,6 +152,12 @@ public class LessonService {
         return lesson;
     }
 
+    /**
+     * Метод для добавления пары сразу на какое-то количество недель.
+     *
+     * @param createLessonForAFewWeeksDto DTO для создания пары сразу на несколько недель.
+     * @return список только что добавленных пар.
+     */
     public List<LessonDto> addLessonForAFewWeeks(CreateLessonForAFewWeeksDto createLessonForAFewWeeksDto) {
 
         CreateLessonDto createLessonDto = createLessonForAFewWeeksDtoMapper.
