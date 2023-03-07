@@ -108,10 +108,34 @@ public class LessonService {
         lessonRepository.deleteById(id);
     }
 
-    public void deleteAllLessonsByWeek(LocalDate startDate, LocalDate endDate) {
-
+    /**
+     * Метод, предназначенный для удаления всех пар конкретной группы студентов, которые
+     * проходят между датой начала учебной недели и датой конца учебной недели.
+     *
+     * @param groupId   уникальный идентификатор группы студентов, пары которой будут удалены.
+     * @param startDate дата начала учебной недели.
+     * @param endDate   дата конца учебной недели.
+     * @throws NotFoundException если группы студентов с указанными уникальными идентификатором не существует.
+     * @throws IllegalArgumentException если дата начала учебной недели позже даты конца или даты не образуют
+     * учебную неделю.
+     */
+    public void deleteAllLessonsByWeek(UUID groupId, LocalDate startDate, LocalDate endDate) {
         verificationOfDates.checkDates(startDate, endDate);
-        lessonRepository.deleteByDateIsBetween(startDate, endDate);
+
+        StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId)
+                .orElseThrow(null);
+
+        if (studentGroup == null) {
+            throw new NotFoundException("Группы студентов с таким ID " + groupId + " не существует");
+        }
+
+        List<LessonEntity> lessonEntities = lessonRepository.findByStudentGroupAndDateBetween(
+                studentGroup,
+                startDate,
+                endDate
+        );
+
+        lessonRepository.deleteAll(lessonEntities);
     }
 
     public LessonDto updateLesson(UUID id, CreateLessonDto updatedLessonDto) {
