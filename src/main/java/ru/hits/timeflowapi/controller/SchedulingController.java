@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.timeflowapi.model.dto.ResponseBodyMessage;
 import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.model.dto.lesson.CreateLessonForAFewWeeksDto;
 import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.service.LessonService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,13 +37,25 @@ public class SchedulingController {
         return new ResponseEntity<>(lessonService.addLesson(createLessonDto), HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить пару.",
+    @Operation(
+            summary = "Добавить пару на N недель вперед.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PostMapping("/for-a-few-weeks")
+    public ResponseEntity<List<LessonDto>> addLessonForAFewWeeks(@RequestBody @Valid CreateLessonForAFewWeeksDto
+                                                                         createLessonForAFewWeeksDto) {
+        return new ResponseEntity<>(lessonService.addLessonForAFewWeeks(createLessonForAFewWeeksDto), HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Удалить пару.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseBodyMessage> deleteLesson(@PathVariable("id") UUID id) {
         lessonService.deleteLesson(id);
-        return new ResponseEntity<>(new ResponseBodyMessage("Пара с ID " + id + " была успешно удалена"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseBodyMessage("Пара с ID " + id + " была успешно удалена"),
+                HttpStatus.OK);
     }
 
     @Operation(summary = "Удалить все пары на неделе у конкретной группы.",
@@ -60,7 +74,8 @@ public class SchedulingController {
         );
     }
 
-    @Operation(summary = "Обновить данные пары.",
+    @Operation(
+            summary = "Обновить данные пары.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @PutMapping("/{id}")

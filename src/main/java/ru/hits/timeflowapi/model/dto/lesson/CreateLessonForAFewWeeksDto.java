@@ -3,6 +3,7 @@ package ru.hits.timeflowapi.model.dto.lesson;
 import lombok.*;
 import ru.hits.timeflowapi.model.enumeration.LessonType;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateLessonDto {
+public class CreateLessonForAFewWeeksDto {
 
     @NotNull(message = "Уникальный идентификатор группы студентов обязателен.")
     private UUID studentGroupId;
@@ -35,5 +36,9 @@ public class CreateLessonDto {
 
     @NotNull(message = "Тип пары обязателен.")
     private LessonType lessonType;
+
+    @NotNull(message = "Количество недель обязательно.")
+    @Min(value = 2, message = "Количество недель должно быть больше 1.")
+    private int numberOfWeeks;
 
 }
