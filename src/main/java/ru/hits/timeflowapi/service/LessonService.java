@@ -100,6 +100,15 @@ public class LessonService {
     public LessonDto addLesson(CreateLessonDto createLessonDto) {
         LessonEntity lesson = new LessonEntity();
 
+        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                createLessonDto.getTimeslotId(),
+                createLessonDto.getTeacherId(),
+                createLessonDto.getClassroomId(),
+                createLessonDto.getStudentGroupId(),
+                createLessonDto.getDate()
+        );
+
         return new LessonDto(setLesson(lesson, createLessonDto));
     }
 
@@ -119,6 +128,15 @@ public class LessonService {
         LessonEntity lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
+        checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
+        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                updatedLessonDto.getTimeslotId(),
+                updatedLessonDto.getTeacherId(),
+                updatedLessonDto.getClassroomId(),
+                updatedLessonDto.getStudentGroupId(),
+                updatedLessonDto.getDate()
+        );
+
         return new LessonDto(setLesson(lesson, updatedLessonDto));
     }
 
@@ -130,15 +148,6 @@ public class LessonService {
      * @return LessonEntity, заполненная новыми данными.
      */
     private LessonEntity setLesson(LessonEntity lesson, CreateLessonDto createLessonDto) {
-        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
-        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
-                createLessonDto.getTimeslotId(),
-                createLessonDto.getTeacherId(),
-                createLessonDto.getClassroomId(),
-                createLessonDto.getStudentGroupId(),
-                createLessonDto.getDate()
-        );
-
         lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
         lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
         lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
@@ -178,17 +187,7 @@ public class LessonService {
 
             LessonEntity lesson = new LessonEntity();
 
-            lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
-            lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
-            lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
-            lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
-            lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
-            lesson.setDate(createLessonDto.getDate().plusDays(i*7));
-            lesson.setLessonType(createLessonDto.getLessonType());
-
-            lessonRepository.save(lesson);
-
-            lessonDtos.add(new LessonDto(lesson));
+            lessonDtos.add(new LessonDto(setLesson(lesson, createLessonDto)));
         }
 
         return lessonDtos;
