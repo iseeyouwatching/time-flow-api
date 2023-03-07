@@ -24,7 +24,8 @@ public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
             ClassroomEntity classroom, LocalDate startDate, LocalDate endDate
     );
 
-    void deleteByDateIsBetween(LocalDate startDate, LocalDate endDate);
+    List<LessonEntity> findByStudentGroupAndDateBetween(StudentGroupEntity studentGroup,
+                                                        LocalDate startDate, LocalDate endDate);
 
     LessonEntity findByTimeslotAndTeacherAndDate(
             Optional<TimeslotEntity> timeslot, Optional<TeacherEntity> teacher, LocalDate date);

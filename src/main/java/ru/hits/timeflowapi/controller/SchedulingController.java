@@ -43,7 +43,7 @@ public class SchedulingController {
     )
     @PostMapping("/for-a-few-weeks")
     public ResponseEntity<List<LessonDto>> addLessonForAFewWeeks(@RequestBody @Valid CreateLessonForAFewWeeksDto
-                                                                 createLessonForAFewWeeksDto) {
+                                                                         createLessonForAFewWeeksDto) {
         return new ResponseEntity<>(lessonService.addLessonForAFewWeeks(createLessonForAFewWeeksDto), HttpStatus.OK);
     }
 
@@ -58,18 +58,20 @@ public class SchedulingController {
                 HttpStatus.OK);
     }
 
-    @Operation(
-            summary = "Удалить все пары на неделе.",
+    @Operation(summary = "Удалить все пары на неделе у конкретной группы.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @DeleteMapping
-    public ResponseEntity<ResponseBodyMessage> deleteAllLessonsByWeek(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DeleteMapping("/group/{groupId}")
+    public ResponseEntity<ResponseBodyMessage> deleteAllLessonsByWeek(@PathVariable("groupId") UUID groupId,
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                       @RequestParam("startDate") LocalDate startDate,
                                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                       @RequestParam("endDate") LocalDate endDate) {
-        lessonService.deleteAllLessonsByWeek(startDate, endDate);
+        lessonService.deleteAllLessonsByWeek(groupId, startDate, endDate);
         return new ResponseEntity<>(new ResponseBodyMessage(
-                "Пары, которые проходят с " + startDate + " по" + endDate + " успешно удалены"), HttpStatus.OK);
+                "Пары, которые проходят с " + startDate + " по" + endDate
+                        + " у группы с ID " + groupId +" успешно удалены"), HttpStatus.OK
+        );
     }
 
     @Operation(
