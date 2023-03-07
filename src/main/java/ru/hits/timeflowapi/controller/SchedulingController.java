@@ -55,8 +55,8 @@ public class SchedulingController {
                                                                       @RequestParam("endDate") LocalDate endDate) {
         lessonService.deleteAllLessonsByWeek(groupId, startDate, endDate);
         return new ResponseEntity<>(new ResponseBodyMessage(
-                "Пары, которые проходят с " + startDate + " по" + endDate + " у группы с ID " + groupId +" успешно удалены"),
-                HttpStatus.OK
+                "Пары, которые проходят с " + startDate + " по" + endDate
+                        + " у группы с ID " + groupId +" успешно удалены"), HttpStatus.OK
         );
     }
 
