@@ -100,7 +100,7 @@ public class LessonService {
     public LessonDto addLesson(CreateLessonDto createLessonDto) {
         LessonEntity lesson = new LessonEntity();
 
-        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
+        LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
         checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
                 createLessonDto.getTimeslotId(),
                 createLessonDto.getTeacherId(),
@@ -109,7 +109,7 @@ public class LessonService {
                 createLessonDto.getDate()
         );
 
-        return new LessonDto(setLesson(lesson, createLessonDto));
+        return new LessonDto(setLesson(lesson, lessonWithValidId));
     }
 
     public void deleteLesson(UUID id) {
@@ -128,7 +128,7 @@ public class LessonService {
         LessonEntity lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
-        checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
+        LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
         checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
                 updatedLessonDto.getTimeslotId(),
                 updatedLessonDto.getTeacherId(),
@@ -137,24 +137,24 @@ public class LessonService {
                 updatedLessonDto.getDate()
         );
 
-        return new LessonDto(setLesson(lesson, updatedLessonDto));
+        return new LessonDto(setLesson(lesson, lessonWithValidId));
     }
 
     /**
      * Метод для добавления новой пары в бд.
      *
-     * @param lesson          LessonEntity, которую меняют/добавляют в бд.
-     * @param createLessonDto дто с данными о паре.
+     * @param lesson            LessonEntity, которую меняют/добавляют в бд.
+     * @param lessonWithValidId LessonEntity с валидными ID.
      * @return LessonEntity, заполненная новыми данными.
      */
-    private LessonEntity setLesson(LessonEntity lesson, CreateLessonDto createLessonDto) {
-        lesson.setStudentGroup(studentGroupRepository.findById(createLessonDto.getStudentGroupId()).orElse(null));
-        lesson.setSubject(subjectRepository.findById(createLessonDto.getSubjectId()).orElse(null));
-        lesson.setTeacher(teacherRepository.findById(createLessonDto.getTeacherId()).orElse(null));
-        lesson.setClassroom(classroomRepository.findById(createLessonDto.getClassroomId()).orElse(null));
-        lesson.setTimeslot(timeslotRepository.findById(createLessonDto.getTimeslotId()).orElse(null));
-        lesson.setDate(createLessonDto.getDate());
-        lesson.setLessonType(createLessonDto.getLessonType());
+    private LessonEntity setLesson(LessonEntity lesson, LessonEntity lessonWithValidId) {
+        lesson.setStudentGroup(lessonWithValidId.getStudentGroup());
+        lesson.setSubject(lessonWithValidId.getSubject());
+        lesson.setTeacher(lessonWithValidId.getTeacher());
+        lesson.setClassroom(lessonWithValidId.getClassroom());
+        lesson.setTimeslot(lessonWithValidId.getTimeslot());
+        lesson.setDate(lessonWithValidId.getDate());
+        lesson.setLessonType(lessonWithValidId.getLessonType());
 
         lessonRepository.save(lesson);
 
@@ -172,7 +172,7 @@ public class LessonService {
         CreateLessonDto createLessonDto = createLessonForAFewWeeksDtoMapper.
                 createLessonForAFewWeeksDtoToCreateLessonDto(createLessonForAFewWeeksDto);
 
-        checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
+        LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(createLessonDto);
 
         List<LessonDto> lessonDtos = new ArrayList<>();
 
@@ -185,9 +185,12 @@ public class LessonService {
                     createLessonDto.getDate().plusDays(i*7)
             );
 
+            lessonWithValidId.setDate(createLessonDto.getDate().plusDays(i*7));
+            lessonWithValidId.setLessonType(createLessonDto.getLessonType());
+
             LessonEntity lesson = new LessonEntity();
 
-            lessonDtos.add(new LessonDto(setLesson(lesson, createLessonDto)));
+            lessonDtos.add(new LessonDto(setLesson(lesson, lessonWithValidId)));
         }
 
         return lessonDtos;
