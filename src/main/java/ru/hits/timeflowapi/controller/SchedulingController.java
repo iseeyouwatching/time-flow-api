@@ -44,21 +44,28 @@ public class SchedulingController {
         return new ResponseEntity<>(new ResponseBodyMessage("Пара с ID " + id + " была успешно удалена"), HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить все пары на неделе.",
+    @Operation(summary = "Удалить все пары на неделе у конкретной группы.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @DeleteMapping
-    public ResponseEntity<ResponseBodyMessage> deleteAllLessonsByWeek(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("startDate") LocalDate startDate,
-                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate) {
-        lessonService.deleteAllLessonsByWeek(startDate, endDate);
-        return new ResponseEntity<>(new ResponseBodyMessage("Пары, которые проходят с " + startDate + " по" + endDate + " успешно удалены"), HttpStatus.OK);
+    @DeleteMapping("/group/{groupId}")
+    public ResponseEntity<ResponseBodyMessage> deleteAllLessonsByWeek(@PathVariable("groupId") UUID groupId,
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                      @RequestParam("startDate") LocalDate startDate,
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                      @RequestParam("endDate") LocalDate endDate) {
+        lessonService.deleteAllLessonsByWeek(groupId, startDate, endDate);
+        return new ResponseEntity<>(new ResponseBodyMessage(
+                "Пары, которые проходят с " + startDate + " по" + endDate + " у группы с ID " + groupId +" успешно удалены"),
+                HttpStatus.OK
+        );
     }
 
     @Operation(summary = "Обновить данные пары.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @PutMapping("/{id}")
-    public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id, @RequestBody @Valid CreateLessonDto updatedLessonDto) {
+    public ResponseEntity<LessonDto> updateLesson(@PathVariable("id") UUID id,
+                                                  @RequestBody @Valid CreateLessonDto updatedLessonDto) {
         return new ResponseEntity<>(lessonService.updateLesson(id, updatedLessonDto), HttpStatus.OK);
     }
 
