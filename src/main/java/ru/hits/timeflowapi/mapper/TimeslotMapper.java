@@ -2,8 +2,8 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
-import ru.hits.timeflowapi.model.entity.TimeslotEntity;
+import ru.hits.timeflowapi.dto.TimeslotDto;
+import ru.hits.timeflowapi.entity.TimeslotEntity;
 
 import java.util.ArrayList;
 import java.util.List;

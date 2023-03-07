@@ -14,7 +14,7 @@ import ru.hits.timeflowapi.exception.BadRequestException;
 import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.ApiError;
+import ru.hits.timeflowapi.dto.ApiError;
 
 import java.util.ArrayList;
 import java.util.HashMap;

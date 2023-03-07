@@ -2,9 +2,9 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
-import ru.hits.timeflowapi.model.dto.employeepost.NewEmployeePostDto;
-import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
+import ru.hits.timeflowapi.dto.employeepost.EmployeePostDto;
+import ru.hits.timeflowapi.dto.employeepost.NewEmployeePostDto;
+import ru.hits.timeflowapi.entity.EmployeePostEntity;
 
 import java.util.ArrayList;
 import java.util.List;

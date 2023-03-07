@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.ApiError;
+import ru.hits.timeflowapi.dto.ApiError;
 import ru.hits.timeflowapi.security.JWTService;
 import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 

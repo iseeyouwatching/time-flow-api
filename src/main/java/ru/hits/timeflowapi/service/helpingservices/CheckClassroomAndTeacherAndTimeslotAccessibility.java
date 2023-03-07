@@ -3,7 +3,7 @@ package ru.hits.timeflowapi.service.helpingservices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
+import ru.hits.timeflowapi.entity.LessonEntity;
 import ru.hits.timeflowapi.repository.*;
 
 import java.time.LocalDate;

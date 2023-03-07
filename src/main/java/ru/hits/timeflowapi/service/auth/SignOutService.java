@@ -3,7 +3,7 @@ package ru.hits.timeflowapi.service.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.entity.UserEntity;
+import ru.hits.timeflowapi.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.util.UUID;

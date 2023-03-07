@@ -5,10 +5,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
-import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
-import ru.hits.timeflowapi.model.entity.UserEntity;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.entity.EmployeePostEntity;
+import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.enumeration.Role;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.util.ArrayList;

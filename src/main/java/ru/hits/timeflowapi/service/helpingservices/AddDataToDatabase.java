@@ -6,10 +6,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.model.entity.*;
-import ru.hits.timeflowapi.model.enumeration.AccountStatus;
-import ru.hits.timeflowapi.model.enumeration.Role;
-import ru.hits.timeflowapi.model.enumeration.Sex;
+import ru.hits.timeflowapi.entity.*;
+import ru.hits.timeflowapi.enumeration.AccountStatus;
+import ru.hits.timeflowapi.enumeration.Role;
+import ru.hits.timeflowapi.enumeration.Sex;
 import ru.hits.timeflowapi.repository.*;
 
 import java.util.List;

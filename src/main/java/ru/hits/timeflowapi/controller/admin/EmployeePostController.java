@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
-import ru.hits.timeflowapi.model.dto.employeepost.NewEmployeePostDto;
+import ru.hits.timeflowapi.dto.employeepost.EmployeePostDto;
+import ru.hits.timeflowapi.dto.employeepost.NewEmployeePostDto;
 import ru.hits.timeflowapi.service.EmployeePostService;
 
 import javax.validation.Valid;
