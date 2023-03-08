@@ -2,8 +2,8 @@ package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.UnauthorizedException;
 import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.exception.AccessTokenNotValidException;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.util.UUID;
@@ -18,7 +18,7 @@ public class SignOutService {
         UserEntity user = userRepository
                 .findByIdAndRefreshToken(userId, refreshToken)
                 .orElseThrow(() -> {
-                    throw new UnauthorizedException("Не авторизован.");
+                    throw new AccessTokenNotValidException("Невалидный access токен.");
                 });
 
         user.setRefreshToken(null);
