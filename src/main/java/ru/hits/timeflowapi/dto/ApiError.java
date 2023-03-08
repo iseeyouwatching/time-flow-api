@@ -1,14 +1,18 @@
 package ru.hits.timeflowapi.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class ApiError {
 
-    private String message;
+    private List<String> messages;
+
+    public ApiError(String message) {
+        this.messages = new ArrayList<>();
+        this.messages.add(message);
+    }
 
 }
