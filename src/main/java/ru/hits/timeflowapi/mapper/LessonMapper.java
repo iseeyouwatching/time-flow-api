@@ -2,8 +2,8 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
+import ru.hits.timeflowapi.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.entity.LessonEntity;
 
 import java.util.ArrayList;
 import java.util.List;

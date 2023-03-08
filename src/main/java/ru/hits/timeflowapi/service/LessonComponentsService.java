@@ -3,12 +3,12 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.model.dto.SubjectDto;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
-import ru.hits.timeflowapi.model.entity.*;
+import ru.hits.timeflowapi.dto.SubjectDto;
+import ru.hits.timeflowapi.dto.TimeslotDto;
+import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.entity.*;
 import ru.hits.timeflowapi.repository.*;
 
 import java.util.ArrayList;

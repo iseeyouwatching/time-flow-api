@@ -7,10 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
+import ru.hits.timeflowapi.dto.classroom.ClassroomTimetableDto;
+import ru.hits.timeflowapi.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupTimetableDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherTimetableDto;
 import ru.hits.timeflowapi.service.LessonService;
 
 import java.time.LocalDate;

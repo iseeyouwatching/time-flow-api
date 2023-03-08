@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.hits.timeflowapi.exception.BadRequestException;
-import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.ApiError;
+import ru.hits.timeflowapi.dto.ApiError;
+import ru.hits.timeflowapi.exception.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +70,36 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * Метод для отлавливания всех {@link BadRequestException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 400.
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
+                                                              WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для отлавливания всех {@link UnauthorizedException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 401.
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
+                                                                WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
      * Метод для отлавливания всех {@link NotFoundException}.
      *
      * @param exception исключение.
@@ -103,34 +130,41 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Метод для отлавливания всех {@link UnauthorizedException}.
+     * Метод для отлавливания {@link AccessTokenNotValidException}.
      *
      * @param exception исключение.
      * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 401.
+     * @return объект класса {@link ApiError} со статус кодом 450.
      */
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
-                                                                WebRequest request
+    @ExceptionHandler(AccessTokenNotValidException.class)
+    public ResponseEntity<ApiError> handleAccessTokenNotValidException(AccessTokenNotValidException exception,
+                                                                       WebRequest request
     ) {
         logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(
+                new ApiError(exception.getMessage()),
+                HttpStatus.valueOf(450)
+        );
     }
 
     /**
-     * Метод для отлавливания всех {@link BadRequestException}.
+     * Метод для отлавливания {@link RefreshTokenNotValidException}.
      *
      * @param exception исключение.
      * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 400.
+     * @return объект класса {@link ApiError} со статус кодом 451.
      */
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
-                                                              WebRequest request
+    @ExceptionHandler(RefreshTokenNotValidException.class)
+    public ResponseEntity<ApiError> handleRefreshTokenNotValidException(RefreshTokenNotValidException exception,
+                                                                       WebRequest request
     ) {
         logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                new ApiError(exception.getMessage()),
+                HttpStatus.valueOf(451)
+        );
     }
+
 
     /**
      * Метод для отлавливания всех непредвиденных исключений.

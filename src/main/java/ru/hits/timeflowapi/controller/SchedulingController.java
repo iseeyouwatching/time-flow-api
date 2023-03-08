@@ -8,10 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.ResponseBodyMessage;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonForAFewWeeksDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.dto.ResponseBodyMessage;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonForAFewWeeksDto;
+import ru.hits.timeflowapi.dto.lesson.LessonDto;
 import ru.hits.timeflowapi.service.LessonService;
 
 import javax.validation.Valid;

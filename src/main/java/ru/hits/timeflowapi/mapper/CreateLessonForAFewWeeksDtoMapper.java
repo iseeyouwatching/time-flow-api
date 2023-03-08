@@ -2,8 +2,8 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonForAFewWeeksDto;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonForAFewWeeksDto;
 
 /**
  * Класс маппер для преобразования объекта класса

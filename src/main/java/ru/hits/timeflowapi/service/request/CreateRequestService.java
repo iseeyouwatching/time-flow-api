@@ -2,11 +2,11 @@ package ru.hits.timeflowapi.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
-import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestEntity;
+import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.entity.StudentDetailsEntity;
+import ru.hits.timeflowapi.entity.requestconfirm.EmployeeRequestEntity;
+import ru.hits.timeflowapi.entity.requestconfirm.ScheduleMakerRequestEntity;
+import ru.hits.timeflowapi.entity.requestconfirm.StudentRequestEntity;
 import ru.hits.timeflowapi.repository.requestconfirm.EmployeeRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.ScheduleMakerRequestRepository;
 import ru.hits.timeflowapi.repository.requestconfirm.StudentRequestRepository;
