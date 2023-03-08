@@ -18,6 +18,8 @@ public class UserDto {
 
     private String email;
 
+    private boolean isEmailConfirmed;
+
     private Role role;
 
     private String name;

@@ -28,6 +28,8 @@ public class UserEntity {
 
     private String email;
 
+    private boolean isEmailConfirmed;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

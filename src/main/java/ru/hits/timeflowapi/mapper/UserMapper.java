@@ -25,6 +25,7 @@ public class UserMapper {
         return new UserDto(
                 user.getId(),
                 user.getEmail(),
+                user.isEmailConfirmed(),
                 user.getRole(),
                 user.getName(),
                 user.getSurname(),
@@ -61,6 +62,7 @@ public class UserMapper {
         return UserEntity
                 .builder()
                 .email(basicSignUpUserDetails.getEmail())
+                .isEmailConfirmed(false)
                 .role(role)
                 .name(basicSignUpUserDetails.getName())
                 .surname(basicSignUpUserDetails.getSurname())
