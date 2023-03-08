@@ -69,6 +69,24 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     /**
+     * Метод, который определяет необходимость выполнения текущего фильтра. Если метод возвращает {@code true},
+     * то фильтр не выполняется, если {@code false}, то фильтр выполняется.
+     *
+     * @param request текущий {@code HTTP} запрос.
+     * @return переменную типа {@code boolean}, которая говорит <strong>нужно ли не выполнять</strong> этот фильтр.
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        for (AntPathRequestMatcher endpoint : SecuredEndpoints.ENDPOINTS) {
+            if (endpoint.matcher(request).isMatch()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Отправляет в ответ на запрос ошибку о том, что пользователь не авторизован.
      *
      * @param response ответ на запрос, который изменится.
