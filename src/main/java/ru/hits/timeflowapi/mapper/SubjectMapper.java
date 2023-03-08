@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.hits.timeflowapi.model.dto.NewSubjectDto;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.entity.SubjectEntity;
 
@@ -15,14 +16,13 @@ public class SubjectMapper {
     /**
      * Метод для преобразования объекта класса {@link SubjectDto} в  обьект класса {@link SubjectEntity}.
      *
-     * @param subjectDto то, что нужно замапить.
+     * @param newSubjectDto то, что нужно замапить.
      * @return объект {@link SubjectEntity}.
      */
-    public SubjectEntity SubjectDtoToEntity(SubjectDto subjectDto) {
+    public SubjectEntity NewSubjectDtoToEntity(NewSubjectDto newSubjectDto) {
         return SubjectEntity
                 .builder()
-                .id(subjectDto.getId())
-                .name(subjectDto.getName())
+                .name(newSubjectDto.getName())
                 .build();
     }
 }

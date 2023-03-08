@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
 
@@ -15,14 +16,13 @@ public class StudentGroupMapper {
     /**
      * Метод для преобразования объекта класса {@link StudentGroupBasicDto} в  обьект класса {@link StudentGroupEntity}.
      *
-     * @param studentGroupBasicDto то, что нужно замапить.
+     * @param newStudentGroupDto то, что нужно замапить.
      * @return объект {@link StudentGroupEntity}.
      */
-    public StudentGroupEntity StudentGroupDtoToEntity(StudentGroupBasicDto studentGroupBasicDto) {
+    public StudentGroupEntity newStudentGroupDtoToEntity(NewStudentGroupDto newStudentGroupDto) {
         return StudentGroupEntity
                 .builder()
-                .id(studentGroupBasicDto.getId())
-                .number(studentGroupBasicDto.getNumber())
+                .number(newStudentGroupDto.getNumber())
                 .build();
     }
 }

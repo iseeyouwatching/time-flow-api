@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.hits.timeflowapi.model.dto.NewTimeslotDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.entity.TimeslotEntity;
 
@@ -36,16 +37,15 @@ public class TimeslotMapper {
     /**
      * Метод для преобразования объекта класса {@link TimeslotDto} в  обьект класса {@link TimeslotEntity}.
      *
-     * @param timeslotDto то, что нужно замапить.
+     * @param newTimeslotDto то, что нужно замапить.
      * @return объект {@link TimeslotEntity}.
      */
-    public TimeslotEntity timeslotDtoToEntity(TimeslotDto timeslotDto) {
+    public TimeslotEntity newTimeslotDtoToEntity(NewTimeslotDto newTimeslotDto) {
         return TimeslotEntity
                 .builder()
-                .id(timeslotDto.getId())
-                .beginTime(timeslotDto.getBeginTime())
-                .endTime(timeslotDto.getEndTime())
-                .sequenceNumber(timeslotDto.getSequenceNumber())
+                .beginTime(newTimeslotDto.getBeginTime())
+                .endTime(newTimeslotDto.getEndTime())
+                .sequenceNumber(newTimeslotDto.getSequenceNumber())
                 .build();
     }
 }

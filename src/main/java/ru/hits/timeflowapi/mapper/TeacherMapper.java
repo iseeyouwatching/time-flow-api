@@ -2,6 +2,7 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.hits.timeflowapi.model.dto.teacher.NewTeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.model.entity.TeacherEntity;
 
@@ -34,18 +35,17 @@ public class TeacherMapper {
     }
 
     /**
-     * Метод для преобразования объекта класса {@link TeacherDto} в  обьект класса {@link TeacherEntity}.
+     * Метод для преобразования объекта класса {@link NewTeacherDto} в  обьект класса {@link TeacherEntity}.
      *
-     * @param teacherDto то, что нужно замапить.
+     * @param newTeacherDto то, что нужно замапить.
      * @return объект {@link TeacherEntity}.
      */
-    public TeacherEntity TeacherDtoToEntity(TeacherDto teacherDto) {
+    public TeacherEntity newTeacherDtoToEntity(NewTeacherDto newTeacherDto) {
         return TeacherEntity
                 .builder()
-                .id(teacherDto.getId())
-                .name(teacherDto.getName())
-                .surname(teacherDto.getSurname())
-                .patronymic(teacherDto.getPatronymic())
+                .name(newTeacherDto.getName())
+                .surname(newTeacherDto.getSurname())
+                .patronymic(newTeacherDto.getPatronymic())
                 .build();
     }
 }
