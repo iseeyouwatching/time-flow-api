@@ -3,10 +3,15 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.mapper.*;
+import ru.hits.timeflowapi.model.dto.NewSubjectDto;
+import ru.hits.timeflowapi.model.dto.NewTimeslotDto;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.model.dto.classroom.NewClassroomDto;
+import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.model.dto.teacher.NewTeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.model.entity.*;
 import ru.hits.timeflowapi.repository.*;
@@ -26,40 +31,39 @@ public class AddComponentsService {
     private final ClassroomMapper classroomMapper;
     private final ClassroomRepository classroomRepository;
 
-    public SubjectDto addSubjects(SubjectDto subjectDto) {
+    public SubjectDto addSubjects(NewSubjectDto subjectDto) {
 
-        SubjectEntity subjectEntity = subjectMapper.SubjectDtoToEntity(subjectDto);
+        SubjectEntity subjectEntity = subjectMapper.NewSubjectDtoToEntity(subjectDto);
         subjectRepository.save(subjectEntity);
-        return subjectDto;
+        return new SubjectDto(subjectEntity);
     }
 
-    public StudentGroupBasicDto addGroups(StudentGroupBasicDto studentGroupBasicDto) {
+    public StudentGroupBasicDto addGroups(NewStudentGroupDto studentGroupBasicDto) {
 
-        StudentGroupEntity studentGroupEntity = studentGroupMapper.StudentGroupDtoToEntity(studentGroupBasicDto);
+        StudentGroupEntity studentGroupEntity = studentGroupMapper.newStudentGroupDtoToEntity(studentGroupBasicDto);
         studentGroupRepository.save(studentGroupEntity);
-        return studentGroupBasicDto;
+        return new StudentGroupBasicDto(studentGroupEntity);
     }
 
 
-    public TimeslotDto addTimeslots(TimeslotDto timeslotDto) {
+    public TimeslotDto addTimeslots(NewTimeslotDto timeslotDto) {
 
-        TimeslotEntity timeslotEntity = timeslotMapper.timeslotDtoToEntity(timeslotDto);
+        TimeslotEntity timeslotEntity = timeslotMapper.newTimeslotDtoToEntity(timeslotDto);
         timeslotRepository.save(timeslotEntity);
-        return timeslotDto;
+        return new TimeslotDto(timeslotEntity);
     }
 
-    public ClassroomDto addClassrooms(ClassroomDto classroomDto) {
+    public ClassroomDto addClassrooms(NewClassroomDto classroomDto) {
 
-        ClassroomEntity classroomEntity = classroomMapper.classroomDtoToEntity(classroomDto);
+        ClassroomEntity classroomEntity = classroomMapper.newClassroomDtoToEntity(classroomDto);
         classroomRepository.save(classroomEntity);
-        return classroomDto;
+        return new ClassroomDto(classroomEntity);
     }
 
-    public TeacherDto addTeachers(TeacherDto teacherDto) {
+    public TeacherDto addTeachers(NewTeacherDto teacherDto) {
 
-
-        TeacherEntity teacherEntity = teacherMapper.TeacherDtoToEntity(teacherDto);
+        TeacherEntity teacherEntity = teacherMapper.newTeacherDtoToEntity(teacherDto);
         teacherRepository.save(teacherEntity);
-        return teacherDto;
+        return new TeacherDto(teacherEntity);
     }
 }

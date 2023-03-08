@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.hits.timeflowapi.model.dto.NewSubjectDto;
+import ru.hits.timeflowapi.model.dto.NewTimeslotDto;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
 import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.model.dto.classroom.NewClassroomDto;
+import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.model.dto.teacher.NewTeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.service.AddComponentsService;
 
@@ -26,31 +31,31 @@ public class AddComponentsController {
 
     @Operation(summary = "Добавить новый предмет.")
     @PostMapping("/subjects")
-    public SubjectDto addSubjects(@RequestBody @Valid SubjectDto subjectDto) {
+    public SubjectDto addSubjects(@RequestBody @Valid NewSubjectDto subjectDto) {
         return addComponentsService.addSubjects(subjectDto);
     }
 
     @Operation(summary = "Добавить новую группу студентов.")
     @PostMapping("/groups")
-    public StudentGroupBasicDto addGroups(@RequestBody @Valid StudentGroupBasicDto studentGroupBasicDto) {
+    public StudentGroupBasicDto addGroups(@RequestBody @Valid NewStudentGroupDto studentGroupBasicDto) {
         return addComponentsService.addGroups(studentGroupBasicDto);
     }
 
     @Operation(summary = "Добавить новый таймслот.")
     @PostMapping("/timeslots")
-    public TimeslotDto addTimeslots(@RequestBody @Valid TimeslotDto timeslotDto) {
+    public TimeslotDto addTimeslots(@RequestBody @Valid NewTimeslotDto timeslotDto) {
         return addComponentsService.addTimeslots(timeslotDto);
     }
 
     @Operation(summary = "Добавить новую аудиторию.")
     @PostMapping("/classrooms")
-    public ClassroomDto addClassrooms(@RequestBody @Valid ClassroomDto classroomDto) {
+    public ClassroomDto addClassrooms(@RequestBody @Valid NewClassroomDto classroomDto) {
         return addComponentsService.addClassrooms(classroomDto);
     }
 
     @Operation(summary = "Добавить нового преподавателя.")
     @PostMapping("/teachers")
-    public TeacherDto addTeachers(@RequestBody @Valid TeacherDto teacherDto) {
+    public TeacherDto addTeachers(@RequestBody @Valid NewTeacherDto teacherDto) {
         return addComponentsService.addTeachers(teacherDto);
     }
 
