@@ -155,8 +155,8 @@ public class LessonService {
 
         LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
 
-        if ((lessonWithValidId.getTimeslot() != lesson.getTimeslot())
-                || (lessonWithValidId.getDate() != lesson.getDate())) {
+        if (lessonWithValidId.getTimeslot() != lesson.getTimeslot()
+                || !lessonWithValidId.getDate().isEqual(lesson.getDate())) {
             checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
                     updatedLessonDto.getTimeslotId(),
                     updatedLessonDto.getTeacherId(),
