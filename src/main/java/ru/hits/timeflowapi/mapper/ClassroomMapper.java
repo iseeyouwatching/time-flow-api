@@ -32,4 +32,18 @@ public class ClassroomMapper {
         }
         return dtoList;
     }
+
+    /**
+     * Метод для преобразования объекта класса {@link ClassroomDto} в  обьект класса {@link ClassroomEntity}.
+     *
+     * @param classroomDto то, что нужно замапить.
+     * @return объект {@link ClassroomEntity}.
+     */
+    public ClassroomEntity classroomDtoToEntity(ClassroomDto classroomDto) {
+        return ClassroomEntity
+                .builder()
+                .id(classroomDto.getId())
+                .number(classroomDto.getNumber())
+                .build();
+    }
 }

@@ -32,4 +32,20 @@ public class TimeslotMapper {
         }
         return dtoList;
     }
+
+    /**
+     * Метод для преобразования объекта класса {@link TimeslotDto} в  обьект класса {@link TimeslotEntity}.
+     *
+     * @param timeslotDto то, что нужно замапить.
+     * @return объект {@link TimeslotEntity}.
+     */
+    public TimeslotEntity timeslotDtoToEntity(TimeslotDto timeslotDto) {
+        return TimeslotEntity
+                .builder()
+                .id(timeslotDto.getId())
+                .beginTime(timeslotDto.getBeginTime())
+                .endTime(timeslotDto.getEndTime())
+                .sequenceNumber(timeslotDto.getSequenceNumber())
+                .build();
+    }
 }
