@@ -2,7 +2,7 @@ package ru.hits.timeflowapi.exception;
 
 /**
  * Исключение, которое следует бросать, когда какие-то проблемы с {@code refresh} токеном.
- * Например если токен: отсутсвует, истёк, подделан.
+ * Например, если токен: отсутствует, истёк, подделан.
  */
 public class RefreshTokenNotValidException extends RuntimeException {
 
