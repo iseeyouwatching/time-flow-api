@@ -154,13 +154,17 @@ public class LessonService {
                 .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
         LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
-        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
-                updatedLessonDto.getTimeslotId(),
-                updatedLessonDto.getTeacherId(),
-                updatedLessonDto.getClassroomId(),
-                updatedLessonDto.getStudentGroupId(),
-                updatedLessonDto.getDate()
-        );
+
+        if (lessonWithValidId.getTimeslot() != lesson.getTimeslot()
+                || !lessonWithValidId.getDate().isEqual(lesson.getDate())) {
+            checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                    updatedLessonDto.getTimeslotId(),
+                    updatedLessonDto.getTeacherId(),
+                    updatedLessonDto.getClassroomId(),
+                    updatedLessonDto.getStudentGroupId(),
+                    updatedLessonDto.getDate()
+            );
+        }
 
         return new LessonDto(setLesson(lesson, lessonWithValidId));
     }
