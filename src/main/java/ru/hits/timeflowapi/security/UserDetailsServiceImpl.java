@@ -2,17 +2,16 @@ package ru.hits.timeflowapi.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
-import ru.hits.timeflowapi.model.entity.EmployeePostEntity;
-import ru.hits.timeflowapi.model.entity.UserEntity;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.entity.EmployeePostEntity;
+import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.enumeration.Role;
+import ru.hits.timeflowapi.exception.AccessTokenNotValidException;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,20 +21,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetailsImpl loadUserByUsername(String id) throws UsernameNotFoundException {
-        Optional<UserEntity> user = userRepository.findById(UUID.fromString(id));
+    public UserDetailsImpl loadUserByUsername(String id) throws AccessTokenNotValidException {
+        UserEntity user = userRepository
+                .findById(UUID.fromString(id))
+                .orElseThrow(() -> {
+                    throw new AccessTokenNotValidException("Невалидный access токен.");
+                });
 
-        if (user.isPresent()) {
-            List<String> postRoles = new ArrayList<>();
+        List<String> postRoles = new ArrayList<>();
 
-            if (user.get().getRole() == Role.ROLE_EMPLOYEE) {
-                postRoles = getPostRoles(user.get().getEmployee());
-            }
-
-            return new UserDetailsImpl(user.get(), postRoles);
+        if (user.getRole() == Role.ROLE_EMPLOYEE) {
+            postRoles = getPostRoles(user.getEmployee());
         }
 
-        throw new UsernameNotFoundException("Пользователь с такой почтой не найден");
+        return new UserDetailsImpl(user, postRoles);
     }
 
     private List<String> getPostRoles(EmployeeDetailsEntity employeeDetails) {

@@ -6,9 +6,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.dto.TimeslotDto;
+import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.service.AvailableComponentsService;
 
 import java.time.LocalDate;

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.signin.TokensDto;
-import ru.hits.timeflowapi.model.dto.signup.EmployeeSignUpDto;
-import ru.hits.timeflowapi.model.dto.signup.StudentSignUpDto;
-import ru.hits.timeflowapi.model.dto.signup.UserSignUpDto;
+import ru.hits.timeflowapi.dto.signin.TokensDto;
+import ru.hits.timeflowapi.dto.signup.EmployeeSignUpDto;
+import ru.hits.timeflowapi.dto.signup.StudentSignUpDto;
+import ru.hits.timeflowapi.dto.signup.UserSignUpDto;
 import ru.hits.timeflowapi.service.auth.SignUpService;
 
 import javax.validation.Valid;

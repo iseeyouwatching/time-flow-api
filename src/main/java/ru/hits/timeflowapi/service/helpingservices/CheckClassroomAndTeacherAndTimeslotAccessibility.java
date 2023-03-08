@@ -3,8 +3,7 @@ package ru.hits.timeflowapi.service.helpingservices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
+import ru.hits.timeflowapi.entity.LessonEntity;
 import ru.hits.timeflowapi.repository.*;
 
 import java.time.LocalDate;
@@ -40,7 +39,7 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
 
         if (lesson != null) {
             throw new ConflictException(
-                    "Преподаватель с ID " + teacherId + " в это время занят");
+                    "Преподаватель с ID " + teacherId + " в таймслот с ID " + timeslotId + " на дату " + date + " занят");
         }
     }
 
@@ -60,7 +59,7 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
 
         if (lesson != null) {
             throw new ConflictException(
-                    "Аудитория с ID " + classroomId + " в это время занята");
+                    "Аудитория с ID " + classroomId + " в таймслот с ID " + timeslotId + " на дату " + date + " занята");
         }
     }
 
@@ -89,15 +88,17 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
     /**
      * Обобщающий метод для проверки доступности преподавателя, аудитории и таймслота.
      *
-     * @param createLessonDto данные, которые необходимы для создания/обновления пары.
+     * @param timeslotId     уникальный идентификатор таймслота.
+     * @param teacherId      уникальный идентификатор преподавателя.
+     * @param classroomId    уникальный идентификатор аудитории.
+     * @param studentGroupId уникальный идентификатор группы студентов.
+     * @param date           дата проведения пары.
+     *
      */
-    public void checkAccessibility(CreateLessonDto createLessonDto) {
-        checkTeacherIsFree(createLessonDto.getTimeslotId(), createLessonDto.getTeacherId(),
-                createLessonDto.getDate());
-        checkClassroomIsFree(createLessonDto.getTimeslotId(), createLessonDto.getClassroomId(),
-                createLessonDto.getDate());
-        checkTimeslotIsFree(createLessonDto.getTimeslotId(), createLessonDto.getStudentGroupId(),
-                createLessonDto.getDate());
+    public void checkAccessibility(UUID timeslotId, UUID teacherId, UUID classroomId, UUID studentGroupId, LocalDate date) {
+        checkTeacherIsFree(timeslotId, teacherId, date);
+        checkClassroomIsFree(timeslotId, classroomId, date);
+        checkTimeslotIsFree(timeslotId, studentGroupId, date);
     }
 
 }

@@ -2,14 +2,14 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
+import ru.hits.timeflowapi.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.entity.LessonEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс  маппер для преобразования объекта класса
+ * Класс маппер для преобразования объекта класса
  * LessonEntity в объект класса LessonDto.
  */
 @Component
@@ -21,7 +21,7 @@ public class LessonMapper {
      *
      * @param entityList список LessonEntity
      */
-    List<LessonDto> lessonListToDtoList(List<LessonEntity> entityList) {
+    public List<LessonDto> lessonListToDtoList(List<LessonEntity> entityList) {
         List<LessonDto> dtoList = new ArrayList<>();
 
         if (entityList != null) {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.signin.RefreshTokenDto;
+import ru.hits.timeflowapi.dto.signin.RefreshTokenDto;
 import ru.hits.timeflowapi.service.auth.SignOutService;
 
 import javax.validation.Valid;

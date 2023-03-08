@@ -1,15 +1,16 @@
 package ru.hits.timeflowapi.controller.admin;
 
+import com.sun.istack.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.request.EmployeeRequestDto;
-import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
+import ru.hits.timeflowapi.dto.request.EmployeeRequestDto;
+import ru.hits.timeflowapi.dto.request.StudentRequestDto;
+import ru.hits.timeflowapi.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.dto.user.StudentDto;
 import ru.hits.timeflowapi.service.request.ManageRequestService;
 
 import java.util.List;
@@ -110,9 +111,12 @@ public class ConfirmRequestController {
             tags = {"Заявки сотрудников"}
     )
     public EmployeeDto acceptEmployeeRequest(@PathVariable UUID id,
-                                             @RequestParam List<UUID> postIds) {
-        return manageRequestService.confirmEmployeeRequest(id, postIds);
+                                             @RequestParam List<UUID> postIds,
+                                             @Nullable @RequestParam(required = false) UUID teacherId
+    ) {
+        return manageRequestService.confirmEmployeeRequest(id, postIds, teacherId);
     }
+
 
     @PostMapping("/employee-requests/{id}/reject")
     @Operation(

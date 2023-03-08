@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.signin.SignInDto;
-import ru.hits.timeflowapi.model.dto.signin.TokensDto;
-import ru.hits.timeflowapi.model.entity.UserEntity;
+import ru.hits.timeflowapi.dto.signin.SignInDto;
+import ru.hits.timeflowapi.dto.signin.TokensDto;
+import ru.hits.timeflowapi.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
 

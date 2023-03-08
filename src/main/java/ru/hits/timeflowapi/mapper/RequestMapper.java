@@ -2,11 +2,11 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.request.EmployeeRequestDto;
-import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
-import ru.hits.timeflowapi.model.entity.requestconfirm.EmployeeRequestEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.ScheduleMakerRequestEntity;
-import ru.hits.timeflowapi.model.entity.requestconfirm.StudentRequestEntity;
+import ru.hits.timeflowapi.dto.request.EmployeeRequestDto;
+import ru.hits.timeflowapi.dto.request.StudentRequestDto;
+import ru.hits.timeflowapi.entity.requestconfirm.EmployeeRequestEntity;
+import ru.hits.timeflowapi.entity.requestconfirm.ScheduleMakerRequestEntity;
+import ru.hits.timeflowapi.entity.requestconfirm.StudentRequestEntity;
 
 @Component
 @RequiredArgsConstructor

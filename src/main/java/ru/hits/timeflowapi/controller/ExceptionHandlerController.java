@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.hits.timeflowapi.dto.ApiError;
 import ru.hits.timeflowapi.exception.*;
-import ru.hits.timeflowapi.model.dto.ApiError;
+import ru.hits.timeflowapi.exception.*;
+import ru.hits.timeflowapi.dto.ApiError;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +36,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      * @param status    выбранный статус ответа.
      * @param request   текущий запрос.
      * @return {@link Map}, где ключ - название поля невалидного тела запроса,
-     * а значение - {@code user-friendly} сообщение об ошибке.
+     * а значение - список {@code user-friendly} сообщений об ошибке.
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -43,16 +47,58 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     ) {
         logError(request, exception);
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
 
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+        exception
+                .getBindingResult()
+                .getAllErrors()
+                .forEach(error -> {
+                    String fieldName = ((FieldError) error).getField();
+                    String message = error.getDefaultMessage();
 
-            errors.put(fieldName, message);
-        });
+                    if (message != null) {
+                        if (errors.containsKey(fieldName)) {
+                            errors.get(fieldName).add(message);
+                        } else {
+                            List<String> newErrorList = new ArrayList<>();
+                            newErrorList.add(message);
+
+                            errors.put(fieldName, newErrorList);
+                        }
+                    }
+                });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для отлавливания всех {@link BadRequestException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 400.
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
+                                                              WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для отлавливания всех {@link UnauthorizedException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 401.
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
+                                                                WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -86,34 +132,41 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Метод для отлавливания всех {@link UnauthorizedException}.
+     * Метод для отлавливания {@link AccessTokenNotValidException}.
      *
      * @param exception исключение.
      * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 401.
+     * @return объект класса {@link ApiError} со статус кодом 450.
      */
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
-                                                                WebRequest request
+    @ExceptionHandler(AccessTokenNotValidException.class)
+    public ResponseEntity<ApiError> handleAccessTokenNotValidException(AccessTokenNotValidException exception,
+                                                                       WebRequest request
     ) {
         logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(
+                new ApiError(exception.getMessage()),
+                HttpStatus.valueOf(450)
+        );
     }
 
     /**
-     * Метод для отлавливания всех {@link BadRequestException}.
+     * Метод для отлавливания {@link RefreshTokenNotValidException}.
      *
      * @param exception исключение.
      * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 400.
+     * @return объект класса {@link ApiError} со статус кодом 451.
      */
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
-                                                              WebRequest request
+    @ExceptionHandler(RefreshTokenNotValidException.class)
+    public ResponseEntity<ApiError> handleRefreshTokenNotValidException(RefreshTokenNotValidException exception,
+                                                                       WebRequest request
     ) {
         logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                new ApiError(exception.getMessage()),
+                HttpStatus.valueOf(451)
+        );
     }
+
 
     /**
      * Метод для отлавливания предвиденных внутренних исключений.
