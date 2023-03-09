@@ -3,7 +3,7 @@ package ru.hits.timeflowapi.service.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.entity.UserEntity;
-import ru.hits.timeflowapi.exception.AccessTokenNotValidException;
+import ru.hits.timeflowapi.exception.RefreshTokenNotValidException;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.util.UUID;
@@ -18,7 +18,7 @@ public class SignOutService {
         UserEntity user = userRepository
                 .findByIdAndRefreshToken(userId, refreshToken)
                 .orElseThrow(() -> {
-                    throw new AccessTokenNotValidException("Невалидный access токен.");
+                    throw new RefreshTokenNotValidException("Невалидный refresh токен.");
                 });
 
         user.setRefreshToken(null);
