@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.hits.timeflowapi.exception.BadRequestException;
-import ru.hits.timeflowapi.exception.ConflictException;
-import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.exception.UnauthorizedException;
+import ru.hits.timeflowapi.exception.*;
 import ru.hits.timeflowapi.model.dto.ApiError;
 
 import java.util.ArrayList;
@@ -130,6 +127,21 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     ) {
         logError(request, exception);
         return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для отлавливания всех {@link ForbiddenException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 403.
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> handleForbiddenException(ForbiddenException exception,
+                                                             WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     /**
