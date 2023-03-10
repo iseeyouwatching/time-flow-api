@@ -123,7 +123,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(RefreshTokenNotValidException.class)
     public ResponseEntity<ApiError> handleRefreshTokenNotValidException(RefreshTokenNotValidException exception,
-                                                                       WebRequest request
+                                                                        WebRequest request
     ) {
         logError(request, exception);
         return new ResponseEntity<>(
@@ -132,6 +132,21 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         );
     }
 
+
+    /**
+     * Метод для отлавливания всех {@link ForbiddenException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 403.
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> handleForbiddenException(ForbiddenException exception,
+                                                             WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.FORBIDDEN);
+    }
 
     /**
      * Метод для отлавливания всех непредвиденных исключений.
