@@ -2,19 +2,26 @@ package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.mapper.*;
+import ru.hits.timeflowapi.mapper.ClassroomMapper;
+import ru.hits.timeflowapi.mapper.StudentGroupMapper;
+import ru.hits.timeflowapi.mapper.SubjectMapper;
+import ru.hits.timeflowapi.mapper.TeacherMapper;
 import ru.hits.timeflowapi.model.dto.NewSubjectDto;
-import ru.hits.timeflowapi.model.dto.NewTimeslotDto;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.NewClassroomDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
 import ru.hits.timeflowapi.model.dto.teacher.NewTeacherDto;
 import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
-import ru.hits.timeflowapi.model.entity.*;
-import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.model.entity.ClassroomEntity;
+import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
+import ru.hits.timeflowapi.model.entity.SubjectEntity;
+import ru.hits.timeflowapi.model.entity.TeacherEntity;
+import ru.hits.timeflowapi.repository.ClassroomRepository;
+import ru.hits.timeflowapi.repository.StudentGroupRepository;
+import ru.hits.timeflowapi.repository.SubjectRepository;
+import ru.hits.timeflowapi.repository.TeacherRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +33,6 @@ public class AddComponentsService {
     private final TeacherRepository teacherRepository;
     private final StudentGroupMapper studentGroupMapper;
     private final TeacherMapper teacherMapper;
-    private final TimeslotRepository timeslotRepository;
-    private final TimeslotMapper timeslotMapper;
     private final ClassroomMapper classroomMapper;
     private final ClassroomRepository classroomRepository;
 
@@ -43,14 +48,6 @@ public class AddComponentsService {
         StudentGroupEntity studentGroupEntity = studentGroupMapper.newStudentGroupDtoToEntity(studentGroupBasicDto);
         studentGroupRepository.save(studentGroupEntity);
         return new StudentGroupBasicDto(studentGroupEntity);
-    }
-
-
-    public TimeslotDto addTimeslots(NewTimeslotDto timeslotDto) {
-
-        TimeslotEntity timeslotEntity = timeslotMapper.newTimeslotDtoToEntity(timeslotDto);
-        timeslotRepository.save(timeslotEntity);
-        return new TimeslotDto(timeslotEntity);
     }
 
     public ClassroomDto addClassrooms(NewClassroomDto classroomDto) {

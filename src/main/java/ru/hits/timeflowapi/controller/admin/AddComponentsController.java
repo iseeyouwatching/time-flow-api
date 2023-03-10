@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hits.timeflowapi.model.dto.NewSubjectDto;
-import ru.hits.timeflowapi.model.dto.NewTimeslotDto;
 import ru.hits.timeflowapi.model.dto.SubjectDto;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
 import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.model.dto.classroom.NewClassroomDto;
 import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
@@ -46,15 +44,6 @@ public class AddComponentsController {
     @PostMapping("/groups")
     public StudentGroupBasicDto addGroups(@RequestBody @Valid NewStudentGroupDto studentGroupBasicDto) {
         return addComponentsService.addGroups(studentGroupBasicDto);
-    }
-
-    @Operation(
-            summary = "Добавить новый таймслот.",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @PostMapping("/timeslots")
-    public TimeslotDto addTimeslots(@RequestBody @Valid NewTimeslotDto timeslotDto) {
-        return addComponentsService.addTimeslots(timeslotDto);
     }
 
     @Operation(
