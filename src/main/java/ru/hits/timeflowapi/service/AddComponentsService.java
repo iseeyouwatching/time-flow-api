@@ -14,6 +14,7 @@ import ru.hits.timeflowapi.entity.ClassroomEntity;
 import ru.hits.timeflowapi.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.entity.SubjectEntity;
 import ru.hits.timeflowapi.entity.TeacherEntity;
+import ru.hits.timeflowapi.exception.BadRequestException;
 import ru.hits.timeflowapi.mapper.ClassroomMapper;
 import ru.hits.timeflowapi.mapper.StudentGroupMapper;
 import ru.hits.timeflowapi.mapper.SubjectMapper;
@@ -39,6 +40,7 @@ public class AddComponentsService {
     public SubjectDto addSubjects(NewSubjectDto subjectDto) {
 
         SubjectEntity subjectEntity = subjectMapper.NewSubjectDtoToEntity(subjectDto);
+        isExistSubject(subjectDto.getName());
         subjectRepository.save(subjectEntity);
         return new SubjectDto(subjectEntity);
     }
@@ -46,6 +48,7 @@ public class AddComponentsService {
     public StudentGroupBasicDto addGroups(NewStudentGroupDto studentGroupBasicDto) {
 
         StudentGroupEntity studentGroupEntity = studentGroupMapper.newStudentGroupDtoToEntity(studentGroupBasicDto);
+        isExistStudentGroup(studentGroupBasicDto.getNumber());
         studentGroupRepository.save(studentGroupEntity);
         return new StudentGroupBasicDto(studentGroupEntity);
     }
@@ -53,6 +56,7 @@ public class AddComponentsService {
     public ClassroomDto addClassrooms(NewClassroomDto classroomDto) {
 
         ClassroomEntity classroomEntity = classroomMapper.newClassroomDtoToEntity(classroomDto);
+        isExistClassroom(classroomDto.getNumber());
         classroomRepository.save(classroomEntity);
         return new ClassroomDto(classroomEntity);
     }
@@ -60,7 +64,34 @@ public class AddComponentsService {
     public TeacherDto addTeachers(NewTeacherDto teacherDto) {
 
         TeacherEntity teacherEntity = teacherMapper.newTeacherDtoToEntity(teacherDto);
+        isExistTeacher(teacherDto.getName(), teacherDto.getSurname(), teacherDto.getPatronymic());
         teacherRepository.save(teacherEntity);
         return new TeacherDto(teacherEntity);
     }
+
+    private void isExistSubject(String name) {
+        if (subjectRepository.existsAllByName(name)) {
+            throw new BadRequestException("Такой предмет уже существует.");
+        }
+    }
+
+    private void isExistTeacher(String name, String surname, String patronymic) {
+        if (teacherRepository.existsAllByNameAndSurnameAndPatronymic(name, surname, patronymic)) {
+            throw new BadRequestException("Такой преподаватель уже существует.");
+        }
+    }
+
+    private void isExistClassroom(String name) {
+        if (classroomRepository.existsAllByNumber(name)) {
+            throw new BadRequestException("Такая аудитория уже существует.");
+        }
+    }
+
+    private void isExistStudentGroup(int number) {
+        if (studentGroupRepository.existsAllByNumber(number)) {
+            throw new BadRequestException("Такая студенческая группа уже существует.");
+        }
+    }
+
+
 }
