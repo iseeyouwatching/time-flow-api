@@ -42,7 +42,7 @@ public class UserAccountController {
     }
 
     @Operation(
-            summary = "Получить должность пользователя.",
+            summary = "Получить должность сотрудника.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/employee-posts")
