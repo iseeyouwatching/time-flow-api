@@ -2,9 +2,6 @@ package ru.hits.timeflowapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.mapper.CreateLessonForAFewWeeksDtoMapper;
-import ru.hits.timeflowapi.mapper.LessonMapper;
 import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
 import ru.hits.timeflowapi.dto.classroom.ClassroomTimetableDto;
 import ru.hits.timeflowapi.dto.lesson.CreateLessonDto;
@@ -18,7 +15,13 @@ import ru.hits.timeflowapi.entity.ClassroomEntity;
 import ru.hits.timeflowapi.entity.LessonEntity;
 import ru.hits.timeflowapi.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.entity.TeacherEntity;
-import ru.hits.timeflowapi.repository.*;
+import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.mapper.CreateLessonForAFewWeeksDtoMapper;
+import ru.hits.timeflowapi.mapper.LessonMapper;
+import ru.hits.timeflowapi.repository.ClassroomRepository;
+import ru.hits.timeflowapi.repository.LessonRepository;
+import ru.hits.timeflowapi.repository.StudentGroupRepository;
+import ru.hits.timeflowapi.repository.TeacherRepository;
 import ru.hits.timeflowapi.service.helpingservices.CheckClassroomAndTeacherAndTimeslotAccessibility;
 import ru.hits.timeflowapi.service.helpingservices.CheckCreateLessonDtoValidity;
 import ru.hits.timeflowapi.service.helpingservices.VerificationOfDates;
@@ -33,9 +36,7 @@ import java.util.UUID;
 public class LessonService {
 
     private final LessonRepository lessonRepository;
-    private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
-    private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
     private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
