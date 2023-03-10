@@ -7,14 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.employeepost.EmployeePostDto;
-import ru.hits.timeflowapi.model.dto.user.*;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.dto.user.*;
+import ru.hits.timeflowapi.enumeration.Role;
 import ru.hits.timeflowapi.service.UserInfoService;
 import ru.hits.timeflowapi.service.helpingservices.CheckEmailService;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -39,16 +37,6 @@ public class UserAccountController {
     Role getUserRole() {
         UUID id = extractId();
         return userInfoService.getUserRole(id);
-    }
-
-    @Operation(
-            summary = "Получить должность сотрудника.",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @GetMapping("/employee-posts")
-    List<EmployeePostDto> getUserPost() {
-        UUID id = extractId();
-        return userInfoService.getUserPost(id);
     }
 
     @Operation(

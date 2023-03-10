@@ -7,20 +7,23 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: time-flow-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      - POSTGRES_DB=time-flow-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   backend:
     build: '.'
     container_name: backend
     ports:
       - '8080:8080'
     environment:
-      - SPRING.PROFILES.ACTIVE=default
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/time-flow-db
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.jpa.hibernate.ddl-auto=update
     depends_on:
       - postgres
 
 networks:
   default:
-    name: test-network
+    name: time-flow-api
     driver: bridge

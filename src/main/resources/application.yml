@@ -2,13 +2,13 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/time-flow-db
-    username: postgres
-    password: postgres
+    url: ${spring.datasource.url:jdbc:postgresql://postgres:5432/time-flow-db}
+    username: ${spring.datasource.username:postgres}
+    password: ${spring.datasource.password:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${spring.jpa.hibernate.ddl-auto:update}
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: false
   mandatory-file-encoding: UTF-8
@@ -26,10 +26,3 @@ logging:
     name: ${LOG_FILE_NAME:time-flow-api.log}
   level:
     root: info
-credentials:
-  admin:
-    email: admin
-    password: admin
-    name: admin_name
-    surname: admin_surname
-    patronymic: admin_patronymic
