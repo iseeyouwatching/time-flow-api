@@ -3,17 +3,20 @@ package ru.hits.timeflowapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.NotFoundException;
-import ru.hits.timeflowapi.mapper.UserMapper;
+import ru.hits.timeflowapi.dto.employeepost.EmployeePostDto;
 import ru.hits.timeflowapi.dto.user.*;
 import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
 import ru.hits.timeflowapi.entity.StudentDetailsEntity;
 import ru.hits.timeflowapi.entity.UserEntity;
 import ru.hits.timeflowapi.enumeration.Role;
+import ru.hits.timeflowapi.exception.ForbiddenException;
+import ru.hits.timeflowapi.exception.NotFoundException;
+import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,6 +39,12 @@ public class UserInfoService {
         UserEntity user = getUserById(id);
 
         return userMapper.userToUserDto(user).getRole();
+    }
+
+    public List<EmployeePostDto> getUserPost(UUID id) {
+        EmployeeDetailsEntity employeeDetails = getEmployeePostById(id);
+
+        return userMapper.employeeDetailsToEmployeeDto(employeeDetails).getPosts();
     }
 
     public StudentDto getStudentDetailsInfo(UUID id) {
@@ -88,6 +97,14 @@ public class UserInfoService {
                 .findByUserId(id)
                 .orElseThrow(() -> {
                     throw new NotFoundException("Не присутствует в числе сотрудников.");
+                });
+    }
+
+    private EmployeeDetailsEntity getEmployeePostById(UUID id) {
+        return employeeDetailsRepository
+                .findByUserId(id)
+                .orElseThrow(() -> {
+                    throw new ForbiddenException("Пользователь не является сотрудником.");
                 });
     }
 }
