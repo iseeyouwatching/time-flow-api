@@ -8,7 +8,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: false
   mandatory-file-encoding: UTF-8
@@ -28,8 +28,8 @@ logging:
     root: info
 credentials:
   admin:
-    email: admin
-    password: admin
-    name: admin_name
-    surname: admin_surname
-    patronymic: admin_patronymic
+    email: admin@gmail.com
+    password: password
+    name: Иван
+    surname: Иванов
+    patronymic: Иванович
