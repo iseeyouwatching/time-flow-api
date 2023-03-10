@@ -70,7 +70,7 @@ public class SchedulingController {
         lessonService.deleteAllLessonsByWeek(groupId, startDate, endDate);
         return new ResponseEntity<>(new ResponseBodyMessage(
                 "Пары, которые проходят с " + startDate + " по" + endDate
-                        + " у группы с ID " + groupId +" успешно удалены"), HttpStatus.OK
+                        + " у группы с ID " + groupId + " успешно удалены"), HttpStatus.OK
         );
     }
 

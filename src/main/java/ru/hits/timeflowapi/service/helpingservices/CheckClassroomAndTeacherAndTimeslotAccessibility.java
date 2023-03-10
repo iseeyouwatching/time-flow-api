@@ -2,8 +2,8 @@ package ru.hits.timeflowapi.service.helpingservices;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.entity.LessonEntity;
+import ru.hits.timeflowapi.exception.ConflictException;
 import ru.hits.timeflowapi.repository.*;
 
 import java.time.LocalDate;
@@ -93,7 +93,6 @@ public class CheckClassroomAndTeacherAndTimeslotAccessibility {
      * @param classroomId    уникальный идентификатор аудитории.
      * @param studentGroupId уникальный идентификатор группы студентов.
      * @param date           дата проведения пары.
-     *
      */
     public void checkAccessibility(UUID timeslotId, UUID teacherId, UUID classroomId, UUID studentGroupId, LocalDate date) {
         checkTeacherIsFree(timeslotId, teacherId, date);

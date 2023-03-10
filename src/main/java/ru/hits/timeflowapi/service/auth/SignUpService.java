@@ -2,7 +2,6 @@ package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.dto.signin.TokensDto;
 import ru.hits.timeflowapi.dto.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.dto.signup.StudentSignUpDto;
@@ -13,6 +12,7 @@ import ru.hits.timeflowapi.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.entity.UserEntity;
 import ru.hits.timeflowapi.enumeration.AccountStatus;
 import ru.hits.timeflowapi.enumeration.Role;
+import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;

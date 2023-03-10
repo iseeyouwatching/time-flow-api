@@ -10,7 +10,7 @@ import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
 @Data
 public class StudentDto {
 
-   private UserDto userInfo;
+    private UserDto userInfo;
 
     private String studentNumber;
 

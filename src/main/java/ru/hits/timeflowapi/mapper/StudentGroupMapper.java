@@ -2,9 +2,9 @@ package ru.hits.timeflowapi.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.studentgroup.NewStudentGroupDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
-import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
+import ru.hits.timeflowapi.dto.studentgroup.NewStudentGroupDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.entity.StudentGroupEntity;
 
 /**
  * Класс  маппер для преобразования объектов класса

@@ -156,7 +156,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(RefreshTokenNotValidException.class)
     public ResponseEntity<ApiError> handleRefreshTokenNotValidException(RefreshTokenNotValidException exception,
-                                                                       WebRequest request
+                                                                        WebRequest request
     ) {
         logError(request, exception);
         return new ResponseEntity<>(
