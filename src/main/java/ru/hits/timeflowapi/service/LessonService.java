@@ -5,23 +5,20 @@ import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.NotFoundException;
 import ru.hits.timeflowapi.mapper.CreateLessonForAFewWeeksDtoMapper;
 import ru.hits.timeflowapi.mapper.LessonMapper;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomTimetableDto;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonForAFewWeeksDto;
-import ru.hits.timeflowapi.model.dto.lesson.LessonDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupTimetableDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherTimetableDto;
-import ru.hits.timeflowapi.model.entity.ClassroomEntity;
-import ru.hits.timeflowapi.model.entity.LessonEntity;
-import ru.hits.timeflowapi.model.entity.StudentGroupEntity;
-import ru.hits.timeflowapi.model.entity.TeacherEntity;
-import ru.hits.timeflowapi.repository.ClassroomRepository;
-import ru.hits.timeflowapi.repository.LessonRepository;
-import ru.hits.timeflowapi.repository.StudentGroupRepository;
-import ru.hits.timeflowapi.repository.TeacherRepository;
+import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.dto.classroom.ClassroomTimetableDto;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonForAFewWeeksDto;
+import ru.hits.timeflowapi.dto.lesson.LessonDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupTimetableDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherTimetableDto;
+import ru.hits.timeflowapi.entity.ClassroomEntity;
+import ru.hits.timeflowapi.entity.LessonEntity;
+import ru.hits.timeflowapi.entity.StudentGroupEntity;
+import ru.hits.timeflowapi.entity.TeacherEntity;
+import ru.hits.timeflowapi.repository.*;
 import ru.hits.timeflowapi.service.helpingservices.CheckClassroomAndTeacherAndTimeslotAccessibility;
 import ru.hits.timeflowapi.service.helpingservices.CheckCreateLessonDtoValidity;
 import ru.hits.timeflowapi.service.helpingservices.VerificationOfDates;
@@ -36,7 +33,9 @@ import java.util.UUID;
 public class LessonService {
 
     private final LessonRepository lessonRepository;
+    private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final TimeslotRepository timeslotRepository;
     private final ClassroomRepository classroomRepository;
     private final StudentGroupRepository studentGroupRepository;
     private final CheckClassroomAndTeacherAndTimeslotAccessibility checkClassroomAndTeacherAndTimeslotAccessibility;
@@ -155,13 +154,17 @@ public class LessonService {
                 .orElseThrow(() -> new NotFoundException("Пары с таким ID " + id + " не существует"));
 
         LessonEntity lessonWithValidId = checkCreateLessonDtoValidity.checkIdValidity(updatedLessonDto);
-        checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
-                updatedLessonDto.getTimeslotId(),
-                updatedLessonDto.getTeacherId(),
-                updatedLessonDto.getClassroomId(),
-                updatedLessonDto.getStudentGroupId(),
-                updatedLessonDto.getDate()
-        );
+
+        if (lessonWithValidId.getTimeslot() != lesson.getTimeslot()
+                || !lessonWithValidId.getDate().isEqual(lesson.getDate())) {
+            checkClassroomAndTeacherAndTimeslotAccessibility.checkAccessibility(
+                    updatedLessonDto.getTimeslotId(),
+                    updatedLessonDto.getTeacherId(),
+                    updatedLessonDto.getClassroomId(),
+                    updatedLessonDto.getStudentGroupId(),
+                    updatedLessonDto.getDate()
+            );
+        }
 
         return new LessonDto(setLesson(lesson, lessonWithValidId));
     }

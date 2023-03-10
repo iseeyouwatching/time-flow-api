@@ -6,11 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.hits.timeflowapi.dto.signin.TokensDto;
+import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.exception.AccessTokenNotValidException;
+import ru.hits.timeflowapi.exception.RefreshTokenNotValidException;
 import ru.hits.timeflowapi.exception.UnauthorizedException;
-import ru.hits.timeflowapi.model.dto.signin.TokensDto;
-import ru.hits.timeflowapi.model.entity.UserEntity;
 import ru.hits.timeflowapi.repository.UserRepository;
 
 import java.time.ZonedDateTime;
@@ -19,6 +22,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JWTService {
 
     private final UserRepository userRepository;
@@ -55,11 +59,16 @@ public class JWTService {
      *
      * @param token {@code access} токен
      * @return {@code id}  пользователя из полезной нагрузки токена.
-     * @throws UnauthorizedException возникает, если токен подделан, или пользователь
-     *                               не найден по {@code ID} из полезной нагрузки токена.
+     * @throws AccessTokenNotValidException возникает, если токен невалиден.
      */
     public UUID verifyAccessTokenAndGetId(String token) throws UnauthorizedException {
-        return verifyAndExtractId(token, accessSecret);
+        try {
+            return verifyAndExtractId(token, accessSecret);
+        } catch (JWTVerificationException exception) {
+            log.error("Исключение во время верификации access токена.", exception);
+
+            throw new AccessTokenNotValidException("Невалидный access токен.");
+        }
     }
 
     /**
@@ -67,17 +76,21 @@ public class JWTService {
      *
      * @param refreshToken {@code refresh} токен.
      * @return пара {@code access} и {@code refresh} токенов.
-     * @throws UnauthorizedException возникает, если токен подделан, или пользователь
-     *                               не найден по {@code ID} из полезной нагрузки токена.
+     * @throws RefreshTokenNotValidException возникает, если refresh токен невалиден.
      */
     public TokensDto updateTokens(String refreshToken) throws UnauthorizedException {
-        UUID id = verifyAndExtractId(refreshToken, refreshSecret);
+        try {
+            UUID id = verifyAndExtractId(refreshToken, refreshSecret);
 
-        if (!userRepository.existsByIdAndRefreshToken(id, refreshToken)) {
-            throw new UnauthorizedException("Недействительный refresh токен.");
+            if (!userRepository.existsByIdAndRefreshToken(id, refreshToken)) {
+                throw new RefreshTokenNotValidException("Невалидный refresh токен.");
+            }
+
+            return generateTokens(id);
+        } catch (JWTVerificationException exception) {
+            log.error("Ошибка во время верификации refresh токена", exception);
+            throw new RefreshTokenNotValidException("Невалидный refresh токен.");
         }
-
-        return generateTokens(id);
     }
 
     /**
@@ -132,27 +145,25 @@ public class JWTService {
      * @param token  {@code access} или {@code refresh} токен.
      * @param secret секретный ключ, с помощью которого токен был закодирован.
      * @return id пользователя.
-     * @throws UnauthorizedException возникает, если токен был подделан.
+     * @throws JWTVerificationException возникает, если токен был подделан, истёк, пуст.
      */
-    private UUID verifyAndExtractId(String token, String secret) throws UnauthorizedException {
+    private UUID verifyAndExtractId(String token, String secret) throws JWTVerificationException {
         if (token == null || token.isBlank()) {
-            throw new UnauthorizedException(UNAUTHORIZED_MESSAGE);
+            throw new JWTVerificationException("Токен пустой");
         }
 
-        try {
-            JWTVerifier verifier = JWT
-                    .require(Algorithm.HMAC256(secret))
-                    .withIssuer(issuer)
-                    .build();
+        JWTVerifier verifier = JWT
+                .require(Algorithm.HMAC256(secret))
+                .withIssuer(issuer)
+                .build();
 
-            DecodedJWT decodedJWT = verifier.verify(token);
+        DecodedJWT decodedJWT = verifier.verify(token);
 
-            return UUID.fromString(decodedJWT
-                    .getClaim("id")
-                    .asString());
-        } catch (JWTVerificationException exception) {
-            throw new UnauthorizedException(UNAUTHORIZED_MESSAGE);
-        }
+        return UUID.fromString(decodedJWT
+                .getClaim("id")
+                .asString()
+        );
+
     }
 
 }

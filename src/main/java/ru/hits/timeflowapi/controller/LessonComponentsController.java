@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.SubjectDto;
-import ru.hits.timeflowapi.model.dto.TimeslotDto;
-import ru.hits.timeflowapi.model.dto.classroom.ClassroomDto;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
-import ru.hits.timeflowapi.model.dto.teacher.TeacherDto;
+import ru.hits.timeflowapi.dto.SubjectDto;
+import ru.hits.timeflowapi.dto.TimeslotDto;
+import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.dto.teacher.TeacherDto;
 import ru.hits.timeflowapi.service.LessonComponentsService;
 
 import java.util.List;

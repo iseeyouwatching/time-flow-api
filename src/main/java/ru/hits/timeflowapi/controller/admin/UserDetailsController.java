@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
+import ru.hits.timeflowapi.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.dto.user.StudentDto;
+import ru.hits.timeflowapi.dto.user.UserDto;
 import ru.hits.timeflowapi.service.UsersService;
 
 @RestController

@@ -7,19 +7,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.mapper.UserMapper;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
-import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
-import ru.hits.timeflowapi.model.entity.UserEntity;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.dto.user.StudentDto;
+import ru.hits.timeflowapi.dto.user.UserDto;
+import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.entity.StudentDetailsEntity;
+import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.enumeration.Role;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.service.helpingservices.CheckPaginationInfoService;
 
-import static ru.hits.timeflowapi.model.enumeration.Role.ROLE_USER;
+import static ru.hits.timeflowapi.enumeration.Role.ROLE_USER;
 
 @Service
 @RequiredArgsConstructor

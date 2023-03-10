@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.request.EmployeeRequestDto;
-import ru.hits.timeflowapi.model.dto.request.StudentRequestDto;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
+import ru.hits.timeflowapi.dto.request.EmployeeRequestDto;
+import ru.hits.timeflowapi.dto.request.StudentRequestDto;
+import ru.hits.timeflowapi.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.dto.user.StudentDto;
 import ru.hits.timeflowapi.service.request.ManageRequestService;
 
 import java.util.List;

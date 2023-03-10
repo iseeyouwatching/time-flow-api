@@ -3,16 +3,16 @@ package ru.hits.timeflowapi.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.hits.timeflowapi.model.dto.signup.BasicSignUpUserDetails;
-import ru.hits.timeflowapi.model.dto.studentgroup.StudentGroupBasicDto;
-import ru.hits.timeflowapi.model.dto.user.EmployeeDto;
-import ru.hits.timeflowapi.model.dto.user.StudentDto;
-import ru.hits.timeflowapi.model.dto.user.UserDto;
-import ru.hits.timeflowapi.model.entity.EmployeeDetailsEntity;
-import ru.hits.timeflowapi.model.entity.StudentDetailsEntity;
-import ru.hits.timeflowapi.model.entity.UserEntity;
-import ru.hits.timeflowapi.model.enumeration.AccountStatus;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.dto.signup.BasicSignUpUserDetails;
+import ru.hits.timeflowapi.dto.studentgroup.StudentGroupBasicDto;
+import ru.hits.timeflowapi.dto.user.EmployeeDto;
+import ru.hits.timeflowapi.dto.user.StudentDto;
+import ru.hits.timeflowapi.dto.user.UserDto;
+import ru.hits.timeflowapi.entity.EmployeeDetailsEntity;
+import ru.hits.timeflowapi.entity.StudentDetailsEntity;
+import ru.hits.timeflowapi.entity.UserEntity;
+import ru.hits.timeflowapi.enumeration.AccountStatus;
+import ru.hits.timeflowapi.enumeration.Role;
 
 @Component
 @RequiredArgsConstructor

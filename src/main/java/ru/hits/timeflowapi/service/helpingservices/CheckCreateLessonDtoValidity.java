@@ -3,8 +3,8 @@ package ru.hits.timeflowapi.service.helpingservices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.BadRequestException;
-import ru.hits.timeflowapi.model.dto.lesson.CreateLessonDto;
-import ru.hits.timeflowapi.model.entity.*;
+import ru.hits.timeflowapi.dto.lesson.CreateLessonDto;
+import ru.hits.timeflowapi.entity.*;
 import ru.hits.timeflowapi.repository.*;
 
 import java.util.UUID;

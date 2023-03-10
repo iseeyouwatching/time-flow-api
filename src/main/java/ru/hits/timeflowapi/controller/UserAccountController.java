@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.hits.timeflowapi.model.dto.user.*;
-import ru.hits.timeflowapi.model.enumeration.Role;
+import ru.hits.timeflowapi.dto.user.*;
+import ru.hits.timeflowapi.enumeration.Role;
 import ru.hits.timeflowapi.service.UserInfoService;
 import ru.hits.timeflowapi.service.helpingservices.CheckEmailService;
 
