@@ -3,6 +3,7 @@ package ru.hits.timeflowapi.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.hits.timeflowapi.dto.classroom.ClassroomDto;
+import ru.hits.timeflowapi.dto.classroom.NewClassroomDto;
 import ru.hits.timeflowapi.entity.ClassroomEntity;
 
 import java.util.ArrayList;
@@ -31,5 +32,18 @@ public class ClassroomMapper {
             }
         }
         return dtoList;
+    }
+
+    /**
+     * Метод для преобразования объекта класса {@link ClassroomDto} в  обьект класса {@link ClassroomEntity}.
+     *
+     * @param newClassroomDto то, что нужно замапить.
+     * @return объект {@link ClassroomEntity}.
+     */
+    public ClassroomEntity newClassroomDtoToEntity(NewClassroomDto newClassroomDto) {
+        return ClassroomEntity
+                .builder()
+                .number(newClassroomDto.getNumber())
+                .build();
     }
 }

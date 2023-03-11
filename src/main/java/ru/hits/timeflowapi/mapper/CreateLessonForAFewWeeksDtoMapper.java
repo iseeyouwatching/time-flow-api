@@ -21,7 +21,7 @@ public class CreateLessonForAFewWeeksDtoMapper {
      * @return createLessondDto объект класса CreateLessonDto
      */
     public CreateLessonDto createLessonForAFewWeeksDtoToCreateLessonDto(CreateLessonForAFewWeeksDto
-                                                                         createLessonForAFewWeeksDto) {
+                                                                                createLessonForAFewWeeksDto) {
 
         CreateLessonDto createLessonDto = new CreateLessonDto();
 

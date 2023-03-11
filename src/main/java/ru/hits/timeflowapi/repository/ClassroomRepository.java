@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface ClassroomRepository extends JpaRepository<ClassroomEntity, UUID> {
+    Boolean existsAllByNumber(String number);
 }
