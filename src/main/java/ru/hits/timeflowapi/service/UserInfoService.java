@@ -15,6 +15,7 @@ import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
+import ru.hits.timeflowapi.service.email.ConfirmEmailSender;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class UserInfoService {
     private final StudentDetailsRepository studentDetailsRepository;
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ConfirmEmailSender confirmEmailSender;
 
     public UserDto getUserInfo(UUID id) {
         UserEntity user = getUserById(id);
@@ -72,7 +74,11 @@ public class UserInfoService {
         UserEntity user = getUserById(id);
 
         user.setEmail(editEmailDto.getEmail());
+        user.setEmailConfirmed(false);
         user = userRepository.save(user);
+
+        confirmEmailSender.sendConfirmEmail(user);
+
         return userMapper.userToUserDto(user);
     }
 
