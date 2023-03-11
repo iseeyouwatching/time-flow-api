@@ -10,5 +10,6 @@ public class RoleConstant {
 
     public static final String ADMIN = "ADMIN";
     public static final String SCHEDULE_MAKER = "SCHEDULE_MAKER";
+    public static final String EMPLOYEE = "EMPLOYEE";
 
 }
