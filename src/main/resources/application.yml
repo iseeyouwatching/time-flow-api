@@ -2,13 +2,13 @@ server:
   port: 8080
 spring:
   datasource:
-    url: ${"spring.datasource.url":jdbc:postgresql://postgres:5432/time-flow-db}
-    username: ${"spring.datasource.username":postgres}
-    password: ${"spring.datasource.password":postgres}
+    url: ${spring_datasource_url:jdbc:postgresql://postgres:5432/time-flow-db}
+    username: ${spring_datasource_username:postgres}
+    password: ${spring_datasource_password:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: ${"spring.jpa.hibernate.ddl-auto":update}
+      ddl-auto: ${spring_jpa_hibernate_ddl-auto:update}
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: false
   mandatory-file-encoding: UTF-8
@@ -23,14 +23,19 @@ spring:
     debug: false
 secret-key: 1234567812345678
 token:
-  access.secret-key: access_secret_key
-  access.lifetime_min: 15
-  refresh.secret-key: refresh_secret_key
-  refresh.lifetime_min: 43200
+  access:
+    secret-key: access_secret_key
+    lifetime_min: 15
+  refresh:
+    secret-key: refresh_secret_key
+    lifetime_min: 43200
   issuer: time-flow-api
 logging:
   file:
-    path: ${PATH_LOG_FILE:./}
-    name: ${LOG_FILE_NAME:time-flow-api.log}
+    path: ${path_log_file:./}
+    name: ${log_file_name:time-flow-api.log}
   level:
     root: info
+email_confirm:
+  host: ${email_confirm_host:localhost}
+  port: ${email_confirm_port:8080}
