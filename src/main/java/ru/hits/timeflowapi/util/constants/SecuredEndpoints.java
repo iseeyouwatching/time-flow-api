@@ -29,6 +29,10 @@ public class SecuredEndpoints {
             new AntPathRequestMatcher(BASE_URL + "/employees"),
             new AntPathRequestMatcher(BASE_URL + "/employee-posts"),
             new AntPathRequestMatcher(BASE_URL + "/lessons/**", HttpMethodConstant.POST),
+            new AntPathRequestMatcher(BASE_URL + "/teachers", HttpMethodConstant.POST),
+            new AntPathRequestMatcher(BASE_URL + "/subjects", HttpMethodConstant.POST),
+            new AntPathRequestMatcher(BASE_URL + "/classrooms", HttpMethodConstant.POST),
+            new AntPathRequestMatcher(BASE_URL + "/groups", HttpMethodConstant.POST),
             new AntPathRequestMatcher(BASE_URL + "/lessons/**", HttpMethodConstant.PUT),
             new AntPathRequestMatcher(BASE_URL + "/lessons/**", HttpMethodConstant.DELETE)
     ));

@@ -47,6 +47,12 @@ public class UserInfoService {
         return userMapper.studentDetailsToStudentDto(studentDetails);
     }
 
+    public List<EmployeePostDto> getUserPost(UUID id) {
+        EmployeeDetailsEntity employeeDetails = getEmployeePostById(id);
+
+        return userMapper.employeeDetailsToEmployeeDto(employeeDetails).getPosts();
+    }
+
     public EmployeeDto getEmployeeDetailsInfo(UUID id) {
         EmployeeDetailsEntity employeeDetails = getEmployeeById(id);
 
