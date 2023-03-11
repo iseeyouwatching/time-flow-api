@@ -43,16 +43,16 @@ public class UserInfoService {
         return userMapper.userToUserDto(user).getRole();
     }
 
-    public List<EmployeePostDto> getUserPost(UUID id) {
-        EmployeeDetailsEntity employeeDetails = getEmployeePostById(id);
-
-        return userMapper.employeeDetailsToEmployeeDto(employeeDetails).getPosts();
-    }
-
     public StudentDto getStudentDetailsInfo(UUID id) {
         StudentDetailsEntity studentDetails = getStudentById(id);
 
         return userMapper.studentDetailsToStudentDto(studentDetails);
+    }
+
+    public List<EmployeePostDto> getUserPost(UUID id) {
+        EmployeeDetailsEntity employeeDetails = getEmployeePostById(id);
+
+        return userMapper.employeeDetailsToEmployeeDto(employeeDetails).getPosts();
     }
 
     public EmployeeDto getEmployeeDetailsInfo(UUID id) {

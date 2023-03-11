@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<TeacherEntity, UUID> {
+    Boolean existsAllByNameAndSurnameAndPatronymic(String name, String surname, String patronymic);
 }

@@ -8,4 +8,6 @@ import java.util.UUID;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<SubjectEntity, UUID> {
+
+    Boolean existsAllByName(String name);
 }
