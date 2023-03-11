@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.hits.timeflowapi.security.UserDetailsServiceImpl;
 
-import static ru.hits.timeflowapi.util.constants.RoleConstant.ADMIN;
-import static ru.hits.timeflowapi.util.constants.RoleConstant.SCHEDULE_MAKER;
+import static ru.hits.timeflowapi.util.constants.RoleConstant.*;
 
 /**
  * Класс для конфигурации {@code Spring Security}.
@@ -46,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/available-timeslots").hasAnyRole(ADMIN, SCHEDULE_MAKER)
                 .antMatchers("/api/v1/available-teachers").hasAnyRole(ADMIN, SCHEDULE_MAKER)
                 .antMatchers("/api/v1/available-classrooms").hasAnyRole(ADMIN, SCHEDULE_MAKER)
+                .antMatchers("/api/v1/account/employee-posts").hasRole(EMPLOYEE)
                 .antMatchers("/api/v1/account/**").authenticated()
                 .antMatchers("/api/v1/sign-out").authenticated()
                 .antMatchers("/api/v1/users").hasRole(ADMIN)

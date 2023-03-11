@@ -70,36 +70,6 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Метод для отлавливания всех {@link BadRequestException}.
-     *
-     * @param exception исключение.
-     * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 400.
-     */
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
-                                                              WebRequest request
-    ) {
-        logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Метод для отлавливания всех {@link UnauthorizedException}.
-     *
-     * @param exception исключение.
-     * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 401.
-     */
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
-                                                                WebRequest request
-    ) {
-        logError(request, exception);
-        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
-    }
-
-    /**
      * Метод для отлавливания всех {@link NotFoundException}.
      *
      * @param exception исключение.
@@ -130,21 +100,18 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Метод для отлавливания {@link AccessTokenNotValidException}.
+     * Метод для отлавливания всех {@link UnauthorizedException}.
      *
      * @param exception исключение.
      * @param request   запрос, в ходе выполнения которого возникло исключение.
-     * @return объект класса {@link ApiError} со статус кодом 450.
+     * @return объект класса {@link ApiError} со статус кодом 401.
      */
-    @ExceptionHandler(AccessTokenNotValidException.class)
-    public ResponseEntity<ApiError> handleAccessTokenNotValidException(AccessTokenNotValidException exception,
-                                                                       WebRequest request
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception,
+                                                                WebRequest request
     ) {
         logError(request, exception);
-        return new ResponseEntity<>(
-                new ApiError(exception.getMessage()),
-                HttpStatus.valueOf(450)
-        );
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -165,6 +132,36 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         );
     }
 
+    /**
+     * Метод для отлавливания всех {@link BadRequestException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 400.
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
+                                                              WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
+     * Метод для отлавливания всех {@link ForbiddenException}.
+     *
+     * @param exception исключение.
+     * @param request   запрос, в ходе выполнения которого возникло исключение.
+     * @return объект класса {@link ApiError} со статус кодом 403.
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> handleForbiddenException(ForbiddenException exception,
+                                                             WebRequest request
+    ) {
+        logError(request, exception);
+        return new ResponseEntity<>(new ApiError(exception.getMessage()), HttpStatus.FORBIDDEN);
+    }
 
     /**
      * Метод для отлавливания всех непредвиденных исключений.
