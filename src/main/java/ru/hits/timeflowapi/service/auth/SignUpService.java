@@ -2,7 +2,6 @@ package ru.hits.timeflowapi.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.dto.signin.TokensDto;
 import ru.hits.timeflowapi.dto.signup.EmployeeSignUpDto;
 import ru.hits.timeflowapi.dto.signup.StudentSignUpDto;
@@ -13,11 +12,13 @@ import ru.hits.timeflowapi.entity.StudentGroupEntity;
 import ru.hits.timeflowapi.entity.UserEntity;
 import ru.hits.timeflowapi.enumeration.AccountStatus;
 import ru.hits.timeflowapi.enumeration.Role;
+import ru.hits.timeflowapi.mapper.UserMapper;
 import ru.hits.timeflowapi.repository.EmployeeDetailsRepository;
 import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
 import ru.hits.timeflowapi.service.LessonComponentsService;
+import ru.hits.timeflowapi.service.email.ConfirmEmailSender;
 import ru.hits.timeflowapi.service.request.CreateRequestService;
 
 @Service
@@ -31,6 +32,7 @@ public class SignUpService {
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final StudentDetailsRepository studentDetailsRepository;
     private final CreateRequestService createRequestService;
+    private final ConfirmEmailSender confirmEmailSender;
 
     /**
      * Метод для регистрации внешнего пользователя.
@@ -46,6 +48,7 @@ public class SignUpService {
         );
 
         user = userRepository.save(user);
+        confirmEmailSender.sendConfirmEmail(user);
         return jwtService.generateTokens(user.getId());
     }
 
@@ -76,6 +79,7 @@ public class SignUpService {
 
         studentDetails = studentDetailsRepository.save(studentDetails);
         createRequestService.createAndSaveStudentRequest(studentDetails);
+        confirmEmailSender.sendConfirmEmail(user);
 
         return jwtService.generateTokens(user.getId());
     }
@@ -89,6 +93,7 @@ public class SignUpService {
     public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveEmployeeRequest(employeeDetails);
+        confirmEmailSender.sendConfirmEmail(employeeDetails.getUser());
 
         return jwtService.generateTokens(employeeDetails.getUser().getId());
     }
@@ -102,6 +107,7 @@ public class SignUpService {
     public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveScheduleMakerRequest(employeeDetails);
+        confirmEmailSender.sendConfirmEmail(employeeDetails.getUser());
 
         return jwtService.generateTokens(employeeDetails.getUser().getId());
     }
