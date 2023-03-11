@@ -16,10 +16,12 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - spring.datasource.url=jdbc:postgresql://postgres:5432/time-flow-db
-      - spring.datasource.username=postgres
-      - spring.datasource.password=postgres
-      - spring.jpa.hibernate.ddl-auto=update
+      - spring_datasource_url=jdbc:postgresql://postgres:5432/time-flow-db
+      - spring_datasource_username=postgres
+      - spring_datasource_password=postgres
+      - spring_jpa_hibernate_ddl-auto=update
+      - email_confirm_host=localhost
+      - email_confirm_port=8080
     depends_on:
       - postgres
 
