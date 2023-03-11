@@ -14,6 +14,13 @@ spring:
   mandatory-file-encoding: UTF-8
   mvc:
     dispatch-options-request: true
+  mail:
+    host: smtp.yandex.ru
+    username: time-flow-api@yandex.ru
+    password: qmuxknxqqzwmvpdy
+    port: 465
+    protocol: smtps
+    debug: false
 secret-key: 1234567812345678
 token:
   access.secret-key: access_secret_key
