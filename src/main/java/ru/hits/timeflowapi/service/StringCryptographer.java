@@ -25,7 +25,6 @@ public class StringCryptographer {
     @Value("${secret-key}")
     private String strKey;
 
-    private static final String ENCRYPT_DECRYPT_ALG = "AES/GCM/NoPadding";
 
     /**
      * Метод для шифрования строки.
@@ -82,8 +81,8 @@ public class StringCryptographer {
      */
     private byte[] encrypt(String value) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(ENCRYPT_DECRYPT_ALG);
-        SecretKeySpec key = new SecretKeySpec(strKey.getBytes(), ENCRYPT_DECRYPT_ALG);
+        Cipher cipher = Cipher.getInstance("AES");
+        SecretKeySpec key = new SecretKeySpec(strKey.getBytes(), "AES");
 
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
@@ -98,8 +97,8 @@ public class StringCryptographer {
      */
     private byte[] decrypt(byte[] bytes) throws InvalidKeyException, NoSuchPaddingException,
             NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(ENCRYPT_DECRYPT_ALG);
-        SecretKeySpec key = new SecretKeySpec(strKey.getBytes(), ENCRYPT_DECRYPT_ALG);
+        Cipher cipher = Cipher.getInstance("AES");
+        SecretKeySpec key = new SecretKeySpec(strKey.getBytes(), "AES");
 
         cipher.init(Cipher.DECRYPT_MODE, key);
 
