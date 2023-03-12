@@ -133,7 +133,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.ACTIVATED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
@@ -148,7 +148,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
@@ -173,7 +173,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATE);
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.ACTIVATED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
@@ -191,7 +191,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.DENIED);
+        request.getStudentDetails().getUser().setAccountStatus(AccountStatus.REJECTED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
@@ -205,7 +205,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.DENIED);
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.REJECTED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
@@ -219,7 +219,7 @@ public class ManageRequestService {
 
         checkRequestStatus(request.isClosed());
 
-        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.DENIED);
+        request.getEmployeeDetails().getUser().setAccountStatus(AccountStatus.REJECTED);
         request.setClosed(true);
         request.setClosedDate(new Date());
 
