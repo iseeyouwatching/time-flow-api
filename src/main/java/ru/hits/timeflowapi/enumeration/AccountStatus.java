@@ -1,7 +1,7 @@
 package ru.hits.timeflowapi.enumeration;
 
 public enum AccountStatus {
-    ACTIVATE,
+    ACTIVATED,
     PENDING,
-    DENIED
+    REJECTED
 }

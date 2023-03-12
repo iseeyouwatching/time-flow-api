@@ -6,7 +6,7 @@ VALUES ('ef96d80e-7676-41f2-8aef-44b3070b7b4c', 'Составитель расп
 
 -- Админ
 INSERT INTO public._user (id, account_status, email, name, password, patronymic, refresh_token, role, sex, surname)
-VALUES ('1577ab67-59ad-4f4a-960e-71b718f6e7e0', 'ACTIVATE', 'admin@gmail.com', 'Иван',
+VALUES ('1577ab67-59ad-4f4a-960e-71b718f6e7e0', 'ACTIVATED', 'admin@gmail.com', 'Иван',
         '$2a$10$LT8ARAzac6s58zqpUFf3uecfb9Oj5b7FfStnRRwi.fJD8EZfkppDy', 'Иванович', null, 'ROLE_EMPLOYEE', 'MALE',
         'Иванов');
 INSERT INTO public.employee_details (id, contract_number, teacher_id, user_id)
