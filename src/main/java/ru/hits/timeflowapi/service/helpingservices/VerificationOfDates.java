@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.hits.timeflowapi.exception.BadRequestException;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Сервис, предназначенный для проверки корректности введенных дат.
@@ -13,19 +12,6 @@ import java.time.temporal.ChronoUnit;
 @Service
 @RequiredArgsConstructor
 public class VerificationOfDates {
-
-    /**
-     * Метод для проверки того, образуют стартовая и конечная даты учебную неделю или нет.
-     *
-     * @param startDate стартовая дата учебной недели.
-     * @param endDate   конечная дата учебной недели.
-     * @throws BadRequestException исключение, которое выбрасывается, если даты не образуют учебную неделю.
-     */
-    private void checkDateDifference(LocalDate startDate, LocalDate endDate) {
-        if (ChronoUnit.DAYS.between(startDate, endDate) != 5) {
-            throw new BadRequestException("Даты " + startDate + " и " + endDate + " не образуют учебную неделю");
-        }
-    }
 
     /**
      * Метод для проверки корректности стартовой и конечной даты.
@@ -54,7 +40,6 @@ public class VerificationOfDates {
      */
     public void checkDates(LocalDate startDate, LocalDate endDate) {
         checkDatesCorrectness(startDate, endDate);
-        checkDateDifference(startDate, endDate);
     }
 
 

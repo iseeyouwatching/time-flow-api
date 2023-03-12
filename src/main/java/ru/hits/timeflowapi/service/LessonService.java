@@ -46,6 +46,8 @@ public class LessonService {
     private final LessonMapper lessonMapper;
 
     public StudentGroupTimetableDto getWeekLessonsByGroupId(UUID groupId, LocalDate startDate, LocalDate endDate) {
+        verificationOfDates.checkDates(startDate, endDate);
+
         StudentGroupEntity studentGroup = studentGroupRepository.findById(groupId)
                 .orElseThrow(() ->
                         new NotFoundException("Студенческой группы с таким ID " + groupId + " не существует"));
@@ -59,6 +61,8 @@ public class LessonService {
     }
 
     public TeacherTimetableDto getWeekLessonsByTeacherId(UUID teacherId, LocalDate startDate, LocalDate endDate) {
+        verificationOfDates.checkDates(startDate, endDate);
+
         TeacherEntity teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() ->
                         new NotFoundException("Преподавателя с таким ID " + teacherId + " не существует"));
@@ -70,6 +74,8 @@ public class LessonService {
     }
 
     public ClassroomTimetableDto getWeekLessonsByClassroomId(UUID classroomId, LocalDate startDate, LocalDate endDate) {
+        verificationOfDates.checkDates(startDate, endDate);
+
         ClassroomEntity classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() ->
                         new NotFoundException("Аудитории с таким ID " + classroomId + " не существует"));
