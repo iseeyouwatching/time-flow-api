@@ -42,7 +42,7 @@ public class SignUpService {
         UserEntity user = userMapper.basicSignUpDetailsToUser(
                 userSignUpDTO,
                 Role.ROLE_USER,
-                AccountStatus.ACTIVATE
+                AccountStatus.ACTIVATED
         );
 
         user = userRepository.save(user);

@@ -65,7 +65,7 @@ public class UserDetailsImpl implements UserDetails {
      * @param authorities полномочия.
      */
     private void addPostsIntoAuthorities(List<SimpleGrantedAuthority> authorities) {
-        if (user.getRole() == Role.ROLE_EMPLOYEE && user.getAccountStatus() == AccountStatus.ACTIVATE) {
+        if (user.getRole() == Role.ROLE_EMPLOYEE && user.getAccountStatus() == AccountStatus.ACTIVATED) {
             for (String role : roles) {
                 authorities.add(new SimpleGrantedAuthority(role));
             }
