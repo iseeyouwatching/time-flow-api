@@ -18,7 +18,6 @@ import ru.hits.timeflowapi.repository.StudentDetailsRepository;
 import ru.hits.timeflowapi.repository.UserRepository;
 import ru.hits.timeflowapi.security.JWTService;
 import ru.hits.timeflowapi.service.LessonComponentsService;
-import ru.hits.timeflowapi.service.email.ConfirmEmailSender;
 import ru.hits.timeflowapi.service.request.CreateRequestService;
 
 @Service
@@ -32,7 +31,6 @@ public class SignUpService {
     private final EmployeeDetailsRepository employeeDetailsRepository;
     private final StudentDetailsRepository studentDetailsRepository;
     private final CreateRequestService createRequestService;
-    private final ConfirmEmailSender confirmEmailSender;
 
     /**
      * Метод для регистрации внешнего пользователя.
@@ -48,7 +46,6 @@ public class SignUpService {
         );
 
         user = userRepository.save(user);
-        confirmEmailSender.sendConfirmEmail(user);
         return jwtService.generateTokens(user.getId());
     }
 
@@ -79,7 +76,6 @@ public class SignUpService {
 
         studentDetails = studentDetailsRepository.save(studentDetails);
         createRequestService.createAndSaveStudentRequest(studentDetails);
-        confirmEmailSender.sendConfirmEmail(user);
 
         return jwtService.generateTokens(user.getId());
     }
@@ -93,7 +89,6 @@ public class SignUpService {
     public TokensDto employeeSignUp(EmployeeSignUpDto employeeSignUpDto) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveEmployeeRequest(employeeDetails);
-        confirmEmailSender.sendConfirmEmail(employeeDetails.getUser());
 
         return jwtService.generateTokens(employeeDetails.getUser().getId());
     }
@@ -107,7 +102,6 @@ public class SignUpService {
     public TokensDto scheduleMakerSignUp(EmployeeSignUpDto employeeSignUpDto) {
         EmployeeDetailsEntity employeeDetails = basicEmployeeSignUp(employeeSignUpDto);
         createRequestService.createAndSaveScheduleMakerRequest(employeeDetails);
-        confirmEmailSender.sendConfirmEmail(employeeDetails.getUser());
 
         return jwtService.generateTokens(employeeDetails.getUser().getId());
     }
